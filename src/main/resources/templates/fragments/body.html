@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+    <navigation th:fragment="navi (all, spielerName, punkte, level)">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">SQL GAME</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse d-flex justify-content-end ">
+                <ul class="navbar-nav text-uppercase ">
+                    <li class="nav-item mx-3">
+                        <span class="navbar-text" th:if="${all == true}" th:text="'Level '+${level}">Level</span>
+                    </li>
+                    <li class="nav-item mx-3" th:if="${all == true}">
+                        <span class="navbar-text" id="min">00</span>:<span  class="navbar-text" id="sec">00</span>
+                    </li>
+                    <li class="nav-item mx-3" th:if="${all == true}">
+                        <span class="navbar-text"  th:text="'Punkte: '+${punkte}">Pth:if="${all == true}"unkte</span>
+                    </li>
+                    <li class="nav-item dropdown" th:if="${all == true}">
+                        <a class="nav-link dropdown-toggle" href="#" th:text= "${spielerName}" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Spieler
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="#">Ranking</a>
+                            <a class="dropdown-item" href="#">Demo</a>
+                            <a class="dropdown-item" href="#">Neustart</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </navigation>
+</body>
+
+
+</html>

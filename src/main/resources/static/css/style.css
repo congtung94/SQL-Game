@@ -1,0 +1,8 @@
+.scrollContainer{
+    height: 300px;
+    overflow-y: scroll;
+}
+
+li{
+    margin: 10px 0;
+}

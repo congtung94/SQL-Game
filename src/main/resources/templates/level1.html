@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/header :: header"><head>
+<body>
+<div class="container mx-auto">
+    <div th:insert="fragments/body :: navigation (true, ${session.spieler.name}, punkte, level)"></div>
+
+    <input id="pauseButton" type="hidden"  value="Pause">
+    <input id="resumeButton" type="hidden" value="Resume">
+    <input id="resetButton" type="hidden" value="Reset">
+    <input id="restartButton" type="hidden" value="Restart">
+
+    <div class="d-flex justify-content-center">
+        <label class="text-center mt-4" id="thetext">Du liebst Abenteuer und möchte endlich reisen.<br>
+            Du hast ein bisschen Geld und das reicht für ein Ticket zur nächsten Insel.<br>
+            Unglücklicherweise ist dein Schiff in einem Sturm gesunken. <br>
+            Du hat glück, an einen Strand zu landen. <br><br>
+            Jetzt musst du die Herausforderungen mit deinen SQL-Kenntnissen meistern.<br>
+            Je schneller du die Probleme löst, desto besser ist dein Ranking.<br><br>
+            Viel Spaß !!!<br>
+        </label>
+    </div>
+
+
+    <input id="listFragenText" type="hidden"  th:value="${session.listFragenText}"/>
+
+    <div class="d-flex justify-content-center">
+        <input id="startButton" onclick="nachsteFrage()" class="btn-secondary mt-4"
+               type="button" value="Weiter">
+    </div>
+
+    <form method="post"  th:action="@{/level1-antwort}" th:object="${antwort}">
+        <div class="form-group">
+            <input type="text" class="form-control mt-4" id="codeArea" name="antwort" th:field = "*{SQL}"
+                      rows="3" placeholder="Hier steht dein Code ...">
+            <br>
+            <div class="d-flex justify-content-center">
+                <button onclick="updateOutput()" class="btn-secondary mt-4"
+                        id="ausfuehrenBtn" >Ausführen</button>
+            </div>
+        </div>
+    </form>
+
+
+
+    <div id="ausgabe" style="overflow:scroll; height:400px;">
+        <span th:text="${bewertung}"></span>
+    </div>
+
+</div>
+
+<script th:inline="javascript">
+    var listFragenText = [[${session.listFragenText}]];
+    var antworten = [[${antworten}]];
+
+    function updateOutput() {
+        $.get("ausgabe").done(function(fragment) {
+            $("#ausgabe").replaceWith(fragment);
+        });
+    }
+
+</script>
+<script th:src="@{/script/timer.js}"></script>
+<script th:src="@{/script/questions.js}"></script>
+<div th:insert="fragments/footer :: footer"></div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/header :: header">
+<body>
+<div class="container mx-auto" >
+    <div th:insert="fragments/body :: navigation (false,null, null, null)"></div>
+
+
+    <div class="form-group text-center mt-5" >
+        <label>Herzlich Willkommen zum SQL Game!</label>
+        <br>
+        <label>Du bist abensteuerlustig und willig, SQL zu lernen ? Dann bist du hier richtig !</label>
+        <br>
+        <form th:action="@{/level1}" method="post" th:object="${spieler}">
+            <label for="nameInput" class="mt-4">Tragen einfach deinen Name ein, um deine Reise zu beginnen :</label>
+            <br>
+            <div class="d-flex justify-content-center my-4" >
+                <input type="text" class="form-control w-25" id="nameInput" th:field="*{name}">
+                <button type="submit" class="btn-secondary ">Beginnen</button>
+            </div>
+        </form>
+    </div>
+
+
+</div>
+
+
+
+<div th:insert="fragments/footer :: footer"></div>
+<!--<script th:src="@{/script/timer.js}"></script>-->
+</body>
+</html>
