@@ -1,7 +1,8 @@
-package com.game.sqlgame.service;
+package com.game.sqlgame.service.impl;
 
 import com.game.sqlgame.game_components.user_verwaltung.Spieler;
 import com.game.sqlgame.repository.SpielerRepository;
+import com.game.sqlgame.service.SpielerService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

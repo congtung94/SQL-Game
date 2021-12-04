@@ -57,6 +57,7 @@ create table antwort
     id integer identity primary key ,
     col_anz integer ,
     zeile_anz integer ,
+    typ integer , -- 1 - zahl, 2- objekt, 3 - list
     sql varchar (2000)
 );
 

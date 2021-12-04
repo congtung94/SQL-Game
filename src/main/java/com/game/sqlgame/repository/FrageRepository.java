@@ -9,6 +9,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,13 +29,18 @@ public class FrageRepository {
         return jdbcTemplate.query(sql, new FrageRowmapper());
     }
 
+    public List<Frage> findAllQuestionsIdGreater (int id){
+        String sql = "select * from frage where id >= ?";
+        return jdbcTemplate.query(sql, new Object[]{id}, new FrageRowmapper());
+    }
+
     public Optional<Frage> findQuestionById (int id){
         String sql = "select * from frage where id = ?";
         Frage frage = null;
         try {
             frage = jdbcTemplate.queryForObject(sql, new Object[]{id}, new FrageRowmapper());
         }catch (DataAccessException ex) {
-            log.info("Spieler not found: " + id);
+            log.info("Frage not found: " + id);
         }
         return Optional.ofNullable(frage);
     }
@@ -42,4 +48,18 @@ public class FrageRepository {
     public boolean existsById (int id){
         return findQuestionById(id).isPresent();
     }
+
+    public boolean questionWithoutAnswer (int id){
+        String sql = "select * from frage where id = ? and antw_id is null";
+        Frage frage = null;
+        try {
+            frage = jdbcTemplate.queryForObject(sql, new Object[]{id}, new FrageRowmapper());
+        }catch (DataAccessException ex){
+            log.info("Frage nicht gefunden " + id);
+        }
+
+        return frage != null;
+    }
+
+
 }

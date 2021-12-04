@@ -3,7 +3,7 @@
 <head th:include="fragments/header :: header"><head>
 <body>
 <div class="container mx-auto">
-    <div th:insert="fragments/body :: navigation (true, ${session.spieler.name}, punkte, level)"></div>
+    <div th:insert="fragments/body :: navigation (true, ${aktivSpieler.name}, ${spielstand.punkte}, ${spielstand.level})"></div>
 
     <input id="pauseButton" type="hidden"  value="Pause">
     <input id="resumeButton" type="hidden" value="Resume">
@@ -11,7 +11,7 @@
     <input id="restartButton" type="hidden" value="Restart">
 
     <div class="d-flex justify-content-center">
-        <label class="text-center mt-4" id="thetext">Du liebst Abenteuer und möchte endlich reisen.<br>
+        <label class="text-center mt-4" id="frageText">Du liebst Abenteuer und möchtest endlich reisen.<br>
             Du hast ein bisschen Geld und das reicht für ein Ticket zur nächsten Insel.<br>
             Unglücklicherweise ist dein Schiff in einem Sturm gesunken. <br>
             Du hat glück, an einen Strand zu landen. <br><br>
@@ -22,10 +22,11 @@
     </div>
 
 
-    <input id="listFragenText" type="hidden"  th:value="${session.listFragenText}"/>
+    <input id="listFragenText" type="hidden"  th:value="${listFragenText}"/>
+    <input type="hidden"  th:value="${nextFrage}"/>
 
     <div class="d-flex justify-content-center">
-        <input id="startButton" onclick="nachsteFrage()" class="btn-secondary mt-4"
+        <input id="startButton" onclick="nachsteFrage()" class="btn-secondary mt-4" th:disabled="false"
                type="button" value="Weiter">
     </div>
 
@@ -46,8 +47,8 @@
 </div>
 
 <script th:inline="javascript">
-    var listFragenText = [[${session.listFragenText}]];
-    var antworten = [[${antworten}]];
+    var listFragenText = [[${listFragenText}]];
+    var nextFrage = [[${nextFrage}]];
 
 </script>
 <script th:src="@{/script/timer.js}"></script>

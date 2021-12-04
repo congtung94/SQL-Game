@@ -7,6 +7,9 @@ import java.util.Optional;
 
 public interface FrageService {
     Optional<Frage> findQuestionById (int id);
-    List<Frage> listAllQuestions();
+    List<Frage> findAllQuestions();
+    List<Frage> findAllQuestionsIdGreater (int id);
+    boolean questionWithoutAnswer (int id);
     boolean existsById (int id);
+
 }

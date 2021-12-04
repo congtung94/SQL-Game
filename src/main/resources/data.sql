@@ -88,22 +88,22 @@ values (1, 5, 3.5, 9);
 
 
 -- antworten
-insert into antwort (col_anz, zeile_anz, sql)
-values (0,0, 'select count(*) from bewohner, insel where bewohner.ort_id = insel.id and insel.name = \"winter\"');
-insert into antwort (col_anz, zeile_anz, sql)
-values (5,2, 'select * from produkt where produkt.besitzer_id is null');
-insert into antwort (col_anz, zeile_anz, sql)
-values (0,0, 'select count(*) from bewohner, insel where bewohner.ort_id = insel.id and insel.name = \"frühling\"');
-insert into antwort (col_anz, zeile_anz, sql)
-values (2,5, 'select select  h.name as Hobby_name, count (bh.hb_id) as Interessiete
+insert into antwort (col_anz, zeile_anz,typ, sql)
+values (0,0,1, 'select count(*) from bewohner, insel where bewohner.ort_id = insel.id and insel.name = \"winter\"');
+insert into antwort (col_anz, zeile_anz,typ, sql)
+values (5,2,3, 'select * from produkt where produkt.besitzer_id is null');
+insert into antwort (col_anz, zeile_anz, typ,sql)
+values (0,0,1, 'select count(*) from bewohner, insel where bewohner.ort_id = insel.id and insel.name = \"frühling\"');
+insert into antwort (col_anz, zeile_anz,typ, sql)
+values (2,5,3, 'select select  h.name as Hobby_name, count (bh.hb_id) as Interessiete
 from hobby h, bew_hobby bh
 where h.id = bh.hb_id
 group by h.name
 order by count(bh.hb_id) desc');
-insert into antwort (col_anz, zeile_anz, sql)
-values (6,2, 'select * from bestellung where bst_tag = lieferung_tag');
-insert into antwort (col_anz, zeile_anz, sql)
-values (3,3, 'select bew.name as kauefer_name,i.name as Insel_name , bst.id as bestellung_id
+insert into antwort (col_anz, zeile_anz,typ, sql)
+values (6,2,3, 'select * from bestellung where bst_tag = lieferung_tag');
+insert into antwort (col_anz, zeile_anz,typ, sql)
+values (3,3,3, 'select bew.name as kauefer_name,i.name as Insel_name , bst.id as bestellung_id
 from bestellung bst, bewohner bew, insel i
 where bst.kaeufer_id = bew.id and bew.ort_id = i.id and i.name = ''frühling'' and
 (bst.verkaeufer_id  in (select bewohner.id from bewohner, insel where bewohner.ort_id = insel.id and insel.name = ''sommer''))');
@@ -125,14 +125,14 @@ values ('welche Bestellungen sind zwischen 2 Insel,welche Insel Frühling als K�
 
 
 -- spieler
-insert into spieler (name, passwort) values ('Tung' , 'demo');
-insert into spieler (name, passwort) values ('Hai' , 'demo');
-insert into spieler (name, passwort) values ('Ba' , 'demo');
+insert into spieler (name, passwort) values ('tung' , 'demo');
+insert into spieler (name, passwort) values ('hai' , 'demo');
+insert into spieler (name, passwort) values ('ba' , 'demo');
 
 -- spielstand
 
 insert into spielstand (spieler_id, level,punkte, zeit, akt_frage_id) values (1, 1, 0, 0, 1 );
 insert into spielstand (spieler_id, level,punkte, zeit, akt_frage_id) values (2, 3, 3000, 2000, 5 );
-insert into spielstand (spieler_id, level,punkte, zeit, akt_frage_id) values (1, 2, 200, 300, 3 );
+insert into spielstand (spieler_id, level,punkte, zeit, akt_frage_id) values (3, 2, 200, 300, 3 );
 
 
