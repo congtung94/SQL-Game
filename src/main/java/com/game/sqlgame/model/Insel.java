@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class Insel {
-    private int nr;
+    private int id;
     private String name;
+    private String beschr;
 }

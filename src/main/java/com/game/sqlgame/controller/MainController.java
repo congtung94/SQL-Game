@@ -5,11 +5,13 @@ import com.game.sqlgame.game_components.Antwort;
 import com.game.sqlgame.game_components.Frage;
 import com.game.sqlgame.game_components.Spielstand;
 import com.game.sqlgame.game_components.user_verwaltung.Spieler;
+import com.game.sqlgame.service.AntwortService;
 import com.game.sqlgame.service.FrageService;
 import com.game.sqlgame.service.SpielerService;
 import com.game.sqlgame.service.SpielstandService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.xml.crypto.Data;
 import java.util.List;
 
 @Controller
@@ -28,13 +31,15 @@ public class MainController {
     private final SpielerService spielerService;
     private final FrageService frageService;
     private final SpielstandService spielstandService;
+    private final AntwortService antwortService;
     private final Spieler aktivSpieler;
 
-    public MainController(JdbcTemplate jdbcTemplate, SpielerService spielerService, FrageService frageService, SpielstandService spielstandService, Spieler aktivSpieler) {
+    public MainController(JdbcTemplate jdbcTemplate, SpielerService spielerService, FrageService frageService, SpielstandService spielstandService, AntwortService antwortService, Spieler aktivSpieler) {
         this.jdbcTemplate = jdbcTemplate;
         this.spielerService = spielerService;
         this.frageService = frageService;
         this.spielstandService = spielstandService;
+        this.antwortService = antwortService;
         this.aktivSpieler = aktivSpieler;
     }
 
@@ -81,11 +86,35 @@ public class MainController {
         return "level1";
     }
 
-    private boolean checkAntwort (String spieler_antwort, String antwort ){
+    private boolean checkAntwort (String spieler_antwort, int antwortId ){
+
+        Antwort antwort = antwortService.findAnswerById(antwortId).get();
+
+        if (antwort.getAntwortTyp() == 1) // zahl
+        {
+            try {
+                int spieler_count = jdbcTemplate.queryForObject(spieler_antwort, Integer.class);
+                int count = jdbcTemplate.queryForObject(antwort.getSQL(), Integer.class);
+                if (count == spieler_count)
+                    return true;
+                else return false;
+            }catch (DataAccessException exception){
+                return false;
+            }
+        }
+
+        if (antwort.getAntwortTyp() == 2) // objekt
+        {
+            try{
+
+            }catch (DataAccessException e){
+                return false;
+            }
+        }
 
 
 
-        return true;
+        return false;
     }
 
 
