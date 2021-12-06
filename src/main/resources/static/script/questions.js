@@ -1,10 +1,36 @@
+let listFragebObject = Object.values(listFragen);
+let spielstandObject = Object.values(spielstand);
 
-var i = 0;
-var l = listFragen.length;
+let frageAnzahl = listFragen.length;
+
+let weiterBtn = document.getElementById("weiterBtn");
+let frageText = document.getElementById("frageText");
+
+var aktuelleFrageId = spielstandObject[5];
+console.log(aktuelleFrageId);
+frageText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[1];
+
+if (Object.values(listFragebObject[aktuelleFrageId-1])[4] == 0) // antwort_id == 0
+{
+    weiterBtn.disabled = false;
+}
+else weiterBtn.disabled = true;
 
 function nachsteFrage() {
-    console.log("weiter clicked !!")
+    if (aktuelleFrageId == frageAnzahl){
+        // das Spiel gewonnen
+        weiterBtn.disabled = true;
+        return;
+    }
+    aktuelleFrageId++;
+    frageText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[1]; // nächste Frage text
+    if (Object.values(listFragebObject[aktuelleFrageId-1])[4] == 0) // antwort_id == 0
+    {
+        weiterBtn.disabled = false;
+    }
+    else weiterBtn.disabled = true;
 }
+
 
 function ausfuhren(){
     var codeArea = document.getElementById("codeArea");
@@ -30,7 +56,20 @@ function ausfuhren(){
                 spielerCodeData: JSON.stringify(dataToServer)
             },
             success: function (response) {
+                // die Frage hat der Spieler richtig geantwortet
+                if (Object.keys(response).length === 0){
+                    return;
+                }
+
                 feedbackArea.innerHTML = response.feedback;
+                if (response.bewertung){
+                    weiterBtn.disabled = false;
+                    // update punkte, womöglich auch level in page-navigation
+                    if (response.level != undefined){
+                        document.getElementById("levelSpan").innerText = "Level: "+ response.level; // nächstes Level
+                    }
+                    document.getElementById("punkteSpan").innerText = "Punkte: " + response.punkte;
+                }else weiterBtn.disabled = true;
             }
         });
     }

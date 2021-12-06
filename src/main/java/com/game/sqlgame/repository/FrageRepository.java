@@ -66,5 +66,9 @@ public class FrageRepository {
         return frage != null;
     }
 
+    public int countFrage (){
+        return jdbcTemplate.queryForObject("select count(*) from frage", Integer.class);
+    }
+
 
 }

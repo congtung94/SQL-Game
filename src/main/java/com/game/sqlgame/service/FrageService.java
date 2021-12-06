@@ -12,5 +12,6 @@ public interface FrageService {
     boolean questionWithoutAnswer (int id);
     boolean existsById (int id);
     int findAnswerIdByQuestionId(int id);
+    int countFrage();
 
 }

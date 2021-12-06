@@ -10,8 +10,8 @@
     <input id="resetButton" type="hidden" value="Reset">
     <input id="restartButton" type="hidden" value="Restart">
 
-    <div class="d-flex justify-content-center">
-        <label th:if="${aktuelleFrage == null}" class="text-center mt-4" >Du liebst Abenteuer und möchtest endlich reisen.<br>
+<!--    <div class="d-flex justify-content-center">
+        <label id="grusseText" class="text-center mt-4" >Du liebst Abenteuer und möchtest endlich reisen.<br>
             Du hast ein bisschen Geld und das reicht für ein Ticket zur nächsten Insel.<br>
             Unglücklicherweise ist dein Schiff in einem Sturm gesunken. <br>
             Du hat glück, an einen Strand zu landen. <br><br>
@@ -19,24 +19,25 @@
             Je schneller du die Probleme löst, desto besser ist dein Ranking.<br><br>
             Viel Spaß !!!<br>
         </label>
+    </div>-->
 
-        <label id="frageText" th:if="${aktuelleFrage != null}" th:text="${aktuelleFrage}">Frage</label>
+    <div class="d-flex justify-content-center" >
+        <label id="frageText" class="text-center" >Frage</label>
     </div>
 
     <input type="hidden"  th:value="${listFragen}"/>
-    <input type="hidden" th:value="${weiterDisable}">
-    <input type="hidden" th:value="${aktuelleFrageId}">
+    <!--<input type="hidden" th:value="${aktuelleFrageId}">-->
 
     <div class="d-flex justify-content-center">
         <input id="weiterBtn" onclick="nachsteFrage()" class="btn-secondary mt-4" th:disabled="false"
                type="button" value="Weiter">
     </div>
 
-    <div th:if="${aktuelleFrage != null}">
+    <div>
             <textarea class="form-control mt-4" id="codeArea"
                       rows="3" placeholder="Hier steht dein Code ..." ></textarea>
         <br>
-        <div class="d-flex justify-content-center" th:if="${aktuelleFrage != null}">
+        <div class="d-flex justify-content-center">
             <button onclick="ausfuhren()" class="btn-secondary mt-4" type="submit"
                     id="ausfuehrenBtn" >Ausführen</button>
         </div>
@@ -46,22 +47,14 @@
         <label id="feedback"> feedback from server </label>
     </div>
 
-    <label id="codetext">sometext hier</label>
-    <button onclick="test()">test</button>
+    <!--<label id="codetext">sometext hier</label>
+    <button onclick="test()">test</button>-->
 
 </div>
 
 <script th:inline="javascript">
-    var listFragen = [[${listFragen}]];
-    var aktuelleFrageId = [[${aktuelleFrageId}]];
-
-
-    var weiterDisable = [[${weiterDisable}]];
-    if (weiterDisable){
-        document.getElementById("weiterBtn").disabled = true;
-    }
-
-
+    let listFragen = [[${listFragen}]];
+    let spielstand = [[${spielstand}]];
 
 </script>
 <script th:src="@{/script/timer.js}"></script>

@@ -46,4 +46,9 @@ public class FrageServiceImpl implements FrageService {
     public int findAnswerIdByQuestionId(int id) {
         return frageRepository.findAnswerIdByQuestionId(id);
     }
+
+    @Override
+    public int countFrage() {
+        return frageRepository.countFrage();
+    }
 }

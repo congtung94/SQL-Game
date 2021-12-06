@@ -21,4 +21,19 @@ public class SpielstandServiceImpl implements SpielstandService {
     public Optional<Spielstand> findSpielStandByPlayerId(int id) {
         return spielstandRepository.findSpielstandByPlayerId(id);
     }
+
+    @Override
+    public boolean updateSpielstand(int spielstandId, int level, int neuPunkte, int aktuelleFrageId) {
+        return spielstandRepository.updateSpielstand(spielstandId, level,neuPunkte,aktuelleFrageId);
+    }
+
+    @Override
+    public boolean updateSpielstand(int spielstandId, int neuPunkte, int aktuelleFrageId) {
+        return spielstandRepository.updateSpielstand(spielstandId, neuPunkte,aktuelleFrageId);
+    }
+
+    @Override
+    public boolean updateSpielstand(int spielstandId, int neuPunkte) {
+        return spielstandRepository.updateSpielstand(spielstandId,neuPunkte);
+    }
 }

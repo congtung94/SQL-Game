@@ -1,8 +1,6 @@
 package com.game.sqlgame.repository;
 
 import com.game.sqlgame.game_components.Spielstand;
-import com.game.sqlgame.game_components.user_verwaltung.Spieler;
-import com.game.sqlgame.rowmapper.SpielerRowmapper;
 import com.game.sqlgame.rowmapper.SpielstandRowmapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,5 +30,36 @@ public class SpielstandRepository {
             log.info("spielstand not found: " + id);
         }
         return Optional.ofNullable(spielstand);
+    }
+
+    public boolean updateSpielstand (int spielstandId,  int level, int neuPunkte, int aktuelleFrageId){
+
+        int tmp = jdbcTemplate.
+                update("update spielstand set level = ?, punkte = ?, akt_frage_id =? where spl_std_id = ?",
+                        level, neuPunkte , aktuelleFrageId, spielstandId);
+        if (tmp == 1){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateSpielstand (int spielstandId, int neuPunkte, int aktuelleFrageId){
+        int tmp = jdbcTemplate.
+                update("update spielstand set punkte = ?, akt_frage_id =? where spl_std_id = ?",
+                         neuPunkte, aktuelleFrageId, spielstandId);
+        if (tmp == 1){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateSpielstand (int spielstandId, int neuPunkte){
+        int tmp = jdbcTemplate.
+                update("update spielstand set punkte = ? where spl_std_id = ?",
+                        neuPunkte, spielstandId);
+        if (tmp == 1){
+            return true;
+        }
+        return false;
     }
 }

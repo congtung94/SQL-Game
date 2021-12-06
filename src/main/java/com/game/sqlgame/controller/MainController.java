@@ -24,7 +24,6 @@ import java.sql.*;
 import java.util.List;
 
 @Controller
-@Transactional
 public class MainController {
 
     private static final Logger log = LoggerFactory.getLogger(MainController.class);
@@ -110,21 +109,16 @@ public class MainController {
         log.info("aktuelle Frage = " + spielstand.getAktuelleFrageId());
         if (aktuelleFrageId == 0)
         {
-            model.addAttribute("aktuelleFrage", null);
-            model.addAttribute("listFragen", frageService.findAllQuestionsIdGreater(1));
+            model.addAttribute("aktuelleFrage", 0);
+
         }
         else
         {
-            List<String> listFragen = frageService.findAllQuestions().stream().map(Frage::getText).toList();
-            model.addAttribute("listFragen", listFragen); // alle Fragetexte
-            model.addAttribute("weiterDisable", true);
-            model.addAttribute("aktuelleFrage",listFragen.get(aktuelleFrageId-1)); //Text der aktuellen Frage
-            model.addAttribute("aktuelleFrageId", aktuelleFrageId); // Id der aktuellen Frage
             log.info("line 121   "+frageService.findQuestionById(aktuelleFrageId).get().getText());
         }
 
         model.addAttribute("spielstand", spielstand);
-
+        model.addAttribute("listFragen", frageService.findAllQuestions());
 
         log.info(spieler.toString());
         return "level1";
@@ -134,18 +128,50 @@ public class MainController {
     public @ResponseBody
     ObjectNode codeBewertung(@RequestParam String spielerCodeData){
 
+        Spielstand spielstand = spielstandService.findSpielStandByPlayerId(aktivSpieler.getId()).get();
+
         log.info(spielerCodeData);
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         JSONObject data = new JSONObject(spielerCodeData);
+
         String spieler_code = data.getString("spielerCode");
         log.info(spieler_code);
         int frageId = data.getInt("aktFragId");
 
+        // die Frage hat der Spieler richtig geantwortet oder das ist keine Frage
+        if (frageId == spielstand.getAktuelleFrageId()-1 || frageService.questionWithoutAnswer(frageId)){
+            return objectNode;
+        }
+
         boolean check = checkQueryAnswer(spieler_code,frageId);
+
+
+
         objectNode.put("bewertung", check);
         if (check){
+            // der Spieler hat die letzte frage richtig geanwortet
+            if (frageId == frageService.countFrage()){
+                objectNode.put("feedback", "Glückwunsch, du hast gewonnen");
+                int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getMax_punkte();
+                log.info("maximal punkte: " + neuPunkte);
+                spielstandService.updateSpielstand(spielstand.getSpielStandId(), neuPunkte);
+                objectNode.put("punkte", neuPunkte);
+                return objectNode;
+            }
             objectNode.put("feedback", "glückwunsch, dein Antwort ist richtig");
+
+            int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getMax_punkte();
+            if (frageId == 3){
+                spielstandService.updateSpielstand(spielstand.getSpielStandId(),2, neuPunkte,frageId+1);
+                objectNode.put("level", 2);
+            }
+            if (frageId == 5){
+                spielstandService.updateSpielstand(spielstand.getSpielStandId(),3, neuPunkte,frageId+1);
+                objectNode.put("level", 3);
+            }
+            spielstandService.updateSpielstand(spielstand.getSpielStandId(), neuPunkte,frageId+1);
+            objectNode.put("punkte",neuPunkte);
         }
         else objectNode.put("feedback", "dein antwort ist nicht richtig");
 
@@ -170,15 +196,17 @@ public class MainController {
         return objectNode;
     }
 
-    private boolean checkQueryAnswer (String spieler_antwort, int frageId ){
+    @Transactional
+    boolean checkQueryAnswer(String spieler_antwort, int frageId){
 
         int antwortId = frageService.findAnswerIdByQuestionId(frageId);
         Antwort antwort = antwortService.findAnswerById(antwortId).get();
         String antwort_text = antwort.getSQL().replace("\\\"", "'");
 
-        try {
-            if (antwort.getAntwortTyp() == 1) // zahl
-            {
+
+        if (antwort.getAntwortTyp() == 1) // zahl
+        {
+            try {
                 int spieler_count = jdbcTemplate.queryForObject(spieler_antwort, Integer.class);
                 int count = jdbcTemplate.queryForObject(antwort_text, Integer.class);
                 if (count == spieler_count)
@@ -187,9 +215,17 @@ public class MainController {
                     log.info("count stimmt nicht antwort = "+ spieler_count +"spieler_cout = "+ count);
                     return false;
                 }
-
+            }catch (Exception e){
+                log.info("line 187 mainController # " + e.getMessage()
+                );
+                return false;
             }
-            if (antwort.getAntwortTyp() == 2) // resultset
+
+        }
+
+        else  // resultset
+        {
+            try
             {
                 Connection c1 = jdbcTemplate.getDataSource().getConnection();
                 Statement s1 = c1.createStatement();
@@ -200,6 +236,7 @@ public class MainController {
                 Statement s2 = c2.createStatement();
                 ResultSet korrekt_rst = s2.executeQuery(antwort_text);
                 ResultSetMetaData korrekt_rsmt = korrekt_rst.getMetaData();
+
 
                 int colNr = korrekt_rsmt.getColumnCount();
                 if (colNr != spieler_rsmt.getColumnCount()){
@@ -253,10 +290,16 @@ public class MainController {
                         }
                     }
                 }
+                s1.close();
+                s2.close();
+                c1.close();
+                c2.close();
+            }catch (Exception e)
+            {
+                log.info("ein SQL exception #####   "+ e.getMessage());
+                return false;
             }
-        }catch (SQLException e){
-            log.info("ein SQL exception #####   "+ e.getMessage());
-            return false;
+
         }
         return true;
     }
