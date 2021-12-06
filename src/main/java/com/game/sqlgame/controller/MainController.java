@@ -1,6 +1,8 @@
 package com.game.sqlgame.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.game.sqlgame.game_components.Antwort;
 import com.game.sqlgame.game_components.Frage;
 import com.game.sqlgame.game_components.Spielstand;
@@ -9,20 +11,20 @@ import com.game.sqlgame.service.AntwortService;
 import com.game.sqlgame.service.FrageService;
 import com.game.sqlgame.service.SpielerService;
 import com.game.sqlgame.service.SpielstandService;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.List;
 
 @Controller
+@Transactional
 public class MainController {
 
     private static final Logger log = LoggerFactory.getLogger(MainController.class);
@@ -33,16 +35,18 @@ public class MainController {
     private final SpielstandService spielstandService;
     private final AntwortService antwortService;
     private final Spieler aktivSpieler;
+    private final ObjectMapper objectMapper;
 
     public MainController(JdbcTemplate jdbcTemplate, SpielerService spielerService,
                           FrageService frageService, SpielstandService spielstandService,
-                          AntwortService antwortService, Spieler aktivSpieler) {
+                          AntwortService antwortService, Spieler aktivSpieler, ObjectMapper objectMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.spielerService = spielerService;
         this.frageService = frageService;
         this.spielstandService = spielstandService;
         this.antwortService = antwortService;
         this.aktivSpieler = aktivSpieler;
+        this.objectMapper = objectMapper;
     }
 
     @GetMapping("/")
@@ -51,7 +55,7 @@ public class MainController {
         return "start";
     }
 
-    @PostMapping("/level1")
+    @PostMapping("/")
     public String login(@ModelAttribute("spieler") Spieler spieler, Model model) {
         // check Login-Daten
         if (!spielerService.existsByName(spieler.getName())){
@@ -92,27 +96,83 @@ public class MainController {
         log.info("korrekt oder nicht  ###### " + test);*/
 
         spieler = spielerService.getPlayerByName(spieler.getName()).get();
-        aktivSpieler.setId(spieler.getId());
-        aktivSpieler.setName(spieler.getName());
 
-        log.info(aktivSpieler.getName()+"############" + "id ##" +aktivSpieler.getId() );
-        Spielstand spielstand = spielstandService.findSpielStandByPlayerId(aktivSpieler.getId()).get();
+        // aktiver Spieler
+        int id = spieler.getId();
+        String name = spieler.getName();
+        aktivSpieler.setId(id);
+        aktivSpieler.setName(name);
+
+        Spielstand spielstand = spielstandService.findSpielStandByPlayerId(id).get();
         log.info(spielstand.toString());
+
+        int aktuelleFrageId = spielstand.getAktuelleFrageId();
+        log.info("aktuelle Frage = " + spielstand.getAktuelleFrageId());
+        if (aktuelleFrageId == 0)
+        {
+            model.addAttribute("aktuelleFrage", null);
+            model.addAttribute("listFragen", frageService.findAllQuestionsIdGreater(1));
+        }
+        else
+        {
+            List<String> listFragen = frageService.findAllQuestions().stream().map(Frage::getText).toList();
+            model.addAttribute("listFragen", listFragen); // alle Fragetexte
+            model.addAttribute("weiterDisable", true);
+            model.addAttribute("aktuelleFrage",listFragen.get(aktuelleFrageId-1)); //Text der aktuellen Frage
+            model.addAttribute("aktuelleFrageId", aktuelleFrageId); // Id der aktuellen Frage
+            log.info("line 121   "+frageService.findQuestionById(aktuelleFrageId).get().getText());
+        }
+
         model.addAttribute("spielstand", spielstand);
 
-        List<Frage> fragen = frageService.findAllQuestionsIdGreater(spielstand.getAktuelleFrageId());
-        List<String> listFragenText = fragen.stream().map(Frage::getText).toList();
-        List<Integer> antworten = fragen.stream().map(Frage::getAntw_id).toList();
-
-
-        model.addAttribute("listFragenText", listFragenText);
 
         log.info(spieler.toString());
         return "level1";
     }
 
-    private boolean checkQueryAnswer (String spieler_antwort, int antwortId ){
+    @PostMapping(value = "/sendCode")
+    public @ResponseBody
+    ObjectNode codeBewertung(@RequestParam String spielerCodeData){
 
+        log.info(spielerCodeData);
+        ObjectNode objectNode = objectMapper.createObjectNode();
+
+        JSONObject data = new JSONObject(spielerCodeData);
+        String spieler_code = data.getString("spielerCode");
+        log.info(spieler_code);
+        int frageId = data.getInt("aktFragId");
+
+        boolean check = checkQueryAnswer(spieler_code,frageId);
+        objectNode.put("bewertung", check);
+        if (check){
+            objectNode.put("feedback", "glückwunsch, dein Antwort ist richtig");
+        }
+        else objectNode.put("feedback", "dein antwort ist nicht richtig");
+
+        return objectNode;
+    }
+
+
+
+    @PostMapping(value = "/test")
+    public @ResponseBody
+    ObjectNode saysomething(@RequestParam String insel){
+
+        log.info(insel);
+
+        JSONObject jsonObject = new JSONObject(insel);
+
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        objectNode.put("hi", jsonObject.getInt("val1"));
+        objectNode.put("ba", jsonObject.getString("val2"));
+        objectNode.put("bon", jsonObject.getString("val3"));
+        log.info(insel.toString());
+        return objectNode;
+    }
+
+    private boolean checkQueryAnswer (String spieler_antwort, int frageId ){
+
+        int antwortId = frageService.findAnswerIdByQuestionId(frageId);
         Antwort antwort = antwortService.findAnswerById(antwortId).get();
         String antwort_text = antwort.getSQL().replace("\\\"", "'");
 

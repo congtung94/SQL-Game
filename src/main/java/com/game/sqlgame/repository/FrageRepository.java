@@ -45,6 +45,11 @@ public class FrageRepository {
         return Optional.ofNullable(frage);
     }
 
+    public int findAnswerIdByQuestionId(int id){
+        String sql = "select antw_id from frage where id = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, Integer.class);
+    }
+
     public boolean existsById (int id){
         return findQuestionById(id).isPresent();
     }

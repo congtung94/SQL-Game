@@ -11,5 +11,6 @@ public interface FrageService {
     List<Frage> findAllQuestionsIdGreater (int id);
     boolean questionWithoutAnswer (int id);
     boolean existsById (int id);
+    int findAnswerIdByQuestionId(int id);
 
 }

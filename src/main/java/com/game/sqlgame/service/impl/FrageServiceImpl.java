@@ -41,4 +41,9 @@ public class FrageServiceImpl implements FrageService {
     public boolean existsById(int id) {
         return frageRepository.existsById(id);
     }
+
+    @Override
+    public int findAnswerIdByQuestionId(int id) {
+        return frageRepository.findAnswerIdByQuestionId(id);
+    }
 }

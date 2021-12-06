@@ -131,8 +131,8 @@ insert into spieler (name, passwort) values ('ba' , 'demo');
 
 -- spielstand
 
-insert into spielstand (spieler_id, level,punkte, zeit, akt_frage_id) values (1, 1, 0, 0, 1 );
+insert into spielstand (spieler_id, level,punkte, zeit, akt_frage_id) values (1, 1, 0, 0, null );
 insert into spielstand (spieler_id, level,punkte, zeit, akt_frage_id) values (2, 3, 3000, 2000, 5 );
-insert into spielstand (spieler_id, level,punkte, zeit, akt_frage_id) values (3, 2, 200, 300, 3 );
+insert into spielstand (spieler_id, level,punkte, zeit, akt_frage_id) values (3, 2, 200, 300, 6 );
 
 

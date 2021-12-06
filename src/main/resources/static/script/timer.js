@@ -57,7 +57,7 @@ var Clock = {
 };
 
 
-document.getElementById("startButton").addEventListener("click", function () { Clock.start(); });
+document.getElementById("weiterBtn").addEventListener("click", function () { Clock.start(); });
 document.getElementById("pauseButton").addEventListener("click", function () { Clock.pause(); });
 document.getElementById("resumeButton").addEventListener("click", function () { Clock.resume(); });
 document.getElementById("resetButton").addEventListener("click", function () { Clock.reset(); });
