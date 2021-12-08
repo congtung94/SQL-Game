@@ -144,8 +144,42 @@ public class MainController {
             return objectNode;
         }
 
-        boolean check = checkQueryAnswer(spieler_code,frageId);
+        //boolean check = checkQueryAnswer(spieler_code,frageId);
+        try {
+            objectNode = checkQueryAnswer(spieler_code, frageId);
+            // wenn die Antwort richtig ist
+            if (objectNode.get("bewertung").asBoolean(true))
+            {
+                // war das die letzte Frage ?
+                if (frageId == frageService.countFrage()){
+                    int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getMax_punkte();
+                    log.info("maximal punkte: " + neuPunkte);
+                    spielstandService.updateSpielstand(spielstand.getSpielStandId(), neuPunkte);
+                    objectNode.put("punkte", neuPunkte);
+                    objectNode.put("gewinn", "Glückwunsch, du hast gewonnen"+ "\n deine Punkte: " + neuPunkte);
+                    return objectNode;
+                }
+                // update level, punkte, aktuelle FrageId in spielstand
+                int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getMax_punkte();
+                if (frageId == 3){
+                    spielstandService.updateSpielstand(spielstand.getSpielStandId(),2, neuPunkte,frageId+1);
+                    objectNode.put("level", 2);
+                }
+                if (frageId == 5){
+                    spielstandService.updateSpielstand(spielstand.getSpielStandId(),3, neuPunkte,frageId+1);
+                    objectNode.put("level", 3);
+                }
+                spielstandService.updateSpielstand(spielstand.getSpielStandId(), neuPunkte,frageId+1);
+                objectNode.put("punkte",neuPunkte);
+            }
+            else
+                return objectNode;
+        }catch (SQLException e){
+            objectNode.put("bewertung", false);
+            objectNode.put("feedback" , e.getMessage());
+        }
 
+        /*boolean check = true;
         objectNode.put("bewertung", check);
         if (check){
             // der Spieler hat die letzte frage richtig geanwortet
@@ -177,6 +211,7 @@ public class MainController {
         }
         else objectNode.put("feedback", "dein antwort ist leider nicht richtig");
 
+        return objectNode;*/
         return objectNode;
     }
 
@@ -199,11 +234,12 @@ public class MainController {
     }
 
     @Transactional
-    boolean checkQueryAnswer(String spieler_antwort, int frageId){
+    ObjectNode checkQueryAnswer(String spieler_antwort, int frageId) throws SQLException {
 
         int antwortId = frageService.findAnswerIdByQuestionId(frageId);
         Antwort antwort = antwortService.findAnswerById(antwortId).get();
         String antwort_text = antwort.getSQL().replace("\\\"", "'");
+        ObjectNode objectNode = objectMapper.createObjectNode();
 
         /*if (antwort.getAntwortTyp() == 1) // zahl
         {
@@ -225,113 +261,163 @@ public class MainController {
         }*/
         /*else*/  // resultset
 
-        try
+        Connection c1 = jdbcTemplate.getDataSource().getConnection();
+        Statement s1 = c1.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        ResultSet spieler_rst = s1.executeQuery(spieler_antwort);
+        ResultSetMetaData spieler_rsmt = spieler_rst.getMetaData();
+
+        Connection c2 = jdbcTemplate.getDataSource().getConnection();
+        Statement s2 = c2.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        ResultSet korrekt_rst = s2.executeQuery(antwort_text);
+        ResultSetMetaData korrekt_rsmt = korrekt_rst.getMetaData();
+
+
+        // objNode : "bewertung","feedback", spaltenAnz", "zeilenAnz",
+        // "spaltenName1" , "spaltenName2", ..., "data#data#data..."
+
+        int colNr = korrekt_rsmt.getColumnCount();
+        if (colNr > spieler_rsmt.getColumnCount()){
+            log.info("hier ist falsch : zu wenig spalten");
+            objectNode.put("bewertung", false);
+            objectNode.put("feedback", "zu wenig Spalten");
+            resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+            return objectNode;
+        }
+        if (colNr < spieler_rsmt.getColumnCount()){
+            log.info("hier ist falsch : zu viel spalten");
+            objectNode.put("bewertung", false);
+            objectNode.put("feedback", "zu viel Spalten");
+            resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+            return objectNode;
+        }
+        // bisher, die anzahl an spalten stimmt
+        int aktuelleZeile = 0;
+        // Zeile für zeile vergleichen
+        while (korrekt_rst.next())
         {
-            Connection c1 = jdbcTemplate.getDataSource().getConnection();
-            Statement s1 = c1.createStatement();
-            ResultSet spieler_rst = s1.executeQuery(spieler_antwort);
-            ResultSetMetaData spieler_rsmt = spieler_rst.getMetaData();
-
-            Connection c2 = jdbcTemplate.getDataSource().getConnection();
-            Statement s2 = c2.createStatement();
-            ResultSet korrekt_rst = s2.executeQuery(antwort_text);
-            ResultSetMetaData korrekt_rsmt = korrekt_rst.getMetaData();
-
-            // objectNode : "bewertung", "feedback" , resultSet-Daten
-            ObjectNode objectNode = objectMapper.createObjectNode();
-
-            int colNr = korrekt_rsmt.getColumnCount();
-            if (colNr > spieler_rsmt.getColumnCount()){
-                log.info("hier ist falsch : zu wenig spalten");
-                return false;
+            aktuelleZeile++;
+            if (!spieler_rst.next()) // spieler_rst hat zu wenig zeilen
+            {
+                log.info("hier ist falsch: spieler_rst hat zu wenig zeilen" );
+                objectNode.put("bewertung", false);
+                objectNode.put("feedback", "zu wenig Zeilen");
+                resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+                return objectNode;
             }
-            if (colNr < spieler_rsmt.getColumnCount()){
-                log.info("hier ist falsch : zu viel spalten");
-                return false;
-            }
-            // bisher, die anzahl an zeile stimmt
-            int aktuelleZeile = 0;
-            // Zeile für zeile vergleichen
-            while (korrekt_rst.next()){
-                aktuelleZeile++;
-                if (!spieler_rst.next()) // spieler_rst hat zu wenig zeilen
+            for (int col = 1; col<colNr;col++)
+            {
+                int colTyp = korrekt_rsmt.getColumnType(col);
+                if (spieler_rsmt.getColumnType(col) != colTyp) // spalten typ nicht gleich
                 {
-                    log.info("hier ist falsch: spieler_rst hat zu wenig zeilen" );
-                    return false;
+                    log.info("hier ist falsch :spalten typ nicht gleich : col " + col + "zeile: " +aktuelleZeile);
+                    objectNode.put("bewertung", false);
+                    objectNode.put("feedback", col +".Spalte hat falschen Datentyp");
+                    resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+                    return objectNode;
                 }
-                for (int col = 1; col<colNr;col++){
-                    int colTyp = korrekt_rsmt.getColumnType(col);
-                    if (spieler_rsmt.getColumnType(col) != colTyp) // spalten typ nicht gleich
+                if (colTyp == 4 || colTyp == -5) // der Typ ist Integer oder bigInt
+                {
+                    if (spieler_rst.getInt(col) != korrekt_rst.getInt(col))
                     {
-                        log.info("hier ist falsch :spalten typ nicht gleich : col " + col + "zeile: " +aktuelleZeile);
-                        return false;
+                        log.info("hier ist falsch: der Typ ist Integer : col " + col + "zeile: " +aktuelleZeile);
+                        objectNode.put("bewertung", false);
+                        objectNode.put("feedback", col+".Spalte, " + aktuelleZeile+".Zeile"
+                                +" hat falschen integer Wert");
+                        resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+                        return objectNode;
                     }
-                    if (colTyp == 4) // der Typ ist Integer
+                    else continue;
+                }
+                if (colTyp == 8) // der Typ ist float
+                {
+                    if (spieler_rst.getInt(col) != korrekt_rst.getInt(col))
                     {
-                        if (spieler_rst.getInt(col) != korrekt_rst.getInt(col))
-                        {
-                            log.info("hier ist falsch: der Typ ist Integer : col " + col + "zeile: " +aktuelleZeile);
-                            return false;
-                        }
-                        else continue;
+                        log.info("hier ist falsch : der Typ ist float : col " + col + "zeile: " +aktuelleZeile);
+                        objectNode.put("bewertung", false);
+                        objectNode.put("feedback", col+".Spalte, " + aktuelleZeile+".Zeile"
+                                +" hat falschen float Wert");
+                        resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+                        return objectNode;
                     }
-                    if (colTyp == 8) // der Typ ist float
+                    else continue;
+                }
+                if (colTyp == 12) // der Typ ist String
+                {
+                    if (!spieler_rst.getString(col).equals(korrekt_rst.getString(col)))
                     {
-                        if (spieler_rst.getInt(col) != korrekt_rst.getInt(col))
-                        {
-                            log.info("hier ist falsch : der Typ ist float : col " + col + "zeile: " +aktuelleZeile);
-                            return false;
-                        }
-                        else continue;
+                        log.info("hier ist falsch : der Typ ist String : col " + col + "zeile: " +aktuelleZeile);
+                        objectNode.put("bewertung", false);
+                        objectNode.put("feedback", col+".Spalte, " + aktuelleZeile+".Zeile"
+                                +" hat falschen string Wert");
+                        resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+                        return objectNode;
                     }
-                    if (colTyp == 12) // der Typ ist String
-                    {
-                        if (!spieler_rst.getString(col).equals(korrekt_rst.getString(col)))
-                        {
-                            log.info("hier ist falsch : der Typ ist String : col " + col + "zeile: " +aktuelleZeile);
-                            return false;
-                        }
-                        else continue;
-                    }
+                    else continue;
                 }
             }
-            s1.close();
-            s2.close();
-            c1.close();
-            c2.close();
-        }catch (Exception e)
-        {
-            log.info("ein SQL exception #####   "+ e.getMessage());
-            return false;
         }
 
-        return true;
+        if (spieler_rst.next()){
+            objectNode.put("bewertung", false);
+            objectNode.put("feedback", "zu viel zeilen");
+            resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+            return objectNode;
+        }
+
+        objectNode.put("bewertung", true);
+        objectNode.put("feedback", "deine Antwort ist richtig");
+        resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+
+        if (!s1.isClosed()){
+            s1.close();
+        }
+        if (!c1.isClosed()){
+            c1.close();
+        }
+        if (!s2.isClosed()){
+            s2.close();
+        }
+        if (!c2.isClosed()){
+            c2.close();
+        }
+        return objectNode;
     }
 
+    // objectNode : "spaltenAnz", "zeilenAnz", "spaltenName1" , "spaltenName2", ..., "data#data#data..."
     private void resultSetToObjectNode (ObjectNode objectNode, ResultSet resultSet,
                                         ResultSetMetaData resultSetMetaData) throws SQLException {
         // Anzahl an Spalten
         int spaltenAnz = resultSetMetaData.getColumnCount();
         objectNode.put("spaltenAnz", spaltenAnz);
+        log.info("spalten ANzahl line 391 " + spaltenAnz + " ,spalten name = " + resultSetMetaData.getColumnName(1));
 
+        int zeilenAnz = 0;
         // Zeile für zeile in objectNode übertragen
         StringBuilder data = new StringBuilder();
+
+        resultSet.beforeFirst();
         while (resultSet.next()){
+            zeilenAnz++;
             for (int i = 1; i<= spaltenAnz;i++){
                 int colTyp = resultSetMetaData.getColumnType(i);
-                if (colTyp == 4){
+                if (colTyp == 4 || colTyp == -5){
                     data.append(resultSet.getInt(i));
+                    data.append("#");
                 }
                 if (colTyp == 8){
                     data.append(resultSet.getFloat(i));
+                    data.append("#");
                 }
                 if (colTyp == 12){
                     data.append(resultSet.getString(i));
+                    data.append("#");
                 }
             }
         }
+        // das letzte # entfernen
+        data.deleteCharAt(data.length()-1);
         // Anzahl an Zeilen
-        objectNode.put("zeilenAnz", data.length() / spaltenAnz);
+        objectNode.put("zeilenAnz", zeilenAnz);
         // Spaltennamen in objectNode übertragen
         for (int i = 1; i <= spaltenAnz; i++){
             objectNode.put("spaltenName" +i, resultSetMetaData.getColumnName(i));

@@ -60,7 +60,7 @@ public class FrageRepository {
         try {
             frage = jdbcTemplate.queryForObject(sql, new Object[]{id}, new FrageRowmapper());
         }catch (DataAccessException ex){
-            log.info("Frage nicht gefunden " + id);
+            log.info("Es gibt eine Antwort für die Frage mit der Id " + id);
         }
 
         return frage != null;

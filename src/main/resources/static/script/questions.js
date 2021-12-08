@@ -4,6 +4,7 @@ let spielstandObject = Object.values(spielstand);
 let frageAnzahl = listFragen.length;
 
 let weiterBtn = document.getElementById("weiterBtn");
+let ausfuhrenBtn = document.getElementById("ausfuehrenBtn");
 let frageText = document.getElementById("frageText");
 
 var aktuelleFrageId = spielstandObject[5];
@@ -55,21 +56,37 @@ function ausfuhren(){
             data: {
                 spielerCodeData: JSON.stringify(dataToServer)
             },
+            // response : bewertung,feedback, spaltenAnz, zeilenAnz,
+            //          spaltenName1,spaltenName2, ..., data#data#data..., level, punkte, gewinn
             success: function (response) {
-                // die Frage hat der Spieler richtig geantwortet
+                // die Frage hat der Spieler richtig geantwortet oder das ist keine Frage
                 if (Object.keys(response).length === 0){
                     return;
                 }
 
-                feedbackArea.innerHTML = response.feedback +"<br><br>" +
+                // syntax error, ein SQLException wurde geworfen
+                if (Object.keys(response).length === 2){
+                    feedbackArea.innerHTML = response.feedback +"<br><br>" +
+                        feedbackArea.innerHTML;
+                    return;
+                }
+
+                feedbackArea.innerHTML = response.feedback + "# spaltenAnz-"+ response.spaltenAnz
+                    +" zeilenAnz-"+ response.zeilenAnz + " daten-" + response.data+ "<br><br>" +
                     feedbackArea.innerHTML;
                 if (response.bewertung){
                     weiterBtn.disabled = false;
-                    // update punkte, womöglich auch level in page-navigation
+                    // update womöglich level in page-navigation
                     if (response.level != undefined){
                         document.getElementById("levelSpan").innerText = "Level: "+ response.level; // nächstes Level
                         alert("Glückwünsch ! Du hast Level "+ response.level + " erreicht !!");
                     }
+                    // der hat gewonnen
+                    if (response.gewinn != undefined){
+                        ausfuhrenBtn.disabled = true;
+                        alert("Glückwunsch, du hast das Spiel gewonnen !!!");
+                    }
+                    // update punkte
                     document.getElementById("punkteSpan").innerText = "Punkte: " + response.punkte;
                 }else weiterBtn.disabled = true;
             }

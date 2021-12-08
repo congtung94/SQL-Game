@@ -21,4 +21,9 @@ class MainControllerTest {
     @Test
     void checkQueryAnswer() {
     }
+
+    @Test
+    void testResultSetToObjectNodeMethod (){
+
+    }
 }
