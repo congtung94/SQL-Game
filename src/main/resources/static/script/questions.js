@@ -61,12 +61,14 @@ function ausfuhren(){
                     return;
                 }
 
-                feedbackArea.innerHTML = response.feedback;
+                feedbackArea.innerHTML = response.feedback +"<br><br>" +
+                    feedbackArea.innerHTML;
                 if (response.bewertung){
                     weiterBtn.disabled = false;
                     // update punkte, womöglich auch level in page-navigation
                     if (response.level != undefined){
                         document.getElementById("levelSpan").innerText = "Level: "+ response.level; // nächstes Level
+                        alert("Glückwünsch ! Du hast Level "+ response.level + " erreicht !!");
                     }
                     document.getElementById("punkteSpan").innerText = "Punkte: " + response.punkte;
                 }else weiterBtn.disabled = true;

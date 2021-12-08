@@ -114,24 +114,25 @@ values ('Du liebst Abenteuer und möchtest endlich reisen.
             Du hast ein bisschen Geld und das reicht für ein Ticket zur nächsten Insel.
             Unglücklicherweise ist dein Schiff in einem Sturm gesunken.
             Du hat glück, an einen Strand zu landen.
+
             Jetzt musst du die Herausforderungen mit deinen SQL-Kenntnissen meistern.
             Je schneller du die Probleme löst, desto besser ist dein Ranking.
             Viel Spaß !!!', 0, 0, null );
 insert into frage (text,level,max_punkte,antw_id)
 values ('Die Insel heißt winter,kannst du checken, wie viele Menschen auf der Insel leben ?', 1, 10, 1);
 insert into frage (text,level,max_punkte,antw_id)
-values ('Auf der Insel kannst du Lebensmittel oder Gegenstände finden.' ||
-        ' Die findest du in der Tabelle Produkt, wo Besitzer null ist ', 1, 10, 2);
+values ('Auf der Insel kannst du Lebensmittel oder Gegenstände finden.
+        Die findest du in der Tabelle Produkt, wo Besitzer null ist ', 1, 10, 2);
 insert into frage (text,level,max_punkte,antw_id)
-values ('Die Insel heißt Frühling,kannst du checken, wer auf der Insel lebt ?', 2, 15, 3);
+values ('Die Insel heißt Frühling,kannst du checken, wie viele Menschen auf der Insel lebt ?', 2, 15, 3);
 insert into frage (text,level,max_punkte,antw_id)
-values ('was sind die dominanten Hobby der Bewohner ?' ||
-        ' Die Ausgabe soll 2 Column Hobby_name und Interessierte enthalten', 2, 15, 4);
+values ('was sind die dominanten Hobby der Bewohner ?
+         Die Ausgabe soll 2 Column Hobby_name und Interessierte enthalten', 2, 15, 4);
 insert into frage (text,level,max_punkte,antw_id)
 values ('welche Bestellungen werden am gleichen Tag geliefert ?', 3, 20, 5);
 insert into frage (text,level,max_punkte,antw_id)
-values ('welche Bestellungen sind zwischen 2 Insel,welche Insel Frühling als Käufer ist ? ' ||
-        'Die Ausgabe sollen 3 Spalten: Kaeufer_name, Insel_name und bestellung_id enthalten ', 3, 20, 6);
+values ('welche Bestellungen sind zwischen 2 Insel,welche Insel Frühling als Käufer ist ?
+        Die Ausgabe sollen 3 Spalten: Kaeufer_name, Insel_name und bestellung_id enthalten ', 3, 20, 6);
 
 
 

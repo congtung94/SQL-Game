@@ -152,14 +152,15 @@ public class MainController {
         if (check){
             // der Spieler hat die letzte frage richtig geanwortet
             if (frageId == frageService.countFrage()){
-                objectNode.put("feedback", "Glückwunsch, du hast gewonnen");
+
                 int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getMax_punkte();
                 log.info("maximal punkte: " + neuPunkte);
                 spielstandService.updateSpielstand(spielstand.getSpielStandId(), neuPunkte);
                 objectNode.put("punkte", neuPunkte);
+                objectNode.put("feedback", "Glückwunsch, du hast gewonnen"+ "\n deine Punkte: " + neuPunkte);
                 return objectNode;
             }
-            objectNode.put("feedback", "glückwunsch, dein Antwort ist richtig");
+
 
             int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getMax_punkte();
             if (frageId == 3){
@@ -172,8 +173,11 @@ public class MainController {
             }
             spielstandService.updateSpielstand(spielstand.getSpielStandId(), neuPunkte,frageId+1);
             objectNode.put("punkte",neuPunkte);
+            objectNode.put("feedback",
+                    "glückwunsch, deine Antwort ist richtig, " +
+                    " deine Punkte : " + neuPunkte);
         }
-        else objectNode.put("feedback", "dein antwort ist nicht richtig");
+        else objectNode.put("feedback", "dein antwort ist leider nicht richtig");
 
         return objectNode;
     }
