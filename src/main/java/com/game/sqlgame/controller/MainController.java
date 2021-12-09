@@ -11,6 +11,7 @@ import com.game.sqlgame.service.AntwortService;
 import com.game.sqlgame.service.FrageService;
 import com.game.sqlgame.service.SpielerService;
 import com.game.sqlgame.service.SpielstandService;
+import com.zaxxer.hikari.HikariDataSource;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Controller
@@ -124,6 +127,7 @@ public class MainController {
         return "level1";
     }
 
+    @Transactional
     @PostMapping(value = "/sendCode")
     public @ResponseBody
     ObjectNode codeBewertung(@RequestParam String spielerCodeData){
@@ -271,6 +275,9 @@ public class MainController {
         ResultSet korrekt_rst = s2.executeQuery(antwort_text);
         ResultSetMetaData korrekt_rsmt = korrekt_rst.getMetaData();
 
+        log.info("line 278 anzahl an spalten "+ spieler_rsmt.getColumnCount() +
+                ", type " + spieler_rsmt.getColumnType(1));
+
 
         // objNode : "bewertung","feedback", spaltenAnz", "zeilenAnz",
         // "spaltenName1" , "spaltenName2", ..., "data#data#data..."
@@ -279,15 +286,19 @@ public class MainController {
         if (colNr > spieler_rsmt.getColumnCount()){
             log.info("hier ist falsch : zu wenig spalten");
             objectNode.put("bewertung", false);
-            objectNode.put("feedback", "zu wenig Spalten");
+            objectNode.put("feedback", "deine Antwort hat zu wenig Spalten");
             resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+            closeConnection(s1,c1);
+            closeConnection(s2,c2);
             return objectNode;
         }
         if (colNr < spieler_rsmt.getColumnCount()){
             log.info("hier ist falsch : zu viel spalten");
             objectNode.put("bewertung", false);
-            objectNode.put("feedback", "zu viel Spalten");
+            objectNode.put("feedback", "deine Antwort hat zu viel Spalten");
             resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+            closeConnection(s1,c1);
+            closeConnection(s2,c2);
             return objectNode;
         }
         // bisher, die anzahl an spalten stimmt
@@ -296,26 +307,46 @@ public class MainController {
         while (korrekt_rst.next())
         {
             aktuelleZeile++;
+            log.info("aktuelle zeile " + aktuelleZeile);
             if (!spieler_rst.next()) // spieler_rst hat zu wenig zeilen
             {
                 log.info("hier ist falsch: spieler_rst hat zu wenig zeilen" );
                 objectNode.put("bewertung", false);
-                objectNode.put("feedback", "zu wenig Zeilen");
+                objectNode.put("feedback", "deine Antwort hat zu wenig Zeilen");
                 resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+                closeConnection(s1,c1);
+                closeConnection(s2,c2);
                 return objectNode;
             }
-            for (int col = 1; col<colNr;col++)
+            for (int col = 1; col<=colNr;col++)
             {
                 int colTyp = korrekt_rsmt.getColumnType(col);
+                log.info("coltyp = "+ colTyp);
                 if (spieler_rsmt.getColumnType(col) != colTyp) // spalten typ nicht gleich
                 {
                     log.info("hier ist falsch :spalten typ nicht gleich : col " + col + "zeile: " +aktuelleZeile);
                     objectNode.put("bewertung", false);
                     objectNode.put("feedback", col +".Spalte hat falschen Datentyp");
                     resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+                    closeConnection(s1,c1);
+                    closeConnection(s2,c2);
                     return objectNode;
                 }
-                if (colTyp == 4 || colTyp == -5) // der Typ ist Integer oder bigInt
+                if (colTyp == -5){ // bigInt für count
+                    if (spieler_rst.getLong(col) != korrekt_rst.getLong(col))
+                    {
+                        log.info("hier ist falsch: der Typ ist BigInt : col " + col + "zeile: " +aktuelleZeile);
+                        objectNode.put("bewertung", false);
+                        objectNode.put("feedback", col+".Spalte, " + aktuelleZeile+".Zeile"
+                                +" hat falschen Wert");
+                        resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+                        closeConnection(s1,c1);
+                        closeConnection(s2,c2);
+                        return objectNode;
+                    }
+                    else continue;
+                }
+                if (colTyp == 4) // der Typ ist Integer
                 {
                     if (spieler_rst.getInt(col) != korrekt_rst.getInt(col))
                     {
@@ -324,6 +355,8 @@ public class MainController {
                         objectNode.put("feedback", col+".Spalte, " + aktuelleZeile+".Zeile"
                                 +" hat falschen integer Wert");
                         resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+                        closeConnection(s1,c1);
+                        closeConnection(s2,c2);
                         return objectNode;
                     }
                     else continue;
@@ -337,9 +370,25 @@ public class MainController {
                         objectNode.put("feedback", col+".Spalte, " + aktuelleZeile+".Zeile"
                                 +" hat falschen float Wert");
                         resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+                        closeConnection(s1,c1);
+                        closeConnection(s2,c2);
                         return objectNode;
                     }
                     else continue;
+                }
+                if (colTyp == 91)
+                {
+                    if (!spieler_rst.getDate(col).equals(korrekt_rst.getDate(col)))
+                    {
+                        log.info("hier ist falsch : der typ ist Date : col "+ col + ", zeile "+ aktuelleZeile);
+                        objectNode.put("bewertung", false);
+                        objectNode.put("feedback", col+".Spalte, " + aktuelleZeile+".Zeile"
+                                +" hat falschen Date Wert");
+                        resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+                        closeConnection(s1,c1);
+                        closeConnection(s2,c2);
+                        return objectNode;
+                    }
                 }
                 if (colTyp == 12) // der Typ ist String
                 {
@@ -350,17 +399,22 @@ public class MainController {
                         objectNode.put("feedback", col+".Spalte, " + aktuelleZeile+".Zeile"
                                 +" hat falschen string Wert");
                         resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+                        closeConnection(s1,c1);
+                        closeConnection(s2,c2);
                         return objectNode;
                     }
                     else continue;
                 }
+
             }
         }
 
         if (spieler_rst.next()){
             objectNode.put("bewertung", false);
-            objectNode.put("feedback", "zu viel zeilen");
+            objectNode.put("feedback", "deine Antwort hat zu viel zeilen");
             resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+            closeConnection(s1,c1);
+            closeConnection(s2,c2);
             return objectNode;
         }
 
@@ -368,24 +422,16 @@ public class MainController {
         objectNode.put("feedback", "deine Antwort ist richtig");
         resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
 
-        if (!s1.isClosed()){
-            s1.close();
-        }
-        if (!c1.isClosed()){
-            c1.close();
-        }
-        if (!s2.isClosed()){
-            s2.close();
-        }
-        if (!c2.isClosed()){
-            c2.close();
-        }
+        closeConnection(s1,c1);
+        closeConnection(s2,c2);
         return objectNode;
     }
 
+
     // objectNode : "spaltenAnz", "zeilenAnz", "spaltenName1" , "spaltenName2", ..., "data#data#data..."
-    private void resultSetToObjectNode (ObjectNode objectNode, ResultSet resultSet,
-                                        ResultSetMetaData resultSetMetaData) throws SQLException {
+    @Transactional
+    void resultSetToObjectNode(ObjectNode objectNode, ResultSet resultSet,
+                               ResultSetMetaData resultSetMetaData) throws SQLException {
         // Anzahl an Spalten
         int spaltenAnz = resultSetMetaData.getColumnCount();
         objectNode.put("spaltenAnz", spaltenAnz);
@@ -408,10 +454,15 @@ public class MainController {
                     data.append(resultSet.getFloat(i));
                     data.append("#");
                 }
+                if (colTyp == 91){
+                    data.append(convertSQLDateToUtilDate(resultSet.getDate(i)));
+                    data.append("#");
+                }
                 if (colTyp == 12){
                     data.append(resultSet.getString(i));
                     data.append("#");
                 }
+
             }
         }
         // das letzte # entfernen
@@ -426,5 +477,18 @@ public class MainController {
         objectNode.put("data", data.toString());
     }
 
+    private void closeConnection (Statement statement, Connection connection) throws SQLException {
+        if (!statement.isClosed()){
+            statement.close();
+        }
+        if (!connection.isClosed()){
+            connection.close();
+        }
+    }
 
+    private String convertSQLDateToUtilDate (java.sql.Date sqlDate){
+        java.util.Date date = new java.util.Date(sqlDate.getTime());
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(date);
+    }
 }

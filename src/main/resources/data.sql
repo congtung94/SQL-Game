@@ -64,15 +64,15 @@ insert into lieferant (name ,beschr) values ('Blitz' , 'sofort lieferung, teuer'
 
 -- bestellung daten
 insert into bestellung (kaeufer_id, verkaeufer_id, bst_tag, lieferung_tag, lieferant_id)
-values (1,4,'2021-03-20', '2021-03-20', 1);
+values (1,4,'2021-03-20', DATE ('2021-03-20'), 1);
 insert into bestellung (kaeufer_id, verkaeufer_id, bst_tag, lieferung_tag, lieferant_id)
-values (1,3,'2020-01-20', '2020-01-22', 2);
+values (1,3,'2020-01-20', DATE ('2020-01-22'), 2);
 insert into bestellung (kaeufer_id, verkaeufer_id, bst_tag, lieferung_tag, lieferant_id)
-values (3,4,'2020-05-01', '2020-05-02', 1);
+values (3,4,'2020-05-01', DATE ('2020-05-02'), 1);
 insert into bestellung (kaeufer_id, verkaeufer_id, bst_tag, lieferung_tag, lieferant_id)
-values (2,5,'2020-09-20', '2020-09-20', 2);
+values (2,5,'2020-09-20', DATE ('2020-09-20'), 2);
 insert into bestellung (kaeufer_id, verkaeufer_id, bst_tag, lieferung_tag, lieferant_id)
-values (5,4,'2021-10-11', '2021-10-20', 3);
+values (5,4,'2021-10-11', DATE ('2021-10-20'), 3);
 
 -- bestellung_details daten
 insert into bestellung_details (bst_id, prod_id, einzel_preis, bst_menge)

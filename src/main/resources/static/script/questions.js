@@ -36,11 +36,18 @@ function nachsteFrage() {
 function ausfuhren(){
     var codeArea = document.getElementById("codeArea");
     var code = codeArea.value;
-    var feedbackArea = document.getElementById("feedback");
+    var feedbackArea = document.getElementById("ausgabe");
 
     if (code == "")
     {
-        feedbackArea.innerHTML = "du hast kein code eingegeben !";
+        let div = document.createElement("div");
+        let label = document.createElement("label");
+        label.innerHTML = "du hast kein code eingegen !";
+        div.appendChild(label);
+        div.appendChild(document.createElement("br"));
+
+        let letztesFeedback = feedbackArea.firstChild;
+        feedbackArea.insertBefore(div, letztesFeedback);
         console.log("kein code");
     }
     else
@@ -66,14 +73,44 @@ function ausfuhren(){
 
                 // syntax error, ein SQLException wurde geworfen
                 if (Object.keys(response).length === 2){
-                    feedbackArea.innerHTML = response.feedback +"<br><br>" +
-                        feedbackArea.innerHTML;
+                    let div = document.createElement("div");
+                    let label = document.createElement("label");
+                    label.innerHTML = response.feedback;
+                    div.appendChild(label);
+                    div.appendChild(document.createElement("br"));
+
+                    let letztesFeedback = feedbackArea.firstChild;
+                    feedbackArea.insertBefore(div, letztesFeedback);
+
                     return;
                 }
+                let spaltenAnz = response.spaltenAnz;
+                let zeilenAnz = response.zeilenAnz;
+                let dataInString = response.data;
 
-                feedbackArea.innerHTML = response.feedback + "# spaltenAnz-"+ response.spaltenAnz
-                    +" zeilenAnz-"+ response.zeilenAnz + " daten-" + response.data+ "<br><br>" +
-                    feedbackArea.innerHTML;
+                // daten für Ausgabe-Tabelle
+                let spaltenNamen = new Array();
+                let daten = new Array();
+                for (let i = 4; i< spaltenAnz +4; i++){
+                    var key = Object.keys(response)[i];
+                    var spaltenName = response[key];
+                    spaltenNamen.push(spaltenName);
+                }
+                daten = dataInString.split ("#");
+                console.log(daten);
+                let ausgabeTabelle = tabelleGenerator(spaltenAnz, zeilenAnz, spaltenNamen, daten);
+
+
+                let div = document.createElement("div");
+                let label = document.createElement("label");
+                label.innerHTML = response.feedback;
+                div.appendChild(label);
+                div.appendChild(ausgabeTabelle);
+                div.appendChild(document.createElement("br"));
+
+                let letztesFeedback = feedbackArea.firstChild;
+                feedbackArea.insertBefore(div, letztesFeedback);
+
                 if (response.bewertung){
                     weiterBtn.disabled = false;
                     // update womöglich level in page-navigation
@@ -81,7 +118,7 @@ function ausfuhren(){
                         document.getElementById("levelSpan").innerText = "Level: "+ response.level; // nächstes Level
                         alert("Glückwünsch ! Du hast Level "+ response.level + " erreicht !!");
                     }
-                    // der hat gewonnen
+                    // der Spieler hat gewonnen
                     if (response.gewinn != undefined){
                         ausfuhrenBtn.disabled = true;
                         alert("Glückwunsch, du hast das Spiel gewonnen !!!");
@@ -92,6 +129,31 @@ function ausfuhren(){
             }
         });
     }
+}
+
+function tabelleGenerator (spaltenAnz, zeilenAnz, spaltenNamen, daten){
+    var tabelle = document.createElement("table");
+    tabelle.border =1;
+    tabelle.style.borderCollapse = "collapse";
+    var tabelleKopf = document.createElement("tr");
+    for (let i = 0; i< spaltenAnz; i++){
+        var th = document.createElement("th");
+        th.appendChild(document.createTextNode(spaltenNamen[i]));
+        tabelleKopf.appendChild(th);
+    }
+    tabelle.appendChild(tabelleKopf);
+
+    for (let i = 0; i< zeilenAnz; i++){
+        var tabelleZeile = document.createElement("tr");
+        for (let j = 0; j< spaltenAnz; j++){
+            var td = document.createElement("td");
+            td.appendChild(document.createTextNode(daten[i*spaltenAnz + j]));
+            tabelleZeile.appendChild(td);
+        }
+        tabelle.appendChild(tabelleZeile);
+    }
+
+    return tabelle;
 }
 
 

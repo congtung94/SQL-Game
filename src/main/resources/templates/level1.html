@@ -43,7 +43,7 @@
         </div>
     </div>
 
-    <div class="mt-4" style="overflow-y: scroll; height:400px;">
+    <div id="ausgabe" class="mt-4" style="overflow-y: scroll; height:400px;">
         <label id="feedback"> feedback from server </label>
     </div>
 
@@ -55,8 +55,8 @@
 <script th:inline="javascript">
     let listFragen = [[${listFragen}]];
     let spielstand = [[${spielstand}]];
-
 </script>
+
 <script th:src="@{/script/timer.js}"></script>
 <script th:src="@{/script/questions.js}"></script>
 <div th:insert="fragments/footer :: footer"></div>
