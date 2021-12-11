@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @ControllerAdvice
 public class SpielerControllerAdvice {
 
-     @Autowired
-    Spieler spieler;
+    @Autowired
+    Spieler aktivSpieler;
 
-    @ModelAttribute("currentSpieler")
+    @ModelAttribute("aktivSpieler")
     public Spieler getCurrentPlayer (){
-        return spieler;
+        return aktivSpieler;
     }
 }

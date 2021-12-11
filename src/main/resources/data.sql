@@ -64,15 +64,15 @@ insert into lieferant (name ,beschr) values ('Blitz' , 'sofort lieferung, teuer'
 
 -- bestellung daten
 insert into bestellung (kaeufer_id, verkaeufer_id, bst_tag, lieferung_tag, lieferant_id)
-values (1,4,'2021-03-20', '2021-03-20', 1);
+values (1,4,'2021-03-20', DATE ('2021-03-20'), 1);
 insert into bestellung (kaeufer_id, verkaeufer_id, bst_tag, lieferung_tag, lieferant_id)
-values (1,3,'2020-01-20', '2020-01-22', 2);
+values (1,3,'2020-01-20', DATE ('2020-01-22'), 2);
 insert into bestellung (kaeufer_id, verkaeufer_id, bst_tag, lieferung_tag, lieferant_id)
-values (3,4,'2020-05-01', '2020-05-02', 1);
+values (3,4,'2020-05-01', DATE ('2020-05-02'), 1);
 insert into bestellung (kaeufer_id, verkaeufer_id, bst_tag, lieferung_tag, lieferant_id)
-values (2,5,'2020-09-20', '2020-09-20', 2);
+values (2,5,'2020-09-20', DATE ('2020-09-20'), 2);
 insert into bestellung (kaeufer_id, verkaeufer_id, bst_tag, lieferung_tag, lieferant_id)
-values (5,4,'2021-10-11', '2021-10-20', 3);
+values (5,4,'2021-10-11', DATE ('2021-10-20'), 3);
 
 -- bestellung_details daten
 insert into bestellung_details (bst_id, prod_id, einzel_preis, bst_menge)
@@ -88,51 +88,64 @@ values (1, 5, 3.5, 9);
 
 
 -- antworten
-insert into antwort (col_anz, zeile_anz, sql)
-values (0,0, 'select count(*) from bewohner, insel where bewohner.ort_id = insel.id and insel.name = \"winter\"');
-insert into antwort (col_anz, zeile_anz, sql)
-values (5,2, 'select * from produkt where produkt.besitzer_id is null');
-insert into antwort (col_anz, zeile_anz, sql)
-values (0,0, 'select count(*) from bewohner, insel where bewohner.ort_id = insel.id and insel.name = \"frühling\"');
-insert into antwort (col_anz, zeile_anz, sql)
-values (2,5, 'select select  h.name as Hobby_name, count (bh.hb_id) as Interessiete
+insert into antwort (col_anz, zeile_anz,typ, sql)
+values (0,0,1, 'select count(*) from bewohner, insel where bewohner.ort_id = insel.id and insel.name = \"winter\"');
+insert into antwort (col_anz, zeile_anz,typ, sql)
+values (5,2,2, 'select * from produkt where produkt.besitzer_id is null');
+insert into antwort (col_anz, zeile_anz, typ,sql)
+values (0,0,1, 'select count(*) from bewohner, insel where bewohner.ort_id = insel.id and insel.name = \"frühling\"');
+insert into antwort (col_anz, zeile_anz,typ, sql)
+values (2,5,2, 'select  h.name as Hobby_name, count (bh.hb_id) as Interessiete
 from hobby h, bew_hobby bh
 where h.id = bh.hb_id
 group by h.name
 order by count(bh.hb_id) desc');
-insert into antwort (col_anz, zeile_anz, sql)
-values (6,2, 'select * from bestellung where bst_tag = lieferung_tag');
-insert into antwort (col_anz, zeile_anz, sql)
-values (3,3, 'select bew.name as kauefer_name,i.name as Insel_name , bst.id as bestellung_id
+insert into antwort (col_anz, zeile_anz,typ, sql)
+values (6,2,2, 'select * from bestellung where bst_tag = lieferung_tag');
+insert into antwort (col_anz, zeile_anz,typ, sql)
+values (3,3,2, 'select bew.name as kauefer_name,i.name as Insel_name , bst.id as bestellung_id
 from bestellung bst, bewohner bew, insel i
 where bst.kaeufer_id = bew.id and bew.ort_id = i.id and i.name = ''frühling'' and
 (bst.verkaeufer_id  in (select bewohner.id from bewohner, insel where bewohner.ort_id = insel.id and insel.name = ''sommer''))');
 
 -- fragen
 insert into frage (text,level,max_punkte,antw_id)
-values ('Die Insel heißt Sommer,kannst du checken, wie viele Menschen auf der Insel leben ?', 1, 10, 1);
+values ('Du liebst Abenteuer und möchtest endlich reisen.
+            Du hast ein bisschen Geld und das reicht für ein Ticket zur nächsten Insel.
+            Unglücklicherweise ist dein Schiff in einem Sturm gesunken.
+            Du hat glück, an einen Strand zu landen.
+
+            Jetzt musst du die Herausforderungen mit deinen SQL-Kenntnissen meistern.
+            Je schneller du die Probleme löst, desto besser ist dein Ranking.
+            Viel Spaß !!!', 0, 0, null );
 insert into frage (text,level,max_punkte,antw_id)
-values ('Auf der Insel kannst du Lebensmittel oder Gegenstände finden. Die findest du in der Tabelle Produkt, wo Besitzer null ist ', 1, 10, 2);
+values ('Die Insel heißt winter,kannst du checken, wie viele Menschen auf der Insel leben ?', 1, 10, 1);
 insert into frage (text,level,max_punkte,antw_id)
-values ('Die Insel heißt Frühling,kannst du checken, wer auf der Insel lebt ?', 2, 15, 3);
+values ('Auf der Insel kannst du Lebensmittel oder Gegenstände finden.
+        Die findest du in der Tabelle Produkt, wo Besitzer null ist ', 1, 10, 2);
 insert into frage (text,level,max_punkte,antw_id)
-values ('was sind die dominanten Hobby der Bewohner ? Die Ausgabe soll 2 Column Hobby_name und Interessierte enthalten', 2, 15, 4);
+values ('Die Insel heißt Frühling,kannst du checken, wie viele Menschen auf der Insel lebt ?', 2, 15, 3);
+insert into frage (text,level,max_punkte,antw_id)
+values ('was sind die dominanten Hobby der Bewohner ?
+         Die Ausgabe soll 2 Column Hobby_name und Interessierte enthalten', 2, 15, 4);
 insert into frage (text,level,max_punkte,antw_id)
 values ('welche Bestellungen werden am gleichen Tag geliefert ?', 3, 20, 5);
 insert into frage (text,level,max_punkte,antw_id)
-values ('welche Bestellungen sind zwischen 2 Insel,welche Insel Frühling als Käufer ist ? ' ||
-        'Die Ausgabe sollen 3 Spalten: Kaeufer_name, Insel_name und bestellung_id enthalten ', 3, 20, 6);
+values ('welche Bestellungen sind zwischen 2 Insel,welche Insel Frühling als Käufer ist ?
+        Die Ausgabe sollen 3 Spalten: Kaeufer_name, Insel_name und bestellung_id enthalten ', 3, 20, 6);
+
+
 
 
 -- spieler
-insert into spieler (name, passwort) values ('Tung' , 'demo');
-insert into spieler (name, passwort) values ('Hai' , 'demo');
-insert into spieler (name, passwort) values ('Ba' , 'demo');
+insert into spieler (name, passwort) values ('tung' , 'demo');
+insert into spieler (name, passwort) values ('hai' , 'demo');
+insert into spieler (name, passwort) values ('ba' , 'demo');
 
 -- spielstand
 
 insert into spielstand (spieler_id, level,punkte, zeit, akt_frage_id) values (1, 1, 0, 0, 1 );
-insert into spielstand (spieler_id, level,punkte, zeit, akt_frage_id) values (2, 3, 3000, 2000, 5 );
-insert into spielstand (spieler_id, level,punkte, zeit, akt_frage_id) values (1, 2, 200, 300, 3 );
+insert into spielstand (spieler_id, level,punkte, zeit, akt_frage_id) values (2, 3, 3000, 2000, 6 );
+insert into spielstand (spieler_id, level,punkte, zeit, akt_frage_id) values (3, 2, 200, 300, 7 );
 
 

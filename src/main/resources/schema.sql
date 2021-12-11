@@ -1,14 +1,19 @@
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO public;
 
 create table insel
 (
-    id integer identity primary key ,
+    id integer generated always as identity primary key ,
     name varchar (30) not null,
     beschr varchar (50)
 );
 
 create table bewohner
 (
-    id integer identity primary key ,
+    id integer  generated always as identity primary key ,
     name varchar (30) not null ,
     ort_id integer,
     gold integer,
@@ -19,14 +24,14 @@ create table bewohner
 
 create table kategorie
 (
-    id integer identity primary key ,
+    id integer generated always as identity primary key ,
     name varchar (30),
     beschr varchar (50)
 );
 
 create table produkt
 (
-    id integer identity primary key ,
+    id integer generated always as identity primary key ,
     name varchar (30) not null ,
     menge integer ,
     besitzer_id integer ,
@@ -38,7 +43,7 @@ create table produkt
 
 create table hobby
 (
-    id integer identity primary key ,
+    id integer generated always as identity primary key ,
     name varchar (30),
     beschr varchar (50)
 );
@@ -54,15 +59,16 @@ create table bew_hobby
 
 create table antwort
 (
-    id integer identity primary key ,
+    id integer generated always as identity primary key ,
     col_anz integer ,
     zeile_anz integer ,
+    typ integer , -- 1 - zahl, 2- objekt, 3 - list
     sql varchar (2000)
 );
 
 create table frage
 (
-    id integer identity primary key ,
+    id integer generated always as identity primary key ,
     text varchar (2000) ,
     level integer ,
     max_punkte integer ,
@@ -73,14 +79,14 @@ create table frage
 
 create table lieferant
 (
-      id integer identity primary key ,
+      id integer generated always as identity primary key ,
       name varchar (30),
       beschr varchar (50)
 );
 
 create table bestellung
 (
-    id integer identity primary key ,
+    id integer generated always as identity primary key ,
     kaeufer_id integer ,
     verkaeufer_id integer ,
     bst_tag date ,
@@ -102,14 +108,14 @@ create table bestellung_details
 
 create table spieler
 (
-    id integer identity primary key ,
+    id integer generated always as identity primary key ,
     name varchar (30),
     passwort varchar (30)
 );
 
 create table spielstand
 (
-    spl_std_id integer identity primary key ,
+    spl_std_id integer generated always as identity primary key ,
     spieler_id integer ,
     level integer ,
     punkte integer ,
