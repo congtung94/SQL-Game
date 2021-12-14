@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/header :: header">
+<body>
+<div class="container mx-auto" >
+    <div th:insert="fragments/body :: navigation (false,null, null, null)"></div>
+
+    <p class="text-center mt-4">Für SQL Game registrieren</p>
+
+    <form th:action="@{/registrieren}" method="post" th:object="${registrierenForm}">
+
+        <div class="d-flex justify-content-center mt-4" >
+            <input type="text" class="form-control w-25" id="name"
+                   required="true" placeholder="name" name="name" >
+        </div>
+        <div class="d-flex justify-content-center" >
+            <input type="password" class="form-control w-25 mt-4" id="password"
+                   required="true" placeholder="passwort" name="passwort">
+        </div>
+        <div class="d-flex justify-content-center" >
+            <input type="password" class="form-control w-25 mt-4" id="passwordRepeated"
+                   required="true" placeholder="passwort wiederholen" name="passwortWiederholung">
+        </div>
+
+        <div class="d-flex justify-content-center mt-4">
+            <button type="submit" id="loginBtn" class="btn-secondary">Registrieren</button>
+        </div>
+
+        <div class="d-flex justify-content-center mt-4" th:if="${error} ">
+            <br>
+            <div class="alert alert-danger w-50 text-center">
+						<span th:text="${error}" >
+                            name ist vergeben oder unterschiedliche Passworte eingegeben</span>
+            </div>
+        </div>
+
+
+    </form>
+
+<div th:insert="fragments/footer :: footer"></div>
+</div>
+</body>
+</html>

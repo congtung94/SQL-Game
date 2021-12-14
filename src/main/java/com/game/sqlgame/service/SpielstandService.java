@@ -9,4 +9,5 @@ public interface SpielstandService {
     public boolean updateSpielstand (int spielstandId,  int level, int plusPunkte, int aktuelleFrageId);
     public boolean updateSpielstand (int spielstandId, int neuPunkte, int aktuelleFrageId);
     public boolean updateSpielstand (int spielstandId, int neuPunkte);
+    public boolean save (Spielstand spielstand);
 }

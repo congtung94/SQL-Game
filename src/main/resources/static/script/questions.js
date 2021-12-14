@@ -42,7 +42,7 @@ function ausfuhren(){
     {
         let div = document.createElement("div");
         let label = document.createElement("label");
-        label.innerHTML = "du hast kein code eingegen !";
+        label.innerHTML = "du hast kein code eingegeben !";
         div.appendChild(label);
         div.appendChild(document.createElement("br"));
 

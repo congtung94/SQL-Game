@@ -1,6 +1,7 @@
 package com.game.sqlgame.repository;
 
 import com.game.sqlgame.game_components.user_verwaltung.Spieler;
+import com.game.sqlgame.game_components.user_verwaltung.SpielerRegistrierenForm;
 import com.game.sqlgame.rowmapper.SpielerRowmapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

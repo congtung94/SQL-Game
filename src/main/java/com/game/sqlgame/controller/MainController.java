@@ -4,15 +4,15 @@ package com.game.sqlgame.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.game.sqlgame.game_components.Antwort;
-import com.game.sqlgame.game_components.Frage;
 import com.game.sqlgame.game_components.Spielstand;
 import com.game.sqlgame.game_components.user_verwaltung.AktuellerSpieler;
 import com.game.sqlgame.game_components.user_verwaltung.Spieler;
+import com.game.sqlgame.game_components.user_verwaltung.SpielerRegistrierenForm;
+import com.game.sqlgame.game_components.user_verwaltung.SpielerRegistrierenValidator;
 import com.game.sqlgame.service.AntwortService;
 import com.game.sqlgame.service.FrageService;
 import com.game.sqlgame.service.SpielerService;
 import com.game.sqlgame.service.SpielstandService;
-import com.zaxxer.hikari.HikariDataSource;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,12 +20,16 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.List;
 
 @Controller
 public class MainController {
@@ -38,22 +42,64 @@ public class MainController {
     private final SpielstandService spielstandService;
     private final AntwortService antwortService;
     private final ObjectMapper objectMapper;
+    private final SpielerRegistrierenValidator validator;
 
     public MainController(JdbcTemplate jdbcTemplate, SpielerService spielerService,
                           FrageService frageService, SpielstandService spielstandService,
-                          AntwortService antwortService, ObjectMapper objectMapper) {
+                          AntwortService antwortService, ObjectMapper objectMapper, SpielerRegistrierenValidator validator) {
         this.jdbcTemplate = jdbcTemplate;
         this.spielerService = spielerService;
         this.frageService = frageService;
         this.spielstandService = spielstandService;
         this.antwortService = antwortService;
         this.objectMapper = objectMapper;
+        this.validator = validator;
+    }
+
+    @InitBinder("registrierenForm")
+    public void initBinder (WebDataBinder webDataBinder){
+        webDataBinder.addValidators(validator);
     }
 
     @GetMapping("/")
     public String start(Model model) {
 
         return "start";
+    }
+
+    @GetMapping("/registrieren")
+    public String registrieren (){
+        return "registrieren";
+    }
+
+    @PostMapping("/registrieren")
+    public String registrieren (@Valid @ModelAttribute("registrierenForm")SpielerRegistrierenForm form,
+                                BindingResult bindingResult, Model model, HttpServletRequest request){
+        if (bindingResult.hasErrors()){
+            model.addAttribute("error", bindingResult.getGlobalError().getDefaultMessage());
+            log.info(bindingResult.getGlobalError().getDefaultMessage());
+            return "registrieren";
+        }
+        Spieler spieler = new Spieler();
+        spieler.setName(form.getName());
+        spieler.setPasswort(form.getPasswort());
+        spielerService.save(spieler);
+
+        Spielstand spielstand = new Spielstand();
+        spielstand.setSpielerId(spielerService.getPlayerByName(spieler.getName()).get().getId());
+        spielstandService.save(spielstand);
+
+        authWithHttpServletRequest(request, spieler.getName(), spieler.getPasswort());
+
+        return "redirect:/spielen";
+    }
+
+    public void authWithHttpServletRequest(HttpServletRequest request, String username, String password) {
+        try {
+            request.login(username, password);
+        } catch (ServletException e) {
+            log.error("Error while login ", e);
+        }
     }
 
     @GetMapping("/spielen")
