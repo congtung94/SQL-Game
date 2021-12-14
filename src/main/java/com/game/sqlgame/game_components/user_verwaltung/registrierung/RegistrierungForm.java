@@ -1,4 +1,4 @@
-package com.game.sqlgame.game_components.user_verwaltung;
+package com.game.sqlgame.game_components.user_verwaltung.registrierung;
 
 
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class SpielerRegistrierenForm {
+public class RegistrierungForm {
 
     @NotNull
     private String name ="";

@@ -56,35 +56,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //auth.jdbcAuthentication().passwordEncoder(passwordEncoder());
     }*/
 
-
-    /*@Bean
-    protected UserDetailsService userDetailsService() {
-        UserDetails annaSmithUser = User.builder()
-                .username("annasmith")
-                .password("password")
-                .authorities("USER")
-                .build();
-
-        UserDetails lindaUser = User.builder()
-                .username("linda")
-                .password("password123")
-                .authorities("User")
-                .build();
-
-        UserDetails tomUser = User.builder()
-                .username("tom")
-                .password("password123")
-                .authorities("user")
-                .build();
-
-        return new InMemoryUserDetailsManager(
-                annaSmithUser,
-                lindaUser,
-                tomUser
-        );
-
-    }*/
-
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new  BCryptPasswordEncoder();

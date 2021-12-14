@@ -6,9 +6,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.game.sqlgame.game_components.Antwort;
 import com.game.sqlgame.game_components.Spielstand;
 import com.game.sqlgame.game_components.user_verwaltung.AktuellerSpieler;
-import com.game.sqlgame.game_components.user_verwaltung.Spieler;
-import com.game.sqlgame.game_components.user_verwaltung.SpielerRegistrierenForm;
-import com.game.sqlgame.game_components.user_verwaltung.SpielerRegistrierenValidator;
 import com.game.sqlgame.service.AntwortService;
 import com.game.sqlgame.service.FrageService;
 import com.game.sqlgame.service.SpielerService;
@@ -18,23 +15,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 @Controller
-public class MainController {
+public class GameController {
 
-    private static final Logger log = LoggerFactory.getLogger(MainController.class);
+    private static final Logger log = LoggerFactory.getLogger(GameController.class);
     private final JdbcTemplate jdbcTemplate;
 
     private final SpielerService spielerService;
@@ -42,65 +33,26 @@ public class MainController {
     private final SpielstandService spielstandService;
     private final AntwortService antwortService;
     private final ObjectMapper objectMapper;
-    private final SpielerRegistrierenValidator validator;
 
-    public MainController(JdbcTemplate jdbcTemplate, SpielerService spielerService,
+
+    public GameController(JdbcTemplate jdbcTemplate, SpielerService spielerService,
                           FrageService frageService, SpielstandService spielstandService,
-                          AntwortService antwortService, ObjectMapper objectMapper, SpielerRegistrierenValidator validator) {
+                          AntwortService antwortService, ObjectMapper objectMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.spielerService = spielerService;
         this.frageService = frageService;
         this.spielstandService = spielstandService;
         this.antwortService = antwortService;
         this.objectMapper = objectMapper;
-        this.validator = validator;
-    }
 
-    @InitBinder("registrierenForm")
-    public void initBinder (WebDataBinder webDataBinder){
-        webDataBinder.addValidators(validator);
     }
 
     @GetMapping("/")
     public String start(Model model) {
-
         return "start";
     }
 
-    @GetMapping("/registrieren")
-    public String registrieren (){
-        return "registrieren";
-    }
 
-    @PostMapping("/registrieren")
-    public String registrieren (@Valid @ModelAttribute("registrierenForm")SpielerRegistrierenForm form,
-                                BindingResult bindingResult, Model model, HttpServletRequest request){
-        if (bindingResult.hasErrors()){
-            model.addAttribute("error", bindingResult.getGlobalError().getDefaultMessage());
-            log.info(bindingResult.getGlobalError().getDefaultMessage());
-            return "registrieren";
-        }
-        Spieler spieler = new Spieler();
-        spieler.setName(form.getName());
-        spieler.setPasswort(form.getPasswort());
-        spielerService.save(spieler);
-
-        Spielstand spielstand = new Spielstand();
-        spielstand.setSpielerId(spielerService.getPlayerByName(spieler.getName()).get().getId());
-        spielstandService.save(spielstand);
-
-        authWithHttpServletRequest(request, spieler.getName(), spieler.getPasswort());
-
-        return "redirect:/spielen";
-    }
-
-    public void authWithHttpServletRequest(HttpServletRequest request, String username, String password) {
-        try {
-            request.login(username, password);
-        } catch (ServletException e) {
-            log.error("Error while login ", e);
-        }
-    }
 
     @GetMapping("/spielen")
     public String login(Model model) {
@@ -157,7 +109,6 @@ public class MainController {
         return "level1";
     }
 
-    @Transactional
     @PostMapping(value = "/sendCode")
     public @ResponseBody
     ObjectNode codeBewertung(@RequestParam String spielerCodeData, Model model){
@@ -269,7 +220,6 @@ public class MainController {
         return objectNode;
     }
 
-    @Transactional
     ObjectNode checkQueryAnswer(String spieler_antwort, int frageId) throws SQLException {
 
         int antwortId = frageService.findAnswerIdByQuestionId(frageId);
@@ -461,7 +411,6 @@ public class MainController {
 
 
     // objectNode : "spaltenAnz", "zeilenAnz", "spaltenName1" , "spaltenName2", ..., "data#data#data..."
-    @Transactional
     void resultSetToObjectNode(ObjectNode objectNode, ResultSet resultSet,
                                ResultSetMetaData resultSetMetaData) throws SQLException {
         // Anzahl an Spalten
