@@ -1,6 +1,6 @@
 package com.game.sqlgame.repository;
 
-import com.game.sqlgame.game_components.Antwort;
+import com.game.sqlgame.gameComponents.Antwort;
 import com.game.sqlgame.rowmapper.AntwortRowmapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

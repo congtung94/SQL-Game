@@ -1,4 +1,4 @@
-package com.game.sqlgame.game_components;
+package com.game.sqlgame.gameComponents;
 
 import lombok.Data;
 

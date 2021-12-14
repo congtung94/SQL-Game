@@ -7,7 +7,8 @@ let weiterBtn = document.getElementById("weiterBtn");
 let ausfuhrenBtn = document.getElementById("ausfuehrenBtn");
 let frageText = document.getElementById("frageText");
 
-var aktuelleFrageId = spielstandObject[5];
+
+let aktuelleFrageId = spielstandObject[5];
 console.log(aktuelleFrageId);
 frageText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[1];
 
@@ -24,6 +25,10 @@ function nachsteFrage() {
         return;
     }
     aktuelleFrageId++;
+    if (aktuelleFrageId == 2) // jetzt läuft die Zeit
+    {
+        Clock.start();
+    }
     frageText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[1]; // nächste Frage text
     if (Object.values(listFragebObject[aktuelleFrageId-1])[4] == 0) // antwort_id == 0
     {

@@ -1,6 +1,6 @@
 package com.game.sqlgame.rowmapper;
 
-import com.game.sqlgame.game_components.Frage;
+import com.game.sqlgame.gameComponents.Frage;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

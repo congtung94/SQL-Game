@@ -1,4 +1,4 @@
-package com.game.sqlgame.game_components.user_verwaltung.registrierung;
+package com.game.sqlgame.gameComponents.user_verwaltung.registrierung;
 
 import com.game.sqlgame.service.SpielerService;
 import org.slf4j.Logger;

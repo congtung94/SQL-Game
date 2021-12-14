@@ -1,7 +1,6 @@
 package com.game.sqlgame.repository;
 
-import com.game.sqlgame.game_components.Spielstand;
-import com.game.sqlgame.game_components.user_verwaltung.Spieler;
+import com.game.sqlgame.gameComponents.Spielstand;
 import com.game.sqlgame.rowmapper.SpielstandRowmapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

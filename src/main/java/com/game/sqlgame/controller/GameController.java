@@ -3,9 +3,9 @@ package com.game.sqlgame.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.game.sqlgame.game_components.Antwort;
-import com.game.sqlgame.game_components.Spielstand;
-import com.game.sqlgame.game_components.user_verwaltung.AktuellerSpieler;
+import com.game.sqlgame.gameComponents.Antwort;
+import com.game.sqlgame.gameComponents.Spielstand;
+import com.game.sqlgame.gameComponents.user_verwaltung.AktuellerSpieler;
 import com.game.sqlgame.service.AntwortService;
 import com.game.sqlgame.service.FrageService;
 import com.game.sqlgame.service.SpielerService;

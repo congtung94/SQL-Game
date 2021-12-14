@@ -1,6 +1,6 @@
 package com.game.sqlgame.service.impl;
 
-import com.game.sqlgame.game_components.Antwort;
+import com.game.sqlgame.gameComponents.Antwort;
 import com.game.sqlgame.repository.AntwortRepository;
 import com.game.sqlgame.service.AntwortService;
 import org.springframework.stereotype.Service;

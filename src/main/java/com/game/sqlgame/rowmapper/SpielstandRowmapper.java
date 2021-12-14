@@ -1,6 +1,6 @@
 package com.game.sqlgame.rowmapper;
 
-import com.game.sqlgame.game_components.Spielstand;
+import com.game.sqlgame.gameComponents.Spielstand;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

@@ -1,35 +1,19 @@
-/*
-var minutesLabel = document.getElementById("minutes");
-var secondsLabel = document.getElementById("seconds");
-var totalSeconds = 0;
-setInterval(setTime, 1000);
+const min = document.getElementById("min");
+const sec = document.getElementById("sec");
 
-function setTime() {
-    ++totalSeconds;
-    secondsLabel.innerHTML = pad(totalSeconds % 60);
-    minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
-}
-
-function pad(val) {
-    var valString = val + "";
-    if (valString.length < 2) {
-        return "0" + valString;
-    } else {
-        return valString;
-    }
-}*/
+function pad(val) { return val > 9 ? val : "0" + val; }
 
 var Clock = {
     totalSeconds: 0,
     start: function () {
         if (!this.interval) {
             var self = this;
-            function pad(val) { return val > 9 ? val : "0" + val; }
             this.interval = setInterval(function () {
+
                 self.totalSeconds += 1;
 
-                document.getElementById("min").innerHTML = pad(Math.floor(self.totalSeconds / 60 % 60));
-                document.getElementById("sec").innerHTML = pad(parseInt(self.totalSeconds % 60));
+                min.innerHTML = pad(Math.floor(self.totalSeconds / 60 % 60));
+                sec.innerHTML = pad(parseInt(self.totalSeconds % 60));
             }, 1000);
         }
     },
@@ -56,8 +40,22 @@ var Clock = {
     }
 };
 
+// Spielzeit anzeigen
+let aktuelleZeit = spielstandObject[4];
+Clock.totalSeconds = aktuelleZeit;
 
-document.getElementById("weiterBtn").addEventListener("click", function () { Clock.start(); });
+if (aktuelleZeit != 0){ // das Spiel hat begonnen
+    min.innerHTML = pad(Math.floor(aktuelleZeit /60 % 60));
+    sec.innerHTML = pad(parseInt(aktuelleZeit % 60));
+    console.log(aktuelleZeit);
+    Clock.start();
+}
+
+
+
+
+
+//document.getElementById("weiterBtn").addEventListener("click", function () { Clock.start(); });
 document.getElementById("pauseButton").addEventListener("click", function () { Clock.pause(); });
 document.getElementById("resumeButton").addEventListener("click", function () { Clock.resume(); });
 document.getElementById("resetButton").addEventListener("click", function () { Clock.reset(); });

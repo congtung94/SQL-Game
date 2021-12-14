@@ -1,9 +1,9 @@
 package com.game.sqlgame.controller;
 
-import com.game.sqlgame.game_components.Spielstand;
-import com.game.sqlgame.game_components.user_verwaltung.Spieler;
-import com.game.sqlgame.game_components.user_verwaltung.registrierung.RegistrierungForm;
-import com.game.sqlgame.game_components.user_verwaltung.registrierung.RegistrierungValidator;
+import com.game.sqlgame.gameComponents.Spielstand;
+import com.game.sqlgame.gameComponents.user_verwaltung.Spieler;
+import com.game.sqlgame.gameComponents.user_verwaltung.registrierung.RegistrierungForm;
+import com.game.sqlgame.gameComponents.user_verwaltung.registrierung.RegistrierungValidator;
 import com.game.sqlgame.service.SpielerService;
 import com.game.sqlgame.service.SpielstandService;
 import org.slf4j.Logger;

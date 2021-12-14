@@ -1,6 +1,6 @@
 package com.game.sqlgame.service;
 
-import com.game.sqlgame.game_components.Frage;
+import com.game.sqlgame.gameComponents.Frage;
 
 import java.util.List;
 import java.util.Optional;
