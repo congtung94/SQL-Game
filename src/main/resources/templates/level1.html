@@ -3,7 +3,7 @@
 <head th:include="fragments/header :: header"><head>
 <body>
 <div class="container mx-auto">
-    <div th:insert="fragments/body :: navigation (true, ${aktivSpieler.name}, ${spielstand.punkte}, ${spielstand.level})"></div>
+    <div th:insert="fragments/body :: navigation (true, ${aktuellerSpieler.name}, ${spielstand.punkte}, ${spielstand.level})"></div>
 
     <input id="pauseButton" type="hidden"  value="Pause">
     <input id="resumeButton" type="hidden" value="Resume">
@@ -26,7 +26,10 @@
     </div>
 
     <input type="hidden"  th:value="${listFragen}"/>
-    <!--<input type="hidden" th:value="${aktuelleFrageId}">-->
+
+    <!--https://stackoverflow.com/questions/37383730/how-to-add-csrf-token-to-ajax-request-->
+    <meta th:name="_csrf" th:content="${_csrf.token}"/>
+    <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
 
     <div class="d-flex justify-content-center">
         <input id="weiterBtn" onclick="nachsteFrage()" class="btn-secondary mt-4" th:disabled="false"
@@ -55,6 +58,8 @@
 <script th:inline="javascript">
     let listFragen = [[${listFragen}]];
     let spielstand = [[${spielstand}]];
+    var csrf_token = document.querySelector("meta[name='_csrf']").getAttribute("content");
+    var csrf_header = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
 </script>
 
 <script th:src="@{/script/timer.js}"></script>

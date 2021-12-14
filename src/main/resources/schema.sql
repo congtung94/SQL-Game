@@ -110,7 +110,7 @@ create table spieler
 (
     id integer generated always as identity primary key ,
     name varchar (30),
-    passwort varchar (30)
+    passwort varchar (100)
 );
 
 create table spielstand

@@ -1,6 +1,7 @@
 package com.game.sqlgame.repository;
 
 import com.game.sqlgame.game_components.Spielstand;
+import com.game.sqlgame.game_components.user_verwaltung.Spieler;
 import com.game.sqlgame.rowmapper.SpielstandRowmapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,17 @@ public class SpielstandRepository {
 
     public SpielstandRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public boolean save (Spielstand spielstand)
+    {
+        String sql = "insert into spielstand(spieler_id, level,punkte, zeit, akt_frage_id) values (?,?,?,?,?)";
+        int insert = jdbcTemplate.update(sql, spielstand.getSpielerId(), spielstand.getLevel(),
+                spielstand.getPunkte(), spielstand.getZeit(), spielstand.getAktuelleFrageId());
+        if (insert == 1){
+            return true;
+        }
+        else return false;
     }
 
 

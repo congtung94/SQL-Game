@@ -63,6 +63,9 @@ function ausfuhren(){
             data: {
                 spielerCodeData: JSON.stringify(dataToServer)
             },
+            beforeSend: function (xhr){
+                xhr.setRequestHeader(csrf_header, csrf_token);
+            },
             // response : bewertung,feedback, spaltenAnz, zeilenAnz,
             //          spaltenName1,spaltenName2, ..., data#data#data..., level, punkte, gewinn
             success: function (response) {

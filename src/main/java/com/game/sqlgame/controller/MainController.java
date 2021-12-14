@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.game.sqlgame.game_components.Antwort;
 import com.game.sqlgame.game_components.Frage;
 import com.game.sqlgame.game_components.Spielstand;
+import com.game.sqlgame.game_components.user_verwaltung.AktuellerSpieler;
 import com.game.sqlgame.game_components.user_verwaltung.Spieler;
 import com.game.sqlgame.service.AntwortService;
 import com.game.sqlgame.service.FrageService;
@@ -36,38 +37,29 @@ public class MainController {
     private final FrageService frageService;
     private final SpielstandService spielstandService;
     private final AntwortService antwortService;
-    private final Spieler aktivSpieler;
     private final ObjectMapper objectMapper;
 
     public MainController(JdbcTemplate jdbcTemplate, SpielerService spielerService,
                           FrageService frageService, SpielstandService spielstandService,
-                          AntwortService antwortService, Spieler aktivSpieler, ObjectMapper objectMapper) {
+                          AntwortService antwortService, ObjectMapper objectMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.spielerService = spielerService;
         this.frageService = frageService;
         this.spielstandService = spielstandService;
         this.antwortService = antwortService;
-        this.aktivSpieler = aktivSpieler;
         this.objectMapper = objectMapper;
     }
 
     @GetMapping("/")
     public String start(Model model) {
-        model.addAttribute("spieler", new Spieler());
+
         return "start";
     }
 
-    @PostMapping("/")
-    public String login(@ModelAttribute("spieler") Spieler spieler, Model model) {
-        // check Login-Daten
-        if (!spielerService.existsByName(spieler.getName())){
-            model.addAttribute("error", "der Username existiert nicht");
-            return "start";
-        }
-        if (!spieler.getPasswort().equals(spielerService.getPlayerByName(spieler.getName()).get().getPasswort())){
-            model.addAttribute("error", "falsche Passwort");
-            return "start";
-        }
+    @GetMapping("/spielen")
+    public String login(Model model) {
+
+        AktuellerSpieler aktuellerSpieler =(AktuellerSpieler) model.asMap().get("aktuellerSpieler");
 
         /*try {
             Connection connection = jdbcTemplate.getDataSource().getConnection();
@@ -97,15 +89,7 @@ public class MainController {
 
         log.info("korrekt oder nicht  ###### " + test);*/
 
-        spieler = spielerService.getPlayerByName(spieler.getName()).get();
-
-        // aktiver Spieler
-        int id = spieler.getId();
-        String name = spieler.getName();
-        aktivSpieler.setId(id);
-        aktivSpieler.setName(name);
-
-        Spielstand spielstand = spielstandService.findSpielStandByPlayerId(id).get();
+        Spielstand spielstand = spielstandService.findSpielStandByPlayerId(aktuellerSpieler.getId()).get();
         log.info(spielstand.toString());
 
         int aktuelleFrageId = spielstand.getAktuelleFrageId();
@@ -123,16 +107,18 @@ public class MainController {
         model.addAttribute("spielstand", spielstand);
         model.addAttribute("listFragen", frageService.findAllQuestions());
 
-        log.info(spieler.toString());
+        log.info(aktuellerSpieler.toString());
         return "level1";
     }
 
     @Transactional
     @PostMapping(value = "/sendCode")
     public @ResponseBody
-    ObjectNode codeBewertung(@RequestParam String spielerCodeData){
+    ObjectNode codeBewertung(@RequestParam String spielerCodeData, Model model){
 
-        Spielstand spielstand = spielstandService.findSpielStandByPlayerId(aktivSpieler.getId()).get();
+        AktuellerSpieler aktuellerSpieler =(AktuellerSpieler) model.asMap().get("aktuellerSpieler");
+
+        Spielstand spielstand = spielstandService.findSpielStandByPlayerId(aktuellerSpieler.getId()).get();
 
         log.info(spielerCodeData);
         ObjectNode objectNode = objectMapper.createObjectNode();

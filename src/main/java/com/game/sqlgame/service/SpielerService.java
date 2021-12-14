@@ -10,4 +10,5 @@ public interface SpielerService {
     Optional<Spieler> getPlayerByName (String name);
     boolean existsByName (String name);
     List<Spieler> getAllPlayers();
+    boolean save (Spieler spieler);
 }

@@ -136,8 +136,7 @@ values ('welche Bestellungen sind zwischen 2 Insel,welche Insel Fr√ºhling als K√
 
 
 
-
--- spieler
+/*-- spieler
 insert into spieler (name, passwort) values ('tung' , 'demo');
 insert into spieler (name, passwort) values ('hai' , 'demo');
 insert into spieler (name, passwort) values ('ba' , 'demo');
@@ -146,6 +145,6 @@ insert into spieler (name, passwort) values ('ba' , 'demo');
 
 insert into spielstand (spieler_id, level,punkte, zeit, akt_frage_id) values (1, 1, 0, 0, 1 );
 insert into spielstand (spieler_id, level,punkte, zeit, akt_frage_id) values (2, 3, 3000, 2000, 6 );
-insert into spielstand (spieler_id, level,punkte, zeit, akt_frage_id) values (3, 2, 200, 300, 7 );
+insert into spielstand (spieler_id, level,punkte, zeit, akt_frage_id) values (3, 2, 200, 300, 7 );*/
 
 

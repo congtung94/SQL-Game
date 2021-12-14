@@ -11,27 +11,29 @@
         <br>
         <label>Du bist abensteuerlustig und willig, SQL zu lernen ? Dann bist du hier richtig !</label>
         <br>
-        <form th:action="@{/}" method="post" th:object="${spieler}">
+        <form th:action="@{/}" method="post">
             <label class="mt-4">Gib dein username und Passwort ein, um deine Reise zu beginnen :</label>
             <br>
-            <div class="d-flex justify-content-center my-4" >
+            <div class="d-flex justify-content-center mt-4" >
                 <input type="text" class="form-control w-25" id="name"
-                       required="true" placeholder="name" th:field="*{name}">
+                       required="true" placeholder="name" name="name" >
             </div>
             <div class="d-flex justify-content-center" >
-                <input type="password" class="form-control w-25 my-1" id="passwort"
-                       required="true" placeholder="passwort" th:field="*{passwort}">
+                <input type="password" class="form-control w-25 mt-4" id="password"
+                       required="true" placeholder="passwort" name="password">
             </div>
-            <div class="d-flex justify-content-center my-2" >
+
+            <div class="d-flex justify-content-center mt-4" >
                 <button type="submit" class="btn-secondary ">Beginnen</button>
             </div>
 
-            <div th:if="${param.logout}">
-                <div class="alert alert-info">You have been logged out.</div>
+
+            <div th:if="${param.logout}" class="d-flex justify-content-center mt-4">
+                <div class="alert alert-info w-50">You have been logged out.</div>
             </div>
-            <div th:if="${param.error}">
+            <div class="d-flex justify-content-center mt-4" th:if="${param.error}">
                 <br>
-                <div class="alert alert-danger">
+                <div class="alert alert-danger w-50 ">
 						<span>login oder passwort ist falsch, bitte nochmal
 							versuchen</span>
                 </div>

@@ -27,6 +27,10 @@
                             <a class="dropdown-item" href="#">Ranking</a>
                             <a class="dropdown-item" href="#">Demo</a>
                             <a class="dropdown-item" href="#">Neustart</a>
+                            <form th:action="@{/logout}" method="post">
+                                <input type="submit" class="dropdown-item"
+                                       value="AUSLOGGEN">
+                            </form>
                         </div>
                     </li>
                 </ul>

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,12 +22,14 @@ public class SpielerRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void save (Spieler spieler){
+    public boolean save (Spieler spieler){
         String sql = "insert into Spieler(name,passwort) values (?,?)";
-        int insert = jdbcTemplate.update(sql, spieler.getName(), spieler.getPasswort());
+        int insert = jdbcTemplate.update(sql, spieler.getName(), new BCryptPasswordEncoder().encode(spieler.getPasswort()));
         if (insert == 1){
             log.info("neuer Spieler ");
+            return true;
         }
+        else return false;
     }
 
     public Optional<Spieler> getPlayerById (int id){

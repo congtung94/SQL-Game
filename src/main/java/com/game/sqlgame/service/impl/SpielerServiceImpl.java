@@ -36,4 +36,9 @@ public class SpielerServiceImpl implements SpielerService {
     public List<Spieler> getAllPlayers() {
         return spielerRepository.getAllPlayers();
     }
+
+    @Override
+    public boolean save(Spieler spieler) {
+        return spielerRepository.save(spieler);
+    }
 }
