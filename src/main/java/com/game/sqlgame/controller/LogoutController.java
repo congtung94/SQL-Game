@@ -32,6 +32,7 @@ public class LogoutController {
         AktuellerSpieler aktuellerSpieler =(AktuellerSpieler) model.asMap().get("aktuellerSpieler");
         log.info("hier logout controller "+aktuellerSpieler.toString());
         spielstandService.updateSpielstandBySpielerId(aktuellerSpieler.getId(), jsonObject.getInt("time"));
+        spielstandService.updateNeueFrageId(aktuellerSpieler.getId(), jsonObject.getInt("aktFrag"));
 
         SecurityContextHolder.clearContext();
         HttpSession session = request.getSession(false);

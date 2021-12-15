@@ -83,4 +83,25 @@ public class SpielstandRepository {
         }
         return false;
     }
+
+    public boolean updateSpielstadNeustart(int spielerId, int level, int punkte, int zeit, int aktuelleFrageId){
+        int tmp = jdbcTemplate.
+                update("update spielstand set level = ?, punkte = ?, zeit = ?, " +
+                                "akt_frage_id = ? where spieler_id = ?",
+                        level, punkte, zeit,aktuelleFrageId, spielerId);
+        if (tmp == 1){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateNeueFrageId (int spielerId, int aktuelleFrageId){
+        int tmp = jdbcTemplate.
+                update("update spielstand set akt_frage_id = ? where spieler_id = ?",
+                        aktuelleFrageId, spielerId);
+        if (tmp == 1){
+            return true;
+        }
+        return false;
+    }
 }

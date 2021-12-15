@@ -52,8 +52,6 @@ public class GameController {
         return "start";
     }
 
-
-
     @GetMapping("/spielen")
     public String login(Model model) {
 
@@ -202,8 +200,6 @@ public class GameController {
         return objectNode;
     }
 
-
-
     @PostMapping(value = "/test")
     public @ResponseBody
     ObjectNode saysomething(@RequestParam String insel){
@@ -218,6 +214,21 @@ public class GameController {
         objectNode.put("bon", jsonObject.getString("val3"));
         log.info(insel.toString());
         return objectNode;
+    }
+
+    @PostMapping("/neustart")
+    public String neustart (Model model){
+        AktuellerSpieler aktuellerSpieler =(AktuellerSpieler) model.asMap().get("aktuellerSpieler");
+        int aktuellerSpielerId = aktuellerSpieler.getId();
+
+        spielstandService.updateSpielstadNeustart(aktuellerSpielerId,1,0,0,1);
+
+        Spielstand spielstand = spielstandService.findSpielStandByPlayerId(aktuellerSpielerId).get();
+
+        model.addAttribute("spielstand", spielstand);
+        model.addAttribute("listFragen", frageService.findAllQuestions());
+
+        return "level1";
     }
 
     ObjectNode checkQueryAnswer(String spieler_antwort, int frageId) throws SQLException {

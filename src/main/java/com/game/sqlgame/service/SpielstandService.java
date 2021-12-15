@@ -11,4 +11,6 @@ public interface SpielstandService {
     boolean updateSpielstand (int spielstandId, int neuPunkte);
     boolean save (Spielstand spielstand);
     boolean updateSpielstandBySpielerId (int spielerId, int neuZeit);
+    boolean updateSpielstadNeustart (int spielerId, int level, int punkte, int zeit, int aktuelleFrageId);
+    boolean updateNeueFrageId (int spielerId, int aktuelleFrageId);
 }

@@ -54,7 +54,8 @@ if (aktuelleZeit != 0){ // das Spiel hat begonnen
 function logout (){
     Clock.pause();
     var zeit = {
-        time: Clock.totalSeconds
+        time: Clock.totalSeconds,
+        aktFrag: aktuelleFrageId
     };
 
     $.ajax({
