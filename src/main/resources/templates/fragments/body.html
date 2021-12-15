@@ -4,7 +4,7 @@
 
     <navigation th:fragment="navi (all, spielerName, punkte, level)">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">SQL GAME</a>
+            <a class="navbar-brand" href="/">SQL GAME</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -27,10 +27,10 @@
                             <a class="dropdown-item" href="#">Ranking</a>
                             <a class="dropdown-item" href="#">Demo</a>
                             <a class="dropdown-item" href="#">Neustart</a>
-                            <form th:action="@{/logout}" method="post">
-                                <input type="submit" class="dropdown-item"
-                                       value="AUSLOGGEN">
-                            </form>
+                            <a href="javascript:logout()" class="dropdown-item">AUSLOGGEN
+                                <!--<input type="submit" class="dropdown-item"
+                                       value="AUSLOGGEN">-->
+                            </a>
                         </div>
                     </li>
                 </ul>

@@ -51,7 +51,26 @@ if (aktuelleZeit != 0){ // das Spiel hat begonnen
     Clock.start();
 }
 
+function logout (){
+    Clock.pause();
+    var zeit = {
+        time: Clock.totalSeconds
+    };
 
+    $.ajax({
+        type: "POST",
+        url: "/custom_logout",
+        data: {
+            sek: JSON.stringify(zeit)
+        },
+        beforeSend: function (xhr){
+            xhr.setRequestHeader(csrf_header, csrf_token);
+        },
+        success: function (response) {
+            window.location = "/";
+        }
+    });
+}
 
 
 

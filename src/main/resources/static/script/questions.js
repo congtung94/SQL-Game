@@ -12,11 +12,8 @@ let aktuelleFrageId = spielstandObject[5];
 console.log(aktuelleFrageId);
 frageText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[1];
 
-if (Object.values(listFragebObject[aktuelleFrageId-1])[4] == 0) // antwort_id == 0
-{
-    weiterBtn.disabled = false;
-}
-else weiterBtn.disabled = true;
+weiterBtnZustand();
+
 
 function nachsteFrage() {
     if (aktuelleFrageId == frageAnzahl){
@@ -30,13 +27,16 @@ function nachsteFrage() {
         Clock.start();
     }
     frageText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[1]; // nächste Frage text
-    if (Object.values(listFragebObject[aktuelleFrageId-1])[4] == 0) // antwort_id == 0
+    weiterBtnZustand();
+}
+
+function weiterBtnZustand (){
+    if (Object.values(listFragebObject[aktuelleFrageId-1])[4] == 0) // antwort_id == 0, es ist keine Frage
     {
         weiterBtn.disabled = false;
     }
     else weiterBtn.disabled = true;
 }
-
 
 function ausfuhren(){
     var codeArea = document.getElementById("codeArea");

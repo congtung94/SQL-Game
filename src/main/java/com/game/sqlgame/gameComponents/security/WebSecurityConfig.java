@@ -34,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .usernameParameter("name")
                 .and()
                 .logout()
-                    .logoutUrl("/logout")
+                    /*.logoutUrl("/logout")*/
                     .clearAuthentication(true)
                     .invalidateHttpSession(true)
                     .deleteCookies("JSESSIONID")

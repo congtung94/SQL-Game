@@ -6,8 +6,9 @@ import java.util.Optional;
 
 public interface SpielstandService {
     Optional<Spielstand> findSpielStandByPlayerId (int id);
-    public boolean updateSpielstand (int spielstandId,  int level, int plusPunkte, int aktuelleFrageId);
-    public boolean updateSpielstand (int spielstandId, int neuPunkte, int aktuelleFrageId);
-    public boolean updateSpielstand (int spielstandId, int neuPunkte);
-    public boolean save (Spielstand spielstand);
+    boolean updateSpielstand (int spielstandId,  int level, int plusPunkte, int aktuelleFrageId);
+    boolean updateSpielstand (int spielstandId, int neuPunkte, int aktuelleFrageId);
+    boolean updateSpielstand (int spielstandId, int neuPunkte);
+    boolean save (Spielstand spielstand);
+    boolean updateSpielstandBySpielerId (int spielerId, int neuZeit);
 }

@@ -73,4 +73,14 @@ public class SpielstandRepository {
         }
         return false;
     }
+
+    public boolean updateSpielstandBySpielerId (int spielerId, int neuZeit){
+        int tmp = jdbcTemplate.
+                update("update spielstand set zeit = ? where spieler_id = ?",
+                        neuZeit, spielerId);
+        if (tmp == 1){
+            return true;
+        }
+        return false;
+    }
 }

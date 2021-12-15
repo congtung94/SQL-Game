@@ -41,4 +41,9 @@ public class SpielstandServiceImpl implements SpielstandService {
     public boolean save(Spielstand spielstand) {
         return spielstandRepository.save(spielstand);
     }
+
+    @Override
+    public boolean updateSpielstandBySpielerId(int spielerId, int neuZeit) {
+        return spielstandRepository.updateSpielstandBySpielerId(spielerId,neuZeit);
+    }
 }
