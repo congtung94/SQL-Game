@@ -88,7 +88,7 @@ public class GameController {
         Spielstand spielstand = spielstandService.findSpielStandByPlayerId(aktuellerSpieler.getId()).get();
         log.info(spielstand.toString());
 
-        int aktuelleFrageId = spielstand.getAktuelleFrageId();
+        /*int aktuelleFrageId = spielstand.getAktuelleFrageId();
         log.info("aktuelle Frage = " + spielstand.getAktuelleFrageId());
         if (aktuelleFrageId == 0)
         {
@@ -98,7 +98,7 @@ public class GameController {
         else
         {
             log.info("line 121   "+frageService.findQuestionById(aktuelleFrageId).get().getText());
-        }
+        }*/
 
         model.addAttribute("spielstand", spielstand);
         model.addAttribute("listFragen", frageService.findAllQuestions());
@@ -129,9 +129,20 @@ public class GameController {
             return objectNode;
         }
 
+        Connection c1 = null;
+        Statement s1 = null;
+        Connection c2 = null;
+        Statement s2 = null;
+
         //boolean check = checkQueryAnswer(spieler_code,frageId);
         try {
-            objectNode = checkQueryAnswer(spieler_code, frageId);
+            c1 = jdbcTemplate.getDataSource().getConnection();
+            s1 = c1.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            c2 = jdbcTemplate.getDataSource().getConnection();
+            s2 = c2.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
+
+            objectNode = checkQueryAnswer(spieler_code, frageId, s1,s2,c1,c2);
             // wenn die Antwort richtig ist
             if (objectNode.get("bewertung").asBoolean(true))
             {
@@ -162,6 +173,21 @@ public class GameController {
         }catch (SQLException e){
             objectNode.put("bewertung", false);
             objectNode.put("feedback" , e.getMessage());
+        }finally {
+            if (c1 != null) {
+                try {
+                    closeConnection(s1,c1);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (c2 != null) {
+                try {
+                    closeConnection(s2,c2);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
 
         /*boolean check = true;
@@ -231,7 +257,8 @@ public class GameController {
         return "level1";
     }
 
-    ObjectNode checkQueryAnswer(String spieler_antwort, int frageId) throws SQLException {
+    ObjectNode checkQueryAnswer(String spieler_antwort, int frageId, Statement s1, Statement s2,
+                                Connection c1, Connection c2) throws SQLException {
 
         int antwortId = frageService.findAnswerIdByQuestionId(frageId);
         Antwort antwort = antwortService.findAnswerById(antwortId).get();
@@ -258,13 +285,11 @@ public class GameController {
         }*/
         /*else*/  // resultset
 
-        Connection c1 = jdbcTemplate.getDataSource().getConnection();
-        Statement s1 = c1.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
         ResultSet spieler_rst = s1.executeQuery(spieler_antwort);
         ResultSetMetaData spieler_rsmt = spieler_rst.getMetaData();
 
-        Connection c2 = jdbcTemplate.getDataSource().getConnection();
-        Statement s2 = c2.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
         ResultSet korrekt_rst = s2.executeQuery(antwort_text);
         ResultSetMetaData korrekt_rsmt = korrekt_rst.getMetaData();
 

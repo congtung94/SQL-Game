@@ -31,6 +31,8 @@ public class LogoutController {
         JSONObject jsonObject = new JSONObject(sek);
         AktuellerSpieler aktuellerSpieler =(AktuellerSpieler) model.asMap().get("aktuellerSpieler");
         log.info("hier logout controller "+aktuellerSpieler.toString());
+
+        // update Spielzeit und aktuelle Frage vor Logout
         spielstandService.updateSpielstandBySpielerId(aktuellerSpieler.getId(), jsonObject.getInt("time"));
         spielstandService.updateNeueFrageId(aktuellerSpieler.getId(), jsonObject.getInt("aktFrag"));
 
