@@ -56,12 +56,12 @@
 </div>
 
 <script th:inline="javascript">
-    let listFragen = [[${listFragen}]];
-    let spielstand = [[${spielstand}]];
+    const listFragen = [[${listFragen}]];
+    const spielstand = [[${spielstand}]];
 
     //https://stackoverflow.com/questions/34747437/use-of-spring-csrf-with-ajax-rest-call-and-html-page-with-thymeleaf
-    var csrf_token = document.querySelector("meta[name='_csrf']").getAttribute("content");
-    var csrf_header = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
+    let csrf_token = document.querySelector("meta[name='_csrf']").getAttribute("content");
+    let csrf_header = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
 </script>
 
 <script th:src="@{/script/questions.js}"></script>

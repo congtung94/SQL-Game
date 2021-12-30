@@ -1,11 +1,11 @@
-let listFragebObject = Object.values(listFragen);
-let spielstandObject = Object.values(spielstand);
+const listFragebObject = Object.values(listFragen);
+const spielstandObject = Object.values(spielstand);
 
-let frageAnzahl = listFragen.length;
+const frageAnzahl = listFragen.length;
 
-let weiterBtn = document.getElementById("weiterBtn");
-let ausfuhrenBtn = document.getElementById("ausfuehrenBtn");
-let frageText = document.getElementById("frageText");
+const weiterBtn = document.getElementById("weiterBtn");
+const ausfuhrenBtn = document.getElementById("ausfuehrenBtn");
+const frageText = document.getElementById("frageText");
 
 
 let aktuelleFrageId = spielstandObject[5];
@@ -39,9 +39,9 @@ function weiterBtnZustand (){
 }
 
 function ausfuhren(){
-    var codeArea = document.getElementById("codeArea");
-    var code = codeArea.value;
-    var feedbackArea = document.getElementById("ausgabe");
+    const codeArea = document.getElementById("codeArea");
+    const code = codeArea.value;
+    const feedbackArea = document.getElementById("ausgabe");
 
     if (code == "")
     {
@@ -57,7 +57,7 @@ function ausfuhren(){
     }
     else
     {
-        var dataToServer = {
+        const dataToServer = {
             aktFragId: aktuelleFrageId,
             spielerCode: code
         };
@@ -100,8 +100,8 @@ function ausfuhren(){
                 let spaltenNamen = new Array();
                 let daten = new Array();
                 for (let i = 4; i< spaltenAnz +4; i++){
-                    var key = Object.keys(response)[i];
-                    var spaltenName = response[key];
+                    const key = Object.keys(response)[i];
+                    const spaltenName = response[key];
                     spaltenNamen.push(spaltenName);
                 }
                 daten = dataInString.split ("#");
@@ -140,21 +140,21 @@ function ausfuhren(){
 }
 
 function tabelleGenerator (spaltenAnz, zeilenAnz, spaltenNamen, daten){
-    var tabelle = document.createElement("table");
+    const tabelle = document.createElement("table");
     tabelle.border =1;
     tabelle.style.borderCollapse = "collapse";
-    var tabelleKopf = document.createElement("tr");
+    const tabelleKopf = document.createElement("tr");
     for (let i = 0; i< spaltenAnz; i++){
-        var th = document.createElement("th");
+        const th = document.createElement("th");
         th.appendChild(document.createTextNode(spaltenNamen[i]));
         tabelleKopf.appendChild(th);
     }
     tabelle.appendChild(tabelleKopf);
 
     for (let i = 0; i< zeilenAnz; i++){
-        var tabelleZeile = document.createElement("tr");
+        const tabelleZeile = document.createElement("tr");
         for (let j = 0; j< spaltenAnz; j++){
-            var td = document.createElement("td");
+            const td = document.createElement("td");
             td.appendChild(document.createTextNode(daten[i*spaltenAnz + j]));
             tabelleZeile.appendChild(td);
         }
@@ -166,7 +166,7 @@ function tabelleGenerator (spaltenAnz, zeilenAnz, spaltenNamen, daten){
 
 
 function test() {
-    var obj = {
+    const obj = {
         val1: 1,
         val2: "frühling",
         val3: "schön"

@@ -3,11 +3,11 @@ const sec = document.getElementById("sec");
 
 function pad(val) { return val > 9 ? val : "0" + val; }
 
-var Clock = {
+const Clock = {
     totalSeconds: 0,
     start: function () {
         if (!this.interval) {
-            var self = this;
+            const self = this;
             this.interval = setInterval(function () {
 
                 self.totalSeconds += 1;
@@ -53,7 +53,7 @@ if (aktuelleZeit != 0){ // das Spiel hat begonnen
 
 function logout (){
     Clock.pause();
-    var zeit = {
+    const zeit = {
         time: Clock.totalSeconds,
         aktFrag: aktuelleFrageId
     };
