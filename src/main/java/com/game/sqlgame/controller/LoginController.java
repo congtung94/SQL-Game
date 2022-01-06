@@ -1,9 +1,11 @@
 package com.game.sqlgame.controller;
 
-import com.game.sqlgame.gameComponents.Spielstand;
-import com.game.sqlgame.gameComponents.user_verwaltung.Spieler;
+import com.game.sqlgame.model.SpielKomponente;
+import com.game.sqlgame.model.Spielstand;
+import com.game.sqlgame.model.Spieler;
 import com.game.sqlgame.gameComponents.user_verwaltung.registrierung.RegistrierungForm;
 import com.game.sqlgame.gameComponents.user_verwaltung.registrierung.RegistrierungValidator;
+import com.game.sqlgame.service.SpielKomponenteService;
 import com.game.sqlgame.service.SpielerService;
 import com.game.sqlgame.service.SpielstandService;
 import org.slf4j.Logger;
@@ -28,11 +30,13 @@ public class LoginController {
     private final RegistrierungValidator validator;
     private final SpielerService spielerService;
     private final SpielstandService spielstandService;
+    private final SpielKomponenteService spielKomponenteService;
 
-    public LoginController(RegistrierungValidator validator, SpielerService spielerService, SpielstandService spielstandService) {
+    public LoginController(RegistrierungValidator validator, SpielerService spielerService, SpielstandService spielstandService, SpielKomponenteService spielKomponenteService) {
         this.validator = validator;
         this.spielerService = spielerService;
         this.spielstandService = spielstandService;
+        this.spielKomponenteService = spielKomponenteService;
     }
 
     @InitBinder("registrierenForm")
@@ -58,9 +62,15 @@ public class LoginController {
         spieler.setPasswort(form.getPasswort());
         spielerService.save(spieler);
 
+        int spielerId = spielerService.getPlayerByName(spieler.getName()).get().getId();
+
         Spielstand spielstand = new Spielstand();
-        spielstand.setSpielerId(spielerService.getPlayerByName(spieler.getName()).get().getId());
+        spielstand.setSpielerId(spielerId);
         spielstandService.save(spielstand);
+
+        SpielKomponente spielKomponente = new SpielKomponente();
+        spielKomponente.setSpieler_id(spielerId);
+        spielKomponenteService.save(spielKomponente);
 
         authWithHttpServletRequest(request, spieler.getName(), spieler.getPasswort());
 

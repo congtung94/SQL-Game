@@ -1,6 +1,6 @@
 package com.game.sqlgame.repository;
 
-import com.game.sqlgame.gameComponents.user_verwaltung.Spieler;
+import com.game.sqlgame.model.Spieler;
 import com.game.sqlgame.rowmapper.SpielerRowmapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,7 @@ import java.util.Optional;
 public class SpielerRepository {
 
     private static final Logger log = LoggerFactory.getLogger(SpielerRepository.class);
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     public SpielerRepository (JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;

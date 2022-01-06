@@ -1,6 +1,6 @@
 package com.game.sqlgame.service;
 
-import com.game.sqlgame.gameComponents.Spielstand;
+import com.game.sqlgame.model.Spielstand;
 
 import java.util.Optional;
 

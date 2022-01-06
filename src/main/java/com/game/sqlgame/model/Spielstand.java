@@ -1,4 +1,4 @@
-package com.game.sqlgame.gameComponents;
+package com.game.sqlgame.model;
 
 import lombok.Data;
 
@@ -6,10 +6,11 @@ import lombok.Data;
 public class Spielstand {
     private int spielStandId;
     private int spielerId;
+    private int aktuelleFrageId;
     private int level;
     private int punkte;
     private int zeit;
-    private int aktuelleFrageId;
+
 
     public Spielstand(){
         this.level = 1;

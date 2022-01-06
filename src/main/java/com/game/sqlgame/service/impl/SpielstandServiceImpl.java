@@ -1,6 +1,6 @@
 package com.game.sqlgame.service.impl;
 
-import com.game.sqlgame.gameComponents.Spielstand;
+import com.game.sqlgame.model.Spielstand;
 import com.game.sqlgame.repository.SpielstandRepository;
 import com.game.sqlgame.service.SpielstandService;
 import org.springframework.stereotype.Service;

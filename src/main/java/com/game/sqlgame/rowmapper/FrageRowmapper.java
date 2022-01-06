@@ -1,6 +1,6 @@
 package com.game.sqlgame.rowmapper;
 
-import com.game.sqlgame.gameComponents.Frage;
+import com.game.sqlgame.model.Frage;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -12,9 +12,8 @@ public class FrageRowmapper implements RowMapper<Frage> {
         Frage frage = new Frage();
         frage.setId(rs.getInt("id"));
         frage.setText(rs.getString("text"));
-        frage.setAntw_id(rs.getInt("antw_id"));
-        frage.setLevel(rs.getInt("level"));
-        frage.setMax_punkte(rs.getInt("max_punkte"));
+        frage.setPunkte(rs.getInt("punkte"));
+        frage.setAntw(rs.getString("antw"));
         return frage;
     }
 }

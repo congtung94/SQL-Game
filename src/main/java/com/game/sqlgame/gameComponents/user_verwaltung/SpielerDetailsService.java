@@ -1,5 +1,6 @@
 package com.game.sqlgame.gameComponents.user_verwaltung;
 
+import com.game.sqlgame.model.Spieler;
 import com.game.sqlgame.service.SpielerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

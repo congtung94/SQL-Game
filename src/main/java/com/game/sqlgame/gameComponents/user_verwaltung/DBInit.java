@@ -1,6 +1,9 @@
 package com.game.sqlgame.gameComponents.user_verwaltung;
 
-import com.game.sqlgame.gameComponents.Spielstand;
+import com.game.sqlgame.model.SpielKomponente;
+import com.game.sqlgame.model.Spielstand;
+import com.game.sqlgame.model.Spieler;
+import com.game.sqlgame.repository.SpielKomponenteRepository;
 import com.game.sqlgame.repository.SpielerRepository;
 import com.game.sqlgame.repository.SpielstandRepository;
 import org.slf4j.Logger;
@@ -16,12 +19,13 @@ public class DBInit {
 
     private final SpielerRepository spielerRepository;
     private final SpielstandRepository spielstandRepository;
+    private final SpielKomponenteRepository spielKomponenteRepository;
 
 
-    public DBInit(SpielerRepository spielerRepository, SpielstandRepository spielstandRepository) {
+    public DBInit(SpielerRepository spielerRepository, SpielstandRepository spielstandRepository, SpielKomponenteRepository spielKomponenteRepository) {
         this.spielerRepository = spielerRepository;
         this.spielstandRepository = spielstandRepository;
-
+        this.spielKomponenteRepository = spielKomponenteRepository;
     }
 
     @PostConstruct
@@ -51,12 +55,16 @@ public class DBInit {
         spielstandTung.setAktuelleFrageId(1);
         spielstandRepository.save(spielstandTung);
 
+        SpielKomponente spielKomponenteTung = new SpielKomponente();
+        spielKomponenteTung.setSpieler_id(1);
+        spielKomponenteRepository.save(spielKomponenteTung);
+
         Spielstand spielstandMai = new Spielstand();
         spielstandMai.setLevel(3);
         spielstandMai.setSpielerId(2);
         spielstandMai.setPunkte(50);
         spielstandMai.setZeit(20);
-        spielstandMai.setAktuelleFrageId(4);
+        spielstandMai.setAktuelleFrageId(1);
         spielstandRepository.save(spielstandMai);
 
         Spielstand spielstandNga = new Spielstand();
@@ -64,7 +72,7 @@ public class DBInit {
         spielstandNga.setSpielerId(3);
         spielstandNga.setPunkte(40);
         spielstandNga.setZeit(10);
-        spielstandNga.setAktuelleFrageId(2);
+        spielstandNga.setAktuelleFrageId(1);
         spielstandRepository.save(spielstandNga);
 
 

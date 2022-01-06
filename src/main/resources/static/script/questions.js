@@ -8,7 +8,7 @@ const ausfuhrenBtn = document.getElementById("ausfuehrenBtn");
 const frageText = document.getElementById("frageText");
 
 
-let aktuelleFrageId = spielstandObject[5];
+let aktuelleFrageId = spielstandObject[2];
 console.log(aktuelleFrageId);
 frageText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[1];
 
@@ -31,11 +31,11 @@ function nachsteFrage() {
 }
 
 function weiterBtnZustand (){
-    if (Object.values(listFragebObject[aktuelleFrageId-1])[4] == 0) // antwort_id == 0, es ist keine Frage
+    if (Object.values(listFragebObject[aktuelleFrageId-1])[3] == null) // antwort_id == 0, es ist keine Frage
     {
-        weiterBtn.disabled = false;
+        weiterBtn.style.visibility = "visible";
     }
-    else weiterBtn.disabled = true;
+    else weiterBtn.style.visibility = "hidden";
 }
 
 function ausfuhren(){
@@ -120,7 +120,7 @@ function ausfuhren(){
                 feedbackArea.insertBefore(div, letztesFeedback);
 
                 if (response.bewertung){
-                    weiterBtn.disabled = false;
+                    weiterBtn.style.visibility = "visible";
                     // update womöglich level in page-navigation
                     if (response.level != undefined){
                         document.getElementById("levelSpan").innerText = "Level: "+ response.level; // nächstes Level
@@ -128,12 +128,12 @@ function ausfuhren(){
                     }
                     // der Spieler hat gewonnen
                     if (response.gewinn != undefined){
-                        ausfuhrenBtn.disabled = true;
+                        ausfuhrenBtn.style.visibility = "hidden";
                         alert("Glückwunsch, du hast das Spiel gewonnen !!!");
                     }
                     // update punkte
                     document.getElementById("punkteSpan").innerText = "Punkte: " + response.punkte;
-                }else weiterBtn.disabled = true;
+                }else weiterBtn.style.visibility = "hidden";
             }
         });
     }

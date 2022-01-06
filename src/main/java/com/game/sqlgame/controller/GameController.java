@@ -3,10 +3,8 @@ package com.game.sqlgame.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.game.sqlgame.gameComponents.Antwort;
-import com.game.sqlgame.gameComponents.Spielstand;
+import com.game.sqlgame.model.Spielstand;
 import com.game.sqlgame.gameComponents.user_verwaltung.AktuellerSpieler;
-import com.game.sqlgame.service.AntwortService;
 import com.game.sqlgame.service.FrageService;
 import com.game.sqlgame.service.SpielerService;
 import com.game.sqlgame.service.SpielstandService;
@@ -31,18 +29,17 @@ public class GameController {
     private final SpielerService spielerService;
     private final FrageService frageService;
     private final SpielstandService spielstandService;
-    private final AntwortService antwortService;
+
     private final ObjectMapper objectMapper;
 
 
     public GameController(JdbcTemplate jdbcTemplate, SpielerService spielerService,
                           FrageService frageService, SpielstandService spielstandService,
-                          AntwortService antwortService, ObjectMapper objectMapper) {
+                           ObjectMapper objectMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.spielerService = spielerService;
         this.frageService = frageService;
         this.spielstandService = spielstandService;
-        this.antwortService = antwortService;
         this.objectMapper = objectMapper;
 
     }
@@ -125,7 +122,8 @@ public class GameController {
         int frageId = data.getInt("aktFragId");
 
         // die Frage hat der Spieler richtig geantwortet oder das ist keine Frage
-        if (frageId == spielstand.getAktuelleFrageId()-1 || frageService.questionWithoutAnswer(frageId)){
+        // ein leeres ObjectNode wird zurückgegeben
+        if (frageId == spielstand.getAktuelleFrageId()-1 || frageService.findQuestionById(frageId).get().getAntw() == null){
             return objectNode;
         }
 
@@ -148,7 +146,7 @@ public class GameController {
             {
                 // war das die letzte Frage ?
                 if (frageId == frageService.countFrage()){
-                    int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getMax_punkte();
+                    int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getPunkte();
                     log.info("maximal punkte: " + neuPunkte);
                     spielstandService.updateSpielstand(spielstand.getSpielStandId(), neuPunkte);
                     objectNode.put("punkte", neuPunkte);
@@ -156,7 +154,7 @@ public class GameController {
                     return objectNode;
                 }
                 // update level, punkte, aktuelle FrageId in spielstand
-                int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getMax_punkte();
+                int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getPunkte();
                 if (frageId == 3){
                     spielstandService.updateSpielstand(spielstand.getSpielStandId(),2, neuPunkte,frageId+1);
                     objectNode.put("level", 2);
@@ -260,9 +258,8 @@ public class GameController {
     ObjectNode checkQueryAnswer(String spieler_antwort, int frageId, Statement s1, Statement s2,
                                 Connection c1, Connection c2) throws SQLException {
 
-        int antwortId = frageService.findAnswerIdByQuestionId(frageId);
-        Antwort antwort = antwortService.findAnswerById(antwortId).get();
-        String antwort_text = antwort.getSQL().replace("\\\"", "'");
+
+        String antwort = frageService.findQuestionById(frageId).get().getAntw().replace("\\\"", "'");
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         /*if (antwort.getAntwortTyp() == 1) // zahl
@@ -290,7 +287,7 @@ public class GameController {
         ResultSetMetaData spieler_rsmt = spieler_rst.getMetaData();
 
 
-        ResultSet korrekt_rst = s2.executeQuery(antwort_text);
+        ResultSet korrekt_rst = s2.executeQuery(antwort);
         ResultSetMetaData korrekt_rsmt = korrekt_rst.getMetaData();
 
         log.info("line 278 anzahl an spalten "+ spieler_rsmt.getColumnCount() +
@@ -350,7 +347,7 @@ public class GameController {
                     closeConnection(s2,c2);
                     return objectNode;
                 }
-                if (colTyp == -5){ // bigInt für count
+                if (colTyp == -5){ // bigInt wird zurückgegeben, wenn count durchgeführt wird
                     if (spieler_rst.getLong(col) != korrekt_rst.getLong(col))
                     {
                         log.info("hier ist falsch: der Typ ist BigInt : col " + col + "zeile: " +aktuelleZeile);
@@ -394,7 +391,7 @@ public class GameController {
                     }
                     else continue;
                 }
-                if (colTyp == 91)
+                if (colTyp == 91) // der Typ ist Date
                 {
                     if (!spieler_rst.getDate(col).equals(korrekt_rst.getDate(col)))
                     {
@@ -482,8 +479,10 @@ public class GameController {
 
             }
         }
+
         // das letzte # entfernen
-        data.deleteCharAt(data.length()-1);
+        if (data.length() != 0)
+            data.deleteCharAt(data.length()-1);
         // Anzahl an Zeilen
         objectNode.put("zeilenAnz", zeilenAnz);
         // Spaltennamen in objectNode übertragen

@@ -1,6 +1,6 @@
 package com.game.sqlgame.rowmapper;
 
-import com.game.sqlgame.gameComponents.Spielstand;
+import com.game.sqlgame.model.Spielstand;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -13,10 +13,11 @@ public class SpielstandRowmapper implements RowMapper<Spielstand> {
         Spielstand spielstand = new Spielstand();
         spielstand.setSpielStandId(rs.getInt("spl_std_id"));
         spielstand.setSpielerId(rs.getInt("spieler_id"));
+        spielstand.setAktuelleFrageId(rs.getInt("akt_frage_id"));
         spielstand.setLevel(rs.getInt("level"));
         spielstand.setPunkte(rs.getInt("punkte"));
         spielstand.setZeit(rs.getInt("zeit"));
-        spielstand.setAktuelleFrageId(rs.getInt("akt_frage_id"));
+
         return spielstand;
     }
 }

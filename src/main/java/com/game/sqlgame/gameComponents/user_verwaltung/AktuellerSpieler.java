@@ -1,5 +1,6 @@
 package com.game.sqlgame.gameComponents.user_verwaltung;
 
+import com.game.sqlgame.model.Spieler;
 import org.springframework.security.core.authority.AuthorityUtils;
 
 public class AktuellerSpieler extends org.springframework.security.core.userdetails.User{

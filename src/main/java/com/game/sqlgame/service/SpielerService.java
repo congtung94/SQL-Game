@@ -1,6 +1,6 @@
 package com.game.sqlgame.service;
 
-import com.game.sqlgame.gameComponents.user_verwaltung.Spieler;
+import com.game.sqlgame.model.Spieler;
 
 import java.util.List;
 import java.util.Optional;

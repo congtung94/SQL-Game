@@ -41,10 +41,10 @@ const Clock = {
 };
 
 // Spielzeit anzeigen
-let aktuelleZeit = spielstandObject[4];
+let aktuelleZeit = spielstandObject[5];
 Clock.totalSeconds = aktuelleZeit;
 
-if (aktuelleZeit != 0){ // das Spiel hat begonnen
+if (aktuelleFrageId > 1){ // das Spiel hat begonnen
     min.innerHTML = pad(Math.floor(aktuelleZeit /60 % 60));
     sec.innerHTML = pad(parseInt(aktuelleZeit % 60));
     console.log(aktuelleZeit);
