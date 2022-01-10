@@ -80,17 +80,17 @@ values (2, 'Ida', 39, 'Musik', 'Musiker', 10, 'beschaeftigt', 92, 8200);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
 values (2, 'Johanna', 28, 'Sport', 'Musiker', 6, 'frei', 98, 9000);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
-values (2, 'David', 31, 'Reparieren', 'Techniker', 10, 'frei', 98, 3500);
+values (2, 'David', 31, 'Archaeologie', 'Techniker', 10, 'frei', 98, 3500);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
-values (2, 'Luca', 46, 'Lesen', 'Baecker', 20, 'beschaeftigt', 90, 1800);
+values (2, 'Luca', 46, 'Archaeologie', 'Baecker', 20, 'beschaeftigt', 90, 1800);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
 values (2, 'Mina', 29, 'Lesen', 'Koch', 9, 'beschaeftigt', 92, 1500);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
-values (2, 'Isa', 28, 'Reisen', 'Navigator', 11, 'beschaeftigt', 110, 8100);
+values (2, 'Isa', 28, 'Archaeologie', 'Navigator', 11, 'beschaeftigt', 110, 8100);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
 values (2, 'Nono', 28, 'Eishockey', 'Navigator', 11, 'beschaeftigt', 115, 6000);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
-values (2, 'Edga', 28, 'Shopping', 'Navigator', 11, 'beschaeftigt', 111, 8000);
+values (2, 'Edga', 28, 'Archaeologie', 'Navigator', 11, 'beschaeftigt', 111, 8000);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
 values (2, 'Kim', 44, 'Tennis', 'Techniker', 20, 'frei', 100, 4500);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
@@ -100,9 +100,14 @@ values (2, 'Kai', 32, 'Reisen', 'Arzt', 6, 'beschaeftigt', 109, 8400);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
 values (2, 'Markus', 36, 'Lesen', 'Arzt', 8, 'beschaeftigt', 120, 7200);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
+values (2, 'Morina', 34, 'Archaeologie', 'Archaeologe', 11, 'beschaeftigt', 101, 6033);
+insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
 values (2, 'Felix', 59, 'Reisen', 'Arzt', 26, 'beschaeftigt', 120, 5900);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
-values (2, 'Tino', 43, 'Sport', 'Arzt', 16, 'beschaeftigt', 111, 5000);
+values (2, 'Tino', 43, 'Archaeologie', 'Arzt', 16, 'beschaeftigt', 111, 5000);
+insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
+values (2, 'Morina', 64, 'Archaeologie', 'Archaeologe', 40, 'beschaeftigt', 111, 6030);
+
 
 
 
@@ -133,6 +138,93 @@ insert into produkt (besitzer_id,name,preis,menge,status,kategorie)
 values (9, 'Kartoffel', 4,50, 'zu verkaufen', 'Lebensmittel');
 insert into produkt (besitzer_id,name,preis,menge,status,kategorie)
 values (11, 'Mehl', 2,25, 'zu verkaufen', 'Lebensmittel');
+
+
+-- hersteller
+insert into hersteller (name, bekanntheitsgrad)
+values ('Kyoto', 1);
+insert into hersteller (name, bekanntheitsgrad)
+values ('Hanako', 1);
+insert into hersteller (name, bekanntheitsgrad)
+values ('Akane', 2);
+insert into hersteller (name, bekanntheitsgrad)
+values ('Hisa', 2);
+insert into hersteller (name, bekanntheitsgrad)
+values ('Chiyo', 3);
+insert into hersteller (name, bekanntheitsgrad)
+values ('Daichi', 4);
+insert into hersteller (name, bekanntheitsgrad)
+values ('Genki', 5);
+insert into hersteller (name, bekanntheitsgrad)
+values ('Jiro', 5);
+insert into hersteller (name, bekanntheitsgrad)
+values ('Kaori', 5);
+
+-- ware
+insert into ware (hersteller_id, name,preis)
+values (8, 'Uhr', 20000); --1
+insert into ware (hersteller_id, name,preis)
+values (8, 'Geldbeutel', 9000); --2
+insert into ware (hersteller_id, name,preis)
+values (9, 'Schuhe', 4000); --3
+insert into ware (hersteller_id, name,preis)
+values (9, 'Jeans', 5000); --4
+insert into ware (hersteller_id, name,preis)
+values (9, 'Jacke', 40000); --5
+insert into ware (hersteller_id, name,preis)
+values (9, 'T-Shirt', 3000); --6
+insert into ware (hersteller_id, name,preis)
+values (6, 'Auto Daichi S1', 4000000); --7
+insert into ware (hersteller_id, name,preis)
+values (6, 'Motorrad Daichi M1', 500000); --8
+insert into ware (hersteller_id, name,preis)
+values (6, 'Auto Daichi limited', 10000000); --9
+insert into ware (hersteller_id, name,preis)
+values (5, 'Ring', 8100); --10
+insert into ware (hersteller_id, name,preis)
+values (5, 'Handschuhe', 1600); --11
+insert into ware (hersteller_id, name,preis)
+values (5, 'Pulli', 2100); --12
+
+
+
+-- käufe
+insert into kaeufe (ware_id, anzahl, tag)
+values (1, 1, '2021-01-01');
+insert into kaeufe (ware_id, anzahl, tag)
+values (2, 2, '2021-01-02');
+insert into kaeufe (ware_id, anzahl, tag)
+values (1, 3, '2021-01-03');
+insert into kaeufe (ware_id, anzahl, tag)
+values (8, 1, '2021-01-03');
+insert into kaeufe (ware_id, anzahl, tag)
+values (7, 1, '2021-01-03');
+insert into kaeufe (ware_id, anzahl, tag)
+values (9, 1, '2021-01-03');
+insert into kaeufe (ware_id, anzahl, tag)
+values (10, 5, '2021-01-08');
+insert into kaeufe (ware_id, anzahl, tag)
+values (11, 3, '2021-01-08');
+insert into kaeufe (ware_id, anzahl, tag)
+values (12, 8, '2021-01-08');
+insert into kaeufe (ware_id, anzahl, tag)
+values (3, 2, '2021-01-11');
+insert into kaeufe (ware_id, anzahl, tag)
+values (9, 1, '2021-01-18');
+insert into kaeufe (ware_id, anzahl, tag)
+values (2, 1, '2021-01-21');
+insert into kaeufe (ware_id, anzahl, tag)
+values (4, 5, '2021-01-28');
+insert into kaeufe (ware_id, anzahl, tag)
+values (5, 3, '2021-01-28');
+insert into kaeufe (ware_id, anzahl, tag)
+values (7, 1, '2021-01-31');
+insert into kaeufe (ware_id, anzahl, tag)
+values (8, 1, '2021-01-31');
+insert into kaeufe (ware_id, anzahl, tag)
+values (9, 2, '2021-02-01');
+insert into kaeufe (ware_id, anzahl, tag)
+values (6, 3, '2021-02-02');
 
 
 -- frage
@@ -239,15 +331,15 @@ values ('Ihr Schiff ist aufgeladen, Sie können die Reise endlich beginnen !!!',
 insert into frage (text, punkte, antw)
 values ('Die Navigation sagt, die nächste Insel liegt im Norden. Finden Sie alle Inseln im Norden.' ||
         'Hinweis : die Antwort hat nur 2 Spalten : id und name der Insel', 10,
-        'select insel.id, insel.name from insel, koordinaten where breiten_richtung = \"N\" and insel.koord_id = koordinaten.id ');
+        'select insel.id, insel.name from insel, koordinaten where breite_richtung = \"N\" and insel.koord_id = koordinaten.id ');
 insert into frage (text, punkte, antw)
 values ('Nächte Information : die Insel liegt im NW , zeigen Sie diese Inseln an ', 10,
-        'select insel.id, insel.name from insel, koordinaten where breiten_richtung = \"N\"' ||
+        'select insel.id, insel.name from insel, koordinaten where breite_richtung = \"N\"' ||
         ' and laenge_richtung = \"W\" and insel.koord_id = koordinaten.id');
 insert into frage (text, punkte, antw)
 values ('Die nächste Insel ist eine dieser 2 Insel, welche die kleiner Abstand hat. Zeigen Sie die name und koordinaten dieser Insel an.' ||
-        'Hinweis : die Spalten der Antwort sind : name, abstand, breiten_grad, breiten_richtung, laenge_grad, laenge_richtung', 10,
-        'select name, abstand,breite_grad,breiten_richtung, laenge_grad,laenge_richtung from insel, koordinaten ' ||
+        'Hinweis : die Spalten der Antwort sind : name, abstand, breite_grad, breite_richtung, laenge_grad, laenge_richtung', 10,
+        'select name, abstand,breite_grad,breite_richtung, laenge_grad,laenge_richtung from insel, koordinaten ' ||
         'where insel.koord_id = koordinaten.id and (insel.id = 2 or insel.id = 5) ' ||
         'and insel.abstand = (select min(abstand) from insel where id = 2 or id = 5)');
 insert into frage (text, punkte, antw)
@@ -299,7 +391,7 @@ values ('Ein Navigator sucht nach einer Aushilfe. Sein Einkommen ist unter dem d
         'Hinweis : nur seine id und name erforderlich',10,
         'select bewohner.id, bewohner.name from insel, bewohner ' ||
         'where insel.name = \"Ohara\" and insel.id = bewohner.insel_id and bewohner.beruf = \"Navigator\" ' ||
-        'and einkommen < (select avg(einkommen) from bewohner, insel where insel.name = \"Ohara\" and bewohner.insel_id = insel.id);');
+        'and einkommen < (select avg(einkommen) from bewohner, insel where insel.name = \"Ohara\" and bewohner.insel_id = insel.id)');
 insert into frage (text, punkte, antw)
 values ('Sehr Gut ! Alle haben jetzt einen Job', 0, null );
 insert into frage (text, punkte, antw)
@@ -329,8 +421,64 @@ values ('Der Arzt, wer bereit ist, mitzukommen, hat IQ Ranking 3 in seiner Grupp
 insert into frage (text, punkte, antw)
 values ('Sehr gut ! Ihre Mannschaft hat jetzt genug Gold, um das Schiff wieder bereit zu machen' ||
         'Jetzt müssen Sie die nächste Insel finden', 0, null );
-
-
-
-
+insert into frage (text, punkte, antw)
+values ('Die nächste Insel liegt auch im NW und hat Breitengrad und Längengrad gleich 80. Finden Sie sie.' ||
+        'Hinweis : Spalten der Antwort : insel.name, breite_grad, breite_richtung, laenge_grad, laenge_richtung'
+        ,10, 'select insel.name, breite_grad, breite_richtung, laenge_grad, laenge_richtung ' ||
+             'from insel, koordinaten ' ||
+             'where koordinaten.id = insel.koord_id and breite_richtung = \"N\" and laenge_richtung = \"W\"' ||
+             'and breite_grad = laenge_grad');
+insert into frage (text, punkte, antw)
+values ('Ok, die nächste Insel ist Konomi !', 0, null );
+insert into frage (text, punkte, antw)
+values ('Auf der Insel Konomi herrscht ein Diktatur. Die  Revolteure haben ihre Mannschaft gebeten, sie anzuschließen, um diesen Diktator zu stürzen. ' ||
+        'Obwohl das Volk in Armut lebt , hat der Diktator ein Luxusleben. Sie sollten sein Luxusleben enthüllen', 0, null );
+insert into frage (text, punkte, antw)
+values ('Wie viele Hersteller des Bekanntheitsgrades 5 gibt es ?', 10, 'select count(*) from hersteller where bekanntheitsgrad = 5');
+insert into frage (text , punkte, antw)
+values ('Wie oft hat er im 01.2021 Produkte von einem Hersteller des Bekanntheitsgrades größer als 4 gekauft' ||
+        'Hinweis : Antwort hat eine Spalte bestellung_anzahl.', 10,
+        'select count (*) as bestellung_anzahl from kaeufe, ware, hersteller where kaeufe.ware_id = ware.id and ware.hersteller_id = hersteller.id
+                and tag <= \"2021-01-31\" and tag >= \"2021-01-01\" and hersteller.bekanntheitsgrad >= 4');
+insert into frage (text, punkte, antw)
+values ('Wie oft hat er im 01.2021 Produkte von einem Hersteller des Bekanntheitsgrades größer als 3 gekauft?', 10,
+        'select count (*) from kaeufe where tag >= \"2021-01-01\"  and tag <= \"2021-01-31\"');
+insert into frage (text, punkte, antw)
+values ('Wie ist der Kaufbetrag im 01.2021 ?' , 10,
+        'select sum(anzahl * preis) as Kaufbetrag from kaeufe, ware ' ||
+        'where kaeufe.ware_id = ware.id and tag >= \"2021-01-01\"  and tag <= \"2021-01-31\"');
+insert into frage (text, punkte, antw)
+values ('Was ist der höchste Betrag, den er am einem Tag gekauft hat ?' ||
+        'Hinweis : Die Antwort hat die einzige Spalte max_betrag', 10,
+        'select max (tag_kaufbetrag) as max_betrag from
+        (select sum(anzahl * preis) as tag_kaufbetrag from kaeufe, ware where kaeufe.ware_id = ware.id group by tag) as tmp');
+insert into frage (text, punkte, antw)
+values ('Was ist der durchschnittliche Kaufbetrag jeden Tag vom 01.01.2021 bis 31.01.2021 ?' ||
+        'Hinweis : die Antwort hat eine Spalte kaufbetrag_durchschnitt', 10,
+        'select avg (kaufbetrag_pro_tag) from
+	        (select sum(preis*anzahl) as kaufbetrag_pro_tag
+	        from kaeufe, ware where kaeufe.ware_id = ware.id
+	        and tag <= \"2021-01-31\" and tag >= ''2021-01-01\" group by tag) as tmp');
+insert into frage (text, punkte, antw)
+values ('Am welchen Tag hat der mehr als Durchschnitt gekauft ? ' ||
+        'Hinweis: die Antwort hat 2 Spalten : tag, kaufbetrag_pro_tag', 10,
+        'with kaufbetrag as (select tag, sum(preis*anzahl) as kaufbetrag_pro_tag from kaeufe, ware where kaeufe.ware_id = ware.id group by tag)
+            select *  from kaufbetrag where kaufbetrag_pro_tag > (select avg(kaufbetrag_pro_tag) from kaufbetrag)');
+insert into frage (text, punkte, antw)
+values ('Mit ihrer Hilfe wurde der Diktator gestürzt. ' ||
+        'Jetzt können Sie mit der Reise weiter. ' ||
+        'Auf der  Insel gibt es den Schatz ,der für jede Reisende ein Traum ist.', 0, null );
+insert into frage (text, punkte, antw)
+values ('Es gibt einen Bewohner, der weiß, wo der Schatz zu finden ist.' ||
+        'Antworten Sie folgende Fragen, um ihn zu finden', 0 , null );
+insert into frage (text, punkte, antw)
+values ('Was ist das dominante Hobby der Bewohner auf der Insel ?' ||
+        'Hinweis : die Antwort hat 2 Spalten : hobby, interessierte (für die Anzahl der Interessierte)', 10,
+        'with hobby_statistik as
+        (select hobby, count (*) as interessierte from insel, bewohner where insel.id = bewohner.insel_id and insel.id = 2 group by hobby)
+        select hobby, interessierte from hobby_statistik where interessierte = (select max(interessierte) from hobby_statistik)');
+insert into frage (text, punkte, antw)
+values ('Wer von Ihnen kann sein Hobby Archaeologie zum Beruf machen ? ' ||
+        'Zeigen Sie die Liste dieser Bewohner mit ihrer id und ihrem name an.',10,
+        '');
 

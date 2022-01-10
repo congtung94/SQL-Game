@@ -376,6 +376,7 @@ public class GameController {
                     }
                     else continue;
                 }
+
                 if (colTyp == 8) // der Typ ist float
                 {
                     if (spieler_rst.getInt(col) != korrekt_rst.getInt(col))
@@ -384,6 +385,21 @@ public class GameController {
                         objectNode.put("bewertung", false);
                         objectNode.put("feedback", col+".Spalte, " + aktuelleZeile+".Zeile"
                                 +" hat falschen float Wert");
+                        resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+                        closeConnection(s1,c1);
+                        closeConnection(s2,c2);
+                        return objectNode;
+                    }
+                    else continue;
+                }
+                if (colTyp == 2) // der Typ ist numeric (double)
+                {
+                    if (spieler_rst.getDouble(col) != korrekt_rst.getDouble(col))
+                    {
+                        log.info("hier ist falsch : der Typ ist double : col " + col + "zeile: " +aktuelleZeile);
+                        objectNode.put("bewertung", false);
+                        objectNode.put("feedback", col+".Spalte, " + aktuelleZeile+".Zeile"
+                                +" hat falschen double Wert");
                         resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
                         closeConnection(s1,c1);
                         closeConnection(s2,c2);
@@ -465,7 +481,12 @@ public class GameController {
                     data.append("#");
                 }
                 if (colTyp == 8){
-                    data.append(resultSet.getFloat(i));
+                    data.append(String.format("%.2f", resultSet.getFloat(i)));
+                    log.info("String.format " + String.format("%.2f", resultSet.getFloat(i)));
+                    data.append("#");
+                }
+                if (colTyp == 2){
+                    data.append(String.format("%.2f", resultSet.getDouble(i)));
                     data.append("#");
                 }
                 if (colTyp == 91){
@@ -479,6 +500,7 @@ public class GameController {
 
             }
         }
+        log.info("zeilen anzahl = " + zeilenAnz);
 
         // das letzte # entfernen
         if (data.length() != 0)
