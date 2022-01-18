@@ -6,6 +6,7 @@ const frageAnzahl = listFragen.length;
 const weiterBtn = document.getElementById("weiterBtn");
 const ausfuhrenBtn = document.getElementById("ausfuehrenBtn");
 const frageText = document.getElementById("frageText");
+const spielInfos = document.getElementById("spielInfos");
 
 
 let aktuelleFrageId = spielstandObject[2];
@@ -16,16 +17,18 @@ weiterBtnZustand();
 
 
 function nachsteFrage() {
-    if (aktuelleFrageId == frageAnzahl){
+    if (aktuelleFrageId === frageAnzahl){
         // das Spiel gewonnen
         weiterBtn.disabled = true;
         return;
     }
+
     aktuelleFrageId++;
-    if (aktuelleFrageId == 2) // jetzt läuft die Zeit
+    if (aktuelleFrageId === 2) // jetzt läuft die Zeit
     {
         Clock.start();
     }
+
     frageText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[1]; // nächste Frage text
     weiterBtnZustand();
 }

@@ -2,8 +2,8 @@
 <html lang="de" xmlns:th="http://www.thymeleaf.org">
 <head th:include="fragments/header :: header"><head>
 <body>
-<div class="container mx-auto">
-    <div th:insert="fragments/body :: navigation (true, ${aktuellerSpieler.name}, ${spielstand.punkte}, ${spielstand.level})"></div>
+<div class="container">
+    <div th:insert="fragments/body :: navigation (true, ${aktuellerSpieler.name})"></div>
 
     <input id="pauseButton" type="hidden"  value="Pause">
     <input id="resumeButton" type="hidden" value="Resume">
@@ -21,33 +21,58 @@
         </label>
     </div>-->
 
-    <div class="d-flex justify-content-center mt-4" >
-        <label id="frageText" class="text-center" >Frage</label>
-    </div>
+    <!--linker Bereich: Spiel-Infos-->
+    <div class="row">
+        <div id="spielInfos" class="col-12 col-md-3">
+            <div class="row justify-content-center text-center">
+                <p class="col-2" id="min">00</p>
+                <p class="col-1">:</p>
+                <p class="col-2" id="sec" >00</p>
+            </div>
+            <div class="row justify-content-around text-center">
+                <p class="col-5" id="levelSpan" th:text="'Level: '+${spielstand.level}">Level</p>
+                <p class="col-5" th:text="'Punkte: '+${spielstand.punkte}">punkte</p>
+            </div>
 
-    <input type="hidden"  th:value="${listFragen}"/>
 
-    <!--https://stackoverflow.com/questions/37383730/how-to-add-csrf-token-to-ajax-request-->
-    <meta th:name="_csrf" th:content="${_csrf.token}"/>
-    <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
 
-    <div class="d-flex justify-content-center">
-        <input id="weiterBtn" onclick="nachsteFrage()" class="btn-secondary mt-4" th:disabled="false"
-               type="button" value="Weiter">
-    </div>
-
-    <div>
-            <textarea class="form-control mt-4" id="codeArea"
-                      rows="3" placeholder="Hier steht dein Code ..." ></textarea>
-        <br>
-        <div class="d-flex justify-content-center">
-            <button onclick="ausfuhren()" class="btn-secondary mt-4" type="submit"
-                    id="ausfuehrenBtn" >Ausführen</button>
         </div>
-    </div>
+    <!--rechter Bereich: Spiel-Fragen, Antworten und Ausgaben-->
+        <div class="col-12 col-md-9">
 
-    <div id="ausgabe" class="mt-4" style="overflow-y: scroll; height:400px;">
-        <label id="feedback"> feedback from server </label>
+            <!--Fragen-->
+            <div class="d-flex justify-content-center mt-4">
+                <label id="frageText" class="text-center">Frage</label>
+            </div>
+
+            <input type="hidden" th:value="${listFragen}"/>
+
+            <!--https://stackoverflow.com/questions/37383730/how-to-add-csrf-token-to-ajax-request-->
+            <meta th:name="_csrf" th:content="${_csrf.token}"/>
+            <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+            <div class="d-flex justify-content-center">
+                <input id="weiterBtn" onclick="nachsteFrage()" class="btn-secondary mt-4" th:disabled="false"
+                       type="button" value="Weiter">
+            </div>
+
+            <!--Antworten-->
+            <div>
+            <textarea class="form-control mt-4" id="codeArea"
+                      rows="3" placeholder="Hier steht dein Code ..."></textarea>
+                <br>
+                <div class="d-flex justify-content-center">
+                    <button onclick="ausfuhren()" class="btn-secondary mt-4" type="submit"
+                            id="ausfuehrenBtn">Ausführen
+                    </button>
+                </div>
+            </div>
+
+            <!--Ausgaben-->
+            <div id="ausgabe" class="mt-4" style="overflow-y: scroll; height:400px;">
+                <label id="feedback"> feedback from server </label>
+            </div>
+        </div>
     </div>
 
     <!--<label id="codetext">sometext hier</label>
