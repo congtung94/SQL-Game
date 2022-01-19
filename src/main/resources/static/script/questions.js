@@ -144,8 +144,7 @@ function ausfuhren(){
 
 function tabelleGenerator (spaltenAnz, zeilenAnz, spaltenNamen, daten){
     const tabelle = document.createElement("table");
-    tabelle.border =1;
-    tabelle.style.borderCollapse = "collapse";
+
     const tabelleKopf = document.createElement("tr");
     for (let i = 0; i< spaltenAnz; i++){
         const th = document.createElement("th");

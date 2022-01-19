@@ -6,3 +6,68 @@
 li{
     margin: 10px 0;
 }
+
+.frageBox{
+    display: flex;
+    width: 95%;
+    border: 1px;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.frageTextBox{
+    margin-top: 2px;
+    max-width: 90%;
+    height: auto;
+    box-sizing: border-box;
+    padding: 3%;
+    border: 1px solid #008E15;
+}
+
+.dreieck{
+    width: 3%;
+    border: 1px solid #008E15;
+    margin-right: -1.5%;
+    margin-top: 2%;
+    border-top: 0px solid #008E15;
+    border-right: 0px solid #008E15;
+    border-left: 1px solid #008E15;
+    border-bottom: 1px solid #008E15;
+    transform: rotate(45deg);
+    background-color: #ffffff;
+}
+
+.dreieck::before{
+    content: "";
+    float: left;
+    padding-top: 100%;
+}
+
+#ausgabe {
+    overflow-y: scroll;
+    max-width: 100%;
+    /*display: flex;
+    flex-direction: column;
+    justify-content: center;*/
+    max-height: 400px;
+}
+
+table{
+    max-width: 100%;
+}
+
+table td, th{
+    border: 1px solid #ddd;
+    padding: 3px;
+}
+
+table tr:nth-child(even){background-color: #F5F5ED;}
+
+table tr:hover {background-color: aliceblue;}
+
+table th{
+    background-color: #6C9A33;
+    color: white;
+}
+
+
