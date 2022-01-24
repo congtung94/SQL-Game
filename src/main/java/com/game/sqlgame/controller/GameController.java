@@ -155,6 +155,7 @@ public class GameController {
                 }
                 // update level, punkte, aktuelle FrageId in spielstand
                 int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getPunkte();
+                log.info("neunPunkte: " + neuPunkte);
                 if (frageId == 3){
                     spielstandService.updateSpielstand(spielstand.getSpielStandId(),2, neuPunkte,frageId+1);
                     objectNode.put("level", 2);
@@ -221,6 +222,7 @@ public class GameController {
         else objectNode.put("feedback", "dein antwort ist leider nicht richtig");
 
         return objectNode;*/
+        log.info(objectNode.toString());
         return objectNode;
     }
 

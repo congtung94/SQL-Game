@@ -42,9 +42,11 @@ function weiterBtnZustand (){
 }
 
 function ausfuhren(){
-    const codeArea = document.getElementById("codeArea");
-    const code = codeArea.value;
+    //const codeArea = document.getElementById("codeArea");
+    //const code = codeArea.innerHTML;
+    const code = sqlEditor.getValue();
     const feedbackArea = document.getElementById("ausgabe");
+
 
     if (code == "")
     {
@@ -126,7 +128,7 @@ function ausfuhren(){
                     weiterBtn.style.visibility = "visible";
                     // update womöglich level in page-navigation
                     if (response.level != undefined){
-                        document.getElementById("levelSpan").innerText = "Level: "+ response.level; // nächstes Level
+                        document.getElementById("level").innerText = "Level: "+ response.level; // nächstes Level
                         alert("Glückwünsch ! Du hast Level "+ response.level + " erreicht !!");
                     }
                     // der Spieler hat gewonnen
@@ -135,11 +137,12 @@ function ausfuhren(){
                         alert("Glückwunsch, du hast das Spiel gewonnen !!!");
                     }
                     // update punkte
-                    document.getElementById("punkteSpan").innerText = "Punkte: " + response.punkte;
+                    document.getElementById("punkte").innerText = "Punkte: "+ response.punkte;
                 }else weiterBtn.style.visibility = "hidden";
             }
         });
     }
+    feedbackArea.scrollIntoView();
 }
 
 function tabelleGenerator (spaltenAnz, zeilenAnz, spaltenNamen, daten){

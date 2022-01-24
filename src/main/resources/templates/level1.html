@@ -1,45 +1,54 @@
 <!DOCTYPE html>
 <html lang="de" xmlns:th="http://www.thymeleaf.org">
-<head th:include="fragments/header :: header"><head>
+<head>
+    <div th:include="fragments/header :: header"></div>
+    <!--codemirror für sql-->
+    <script th:src="@{/codemirror/lib/codemirror.js}"></script>
+    <script th:src="@{/codemirror/mode/sql/sql.js}"></script>
+    <script th:src="@{/codemirror/addon/display/placeholder.js}"></script>
+    <link th:href="@{/codemirror/lib/codemirror.css}" rel="stylesheet" />
+</head>
 <body>
-<div class="container">
-    <div th:insert="fragments/body :: navigation (true, ${aktuellerSpieler.name})"></div>
+<div class="container" id="mainbody">
+
+        <div id="navi" class="col-12" th:insert="fragments/body :: navigation (true, ${aktuellerSpieler.name})"></div>
+
 
     <input id="pauseButton" type="hidden"  value="Pause">
     <input id="resumeButton" type="hidden" value="Resume">
     <input id="resetButton" type="hidden" value="Reset">
     <input id="restartButton" type="hidden" value="Restart">
 
-<!--    <div class="d-flex justify-content-center">
-        <label id="grusseText" class="text-center mt-4" >Du liebst Abenteuer und möchtest endlich reisen.<br>
-            Du hast ein bisschen Geld und das reicht für ein Ticket zur nächsten Insel.<br>
-            Unglücklicherweise ist dein Schiff in einem Sturm gesunken. <br>
-            Du hat glück, an einen Strand zu landen. <br><br>
-            Jetzt musst du die Herausforderungen mit deinen SQL-Kenntnissen meistern.<br>
-            Je schneller du die Probleme löst, desto besser ist dein Ranking.<br><br>
-            Viel Spaß !!!<br>
-        </label>
-    </div>-->
 
     <!--linker Bereich: Spiel-Infos-->
     <div class="row">
         <div id="spielInfos" class="col-12 col-md-3">
-            <div class="row justify-content-center text-center my-2">
+            <div class="row spielInfos-items justify-content-center text-center my-2">
                 <p class="col-2" id="min">00</p>
                 <p class="col-1">:</p>
                 <p class="col-2" id="sec" >00</p>
             </div>
-            <div class="row justify-content-around text-center my-2">
-                <p class="col-5" id="levelSpan" th:text="'Level: '+${spielstand.level}">Level</p>
-                <p class="col-5" th:text="'Punkte: '+${spielstand.punkte}">punkte</p>
+            <div class="row spielInfos-items justify-content-around text-center my-2">
+                <p class="col-5" id="level" th:text="'Level: '+${spielstand.level}">Level</p>
+                <p class="col-5" id="punkte" th:text="'Punkte: '+${spielstand.punkte}">punkte</p>
             </div>
 
-            <div class="row my-2">
-                <button type="button" class="btn btn-secondary col-12">Datenbankschema</button>
+            <div class="row spielInfos-items my-2">
+                <button class="btn col-12" type="button" data-toggle="collapse"
+                        data-target="#datenbankschema" aria-expanded="false" aria-controls="collapseExample">
+                    Datenbankschema
+                </button>
+                <div class="collapse show" id="datenbankschema">
+                    <div class="card card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus
+                        terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore
+                        wes anderson cred nesciunt sapiente ea proident.
+                    </div>
+                </div>
             </div>
 
-            <div class="row my-2">
-                <button class="btn btn-secondary col-12" type="button" data-toggle="collapse"
+            <div class="row spielInfos-items my-2">
+                <button class="btn col-12" type="button" data-toggle="collapse"
                         data-target="#tips" aria-expanded="false" aria-controls="collapseExample">
                     Tips
                 </button>
@@ -53,43 +62,48 @@
             </div>
 
         </div>
-    <!--rechter Bereich: Spiel-Fragen, Antworten und Ausgaben-->
+        <!--rechter Bereich: Spiel-Fragen, Antworten und Ausgaben-->
         <div class="col-12 col-md-9">
 
             <!--Fragen-->
 
-            <div class="frageBox">
-                <img src="../static/images/boy.png" th:src="@{/images/boy.png}" width="5%"/>
-                <div class="dreieck">
+            <div>
+                <div class="frageBox">
+                    <img th:src="@{/images/boy.png}" width="5%"/>
+                    <div class="dreieck">
+                    </div>
+                    <div class="frageTextBox" id="frageText">
+                        text
+                    </div>
                 </div>
-                <div class="frageTextBox" id="frageText">
-                    text
+                <div class="d-flex justify-content-center">
+                    <button id="weiterBtn" onclick="nachsteFrage()" class="btn mt-2"
+                           type="button" >
+                        Weiter
+                    </button>
                 </div>
             </div>
 
 
-            <input type="hidden" th:value="${listFragen}"/>
+            <!--<input type="hidden" th:value="${listFragen}"/>-->
 
             <!--https://stackoverflow.com/questions/37383730/how-to-add-csrf-token-to-ajax-request-->
             <meta th:name="_csrf" th:content="${_csrf.token}"/>
             <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
 
-            <div class="d-flex justify-content-center">
-                <input id="weiterBtn" onclick="nachsteFrage()" class="btn-secondary mt-4" th:disabled="false"
-                       type="button" value="Weiter">
-            </div>
 
             <!--Antworten-->
+
             <div>
             <textarea class="form-control mt-2" id="codeArea"
-                      rows="3" placeholder="Hier steht dein Code ..."></textarea>
-                <br>
+                      placeholder="Hier steht dein Code..." style="display: none;"></textarea>
                 <div class="d-flex justify-content-center">
-                    <button onclick="ausfuhren()" class="btn-secondary mt-2" type="submit"
+                    <button onclick="ausfuhren()" class="btn mt-2" type="submit"
                             id="ausfuehrenBtn">Ausführen
                     </button>
                 </div>
             </div>
+
 
             <!--Ausgaben-->
             <div id="ausgabe" class="mt-2">
@@ -97,9 +111,6 @@
             </div>
         </div>
     </div>
-
-    <!--<label id="codetext">sometext hier</label>
-    <button onclick="test()">test</button>-->
 
 </div>
 
@@ -110,6 +121,14 @@
     //https://stackoverflow.com/questions/34747437/use-of-spring-csrf-with-ajax-rest-call-and-html-page-with-thymeleaf
     let csrf_token = document.querySelector("meta[name='_csrf']").getAttribute("content");
     let csrf_header = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
+
+    let sqlEditor = CodeMirror.fromTextArea(document.getElementById("codeArea"),{
+        mode: "sql",
+        lineNumbers: true,
+        lineWrapping: true
+    });
+
+    //sqlEditor.setValue('\n\n\n');
 </script>
 
 <script th:src="@{/script/questions.js}"></script>

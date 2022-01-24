@@ -51,6 +51,8 @@ values (1, 'alex', 24, 'Abenteuer', 'Navigator', 5, 'beschaeftigt', 85, 4000);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
 values (1, 'malen', 35, 'Reisen', 'Koch', 10, 'frei', 90, 3000);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
+values (1, 'Tuco', 44, 'Reisen', 'Koch', 10, 'beschaeftigt', 90, 3000);
+insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
 values (1, 'jadon', 21, 'Volleyball', 'Koch', 8, 'beschaeftigt', 90, 2500);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
 values (1, 'thomas', 21, 'Reisen', 'Saenger', 5, 'frei', 100,3500);
