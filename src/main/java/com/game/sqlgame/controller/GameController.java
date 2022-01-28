@@ -101,7 +101,7 @@ public class GameController {
         model.addAttribute("listFragen", frageService.findAllQuestions());
 
         log.info(aktuellerSpieler.toString());
-        return "level1";
+        return "main";
     }
 
     @PostMapping(value = "/sendCode")
@@ -254,7 +254,7 @@ public class GameController {
         model.addAttribute("spielstand", spielstand);
         model.addAttribute("listFragen", frageService.findAllQuestions());
 
-        return "level1";
+        return "main";
     }
 
     ObjectNode checkQueryAnswer(String spieler_antwort, int frageId, Statement s1, Statement s2,

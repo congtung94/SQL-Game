@@ -3,33 +3,36 @@
 <body>
 
 <navigation th:fragment="navi (all, spielerName)">
-    <nav class="navbar navbar-expand-md navbar-light bg-light">
+    <nav id="navi" class="navbar navbar-expand-md">
         <div class="container-fluid">
-            <a class="navbar-brand" id="gameLogo" href="javascript:logout()">SQL GAME</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+            <a class="navbar-brand navi-links" id="gameLogo" href="javascript:logout()">
+            <img id="logo" src="/images/sql-game-logo.png" alt="Bild"/>
+            </a>
+            <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
                     aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav text-uppercase ml-auto ">
-                    <li class="nav-item" th:if="${all == true}" >
-                        <a class="nav-link" href="#">Ranking</a>
+                    <li class="nav-item " th:if="${all == true}" >
+                        <a class="nav-link navi-links" href="#">Ranking</a>
                     </li>
-                    <li class="nav-item" th:if="${all == true}" >
-                        <a class="nav-link" href="#">Leaderboard</a>
+                    <li class="nav-item " th:if="${all == true}" >
+                        <a class="nav-link navi-links" href="#">Leaderboard</a>
                     </li>
 
                     <li class="nav-item dropdown" th:if="${all == true}">
-                        <a class="nav-link dropdown-toggle" href="#" th:text="${spielerName}"
+                        <a class="nav-link dropdown-toggle navi-links" href="#" th:text="${spielerName}"
                            id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
                            aria-expanded="false">
                             Spieler
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <div class="dropdown-menu"
+                             id="navi-dropdown" aria-labelledby="navbarDropdownMenuLink">
                             <form th:action="@{/neustart}" method="post">
                                 <input type="submit" class="dropdown-item" value="NEUSTART">
                             </form>
-                            <a href="javascript:logout()" class="dropdown-item">AUSLOGGEN</a>
+                            <a id="navi-logout" href="javascript:logout()" class="dropdown-item">AUSLOGGEN</a>
                         </div>
                     </li>
                 </ul>

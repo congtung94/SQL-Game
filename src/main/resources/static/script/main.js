@@ -1,5 +1,7 @@
+
 const listFragebObject = Object.values(listFragen);
 const spielstandObject = Object.values(spielstand);
+
 
 const frageAnzahl = listFragen.length;
 
@@ -13,7 +15,7 @@ let aktuelleFrageId = spielstandObject[2];
 console.log(aktuelleFrageId);
 frageText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[1];
 
-weiterBtnZustand();
+setVisibilityWeiterBtn();
 
 
 function nachsteFrage() {
@@ -30,10 +32,11 @@ function nachsteFrage() {
     }
 
     frageText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[1]; // nächste Frage text
-    weiterBtnZustand();
+    setVisibilityWeiterBtn();
+    document.getElementById("navi").scrollIntoView();
 }
 
-function weiterBtnZustand (){
+function setVisibilityWeiterBtn (){
     if (Object.values(listFragebObject[aktuelleFrageId-1])[3] == null) // antwort_id == 0, es ist keine Frage
     {
         weiterBtn.style.visibility = "visible";
@@ -42,8 +45,7 @@ function weiterBtnZustand (){
 }
 
 function ausfuhren(){
-    //const codeArea = document.getElementById("codeArea");
-    //const code = codeArea.innerHTML;
+
     const code = sqlEditor.getValue();
     const feedbackArea = document.getElementById("ausgabe");
 
@@ -128,8 +130,16 @@ function ausfuhren(){
                     weiterBtn.style.visibility = "visible";
                     // update womöglich level in page-navigation
                     if (response.level != undefined){
-                        document.getElementById("level").innerText = "Level: "+ response.level; // nächstes Level
+                        let newLevel = response.level;
+                        document.getElementById("level").innerText = newLevel; // nächstes Level
                         alert("Glückwünsch ! Du hast Level "+ response.level + " erreicht !!");
+                        const tabelleList = document.getElementById("tabelle-liste");
+                        if (newLevel === 2){
+                            loadLevel2(tabelleList);
+                        }
+                        if (newLevel === 3){
+                            loadLevel3(tabelleList);
+                        }
                     }
                     // der Spieler hat gewonnen
                     if (response.gewinn != undefined){
@@ -145,29 +155,6 @@ function ausfuhren(){
     feedbackArea.scrollIntoView();
 }
 
-function tabelleGenerator (spaltenAnz, zeilenAnz, spaltenNamen, daten){
-    const tabelle = document.createElement("table");
-
-    const tabelleKopf = document.createElement("tr");
-    for (let i = 0; i< spaltenAnz; i++){
-        const th = document.createElement("th");
-        th.appendChild(document.createTextNode(spaltenNamen[i]));
-        tabelleKopf.appendChild(th);
-    }
-    tabelle.appendChild(tabelleKopf);
-
-    for (let i = 0; i< zeilenAnz; i++){
-        const tabelleZeile = document.createElement("tr");
-        for (let j = 0; j< spaltenAnz; j++){
-            const td = document.createElement("td");
-            td.appendChild(document.createTextNode(daten[i*spaltenAnz + j]));
-            tabelleZeile.appendChild(td);
-        }
-        tabelle.appendChild(tabelleZeile);
-    }
-
-    return tabelle;
-}
 
 
 function test() {
@@ -190,3 +177,4 @@ function test() {
         }
     });
 }
+
