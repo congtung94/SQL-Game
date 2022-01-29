@@ -1,6 +1,6 @@
 package com.game.sqlgame.service.impl;
 
-import com.game.sqlgame.game_components.Spielstand;
+import com.game.sqlgame.model.Spielstand;
 import com.game.sqlgame.repository.SpielstandRepository;
 import com.game.sqlgame.service.SpielstandService;
 import org.springframework.stereotype.Service;
@@ -35,5 +35,25 @@ public class SpielstandServiceImpl implements SpielstandService {
     @Override
     public boolean updateSpielstand(int spielstandId, int neuPunkte) {
         return spielstandRepository.updateSpielstand(spielstandId,neuPunkte);
+    }
+
+    @Override
+    public boolean save(Spielstand spielstand) {
+        return spielstandRepository.save(spielstand);
+    }
+
+    @Override
+    public boolean updateSpielstandBySpielerId(int spielerId, int neuZeit) {
+        return spielstandRepository.updateSpielstandBySpielerId(spielerId,neuZeit);
+    }
+
+    @Override
+    public boolean updateSpielstadNeustart(int spielerId, int level, int punkte, int zeit, int aktuelleFrageId) {
+        return spielstandRepository.updateSpielstadNeustart(spielerId,level,punkte,zeit,aktuelleFrageId);
+    }
+
+    @Override
+    public boolean updateNeueFrageId(int spielerId, int aktuelleFrageId) {
+        return spielstandRepository.updateNeueFrageId(spielerId,aktuelleFrageId);
     }
 }

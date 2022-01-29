@@ -1,11 +1,12 @@
 package com.game.sqlgame.repository;
 
-import com.game.sqlgame.game_components.user_verwaltung.Spieler;
+import com.game.sqlgame.model.Spieler;
 import com.game.sqlgame.rowmapper.SpielerRowmapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,18 +16,20 @@ import java.util.Optional;
 public class SpielerRepository {
 
     private static final Logger log = LoggerFactory.getLogger(SpielerRepository.class);
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     public SpielerRepository (JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void save (Spieler spieler){
+    public boolean save (Spieler spieler){
         String sql = "insert into Spieler(name,passwort) values (?,?)";
-        int insert = jdbcTemplate.update(sql, spieler.getName(), spieler.getPasswort());
+        int insert = jdbcTemplate.update(sql, spieler.getName(), new BCryptPasswordEncoder().encode(spieler.getPasswort()));
         if (insert == 1){
             log.info("neuer Spieler ");
+            return true;
         }
+        else return false;
     }
 
     public Optional<Spieler> getPlayerById (int id){

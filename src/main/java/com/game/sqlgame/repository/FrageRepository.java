@@ -1,16 +1,13 @@
 package com.game.sqlgame.repository;
 
-import com.game.sqlgame.game_components.Frage;
+import com.game.sqlgame.model.Frage;
 import com.game.sqlgame.rowmapper.FrageRowmapper;
-import com.game.sqlgame.rowmapper.SpielerRowmapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import javax.xml.crypto.Data;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,17 +51,6 @@ public class FrageRepository {
         return findQuestionById(id).isPresent();
     }
 
-    public boolean questionWithoutAnswer (int id){
-        String sql = "select * from frage where id = ? and antw_id is null";
-        Frage frage = null;
-        try {
-            frage = jdbcTemplate.queryForObject(sql, new Object[]{id}, new FrageRowmapper());
-        }catch (DataAccessException ex){
-            log.info("Es gibt eine Antwort für die Frage mit der Id " + id);
-        }
-
-        return frage != null;
-    }
 
     public int countFrage (){
         return jdbcTemplate.queryForObject("select count(*) from frage", Integer.class);

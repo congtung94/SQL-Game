@@ -1,6 +1,6 @@
 package com.game.sqlgame.service.impl;
 
-import com.game.sqlgame.game_components.user_verwaltung.Spieler;
+import com.game.sqlgame.model.Spieler;
 import com.game.sqlgame.repository.SpielerRepository;
 import com.game.sqlgame.service.SpielerService;
 import org.springframework.stereotype.Service;
@@ -35,5 +35,10 @@ public class SpielerServiceImpl implements SpielerService {
     @Override
     public List<Spieler> getAllPlayers() {
         return spielerRepository.getAllPlayers();
+    }
+
+    @Override
+    public boolean save(Spieler spieler) {
+        return spielerRepository.save(spieler);
     }
 }

@@ -3,136 +3,74 @@ package com.game.sqlgame.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.game.sqlgame.game_components.Antwort;
-import com.game.sqlgame.game_components.Frage;
-import com.game.sqlgame.game_components.Spielstand;
-import com.game.sqlgame.game_components.user_verwaltung.Spieler;
-import com.game.sqlgame.service.AntwortService;
+import com.game.sqlgame.model.Spielstand;
+import com.game.sqlgame.gameComponents.user_verwaltung.AktuellerSpieler;
 import com.game.sqlgame.service.FrageService;
 import com.game.sqlgame.service.SpielerService;
 import com.game.sqlgame.service.SpielstandService;
-import com.zaxxer.hikari.HikariDataSource;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.List;
 
 @Controller
-public class MainController {
+public class GameController {
 
-    private static final Logger log = LoggerFactory.getLogger(MainController.class);
+    private static final Logger log = LoggerFactory.getLogger(GameController.class);
     private final JdbcTemplate jdbcTemplate;
 
     private final SpielerService spielerService;
     private final FrageService frageService;
     private final SpielstandService spielstandService;
-    private final AntwortService antwortService;
-    private final Spieler aktivSpieler;
+
     private final ObjectMapper objectMapper;
 
-    public MainController(JdbcTemplate jdbcTemplate, SpielerService spielerService,
+
+    public GameController(JdbcTemplate jdbcTemplate, SpielerService spielerService,
                           FrageService frageService, SpielstandService spielstandService,
-                          AntwortService antwortService, Spieler aktivSpieler, ObjectMapper objectMapper) {
+                           ObjectMapper objectMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.spielerService = spielerService;
         this.frageService = frageService;
         this.spielstandService = spielstandService;
-        this.antwortService = antwortService;
-        this.aktivSpieler = aktivSpieler;
         this.objectMapper = objectMapper;
+
     }
 
     @GetMapping("/")
     public String start(Model model) {
-        model.addAttribute("spieler", new Spieler());
         return "start";
     }
 
-    @PostMapping("/")
-    public String login(@ModelAttribute("spieler") Spieler spieler, Model model) {
-        // check Login-Daten
-        if (!spielerService.existsByName(spieler.getName())){
-            model.addAttribute("error", "der Username existiert nicht");
-            return "start";
-        }
-        if (!spieler.getPasswort().equals(spielerService.getPlayerByName(spieler.getName()).get().getPasswort())){
-            model.addAttribute("error", "falsche Passwort");
-            return "start";
-        }
+    @GetMapping("/spielen")
+    public String login(Model model) {
 
-        /*try {
-            Connection connection = jdbcTemplate.getDataSource().getConnection();
-            Statement statement = connection.createStatement();
+        AktuellerSpieler aktuellerSpieler =(AktuellerSpieler) model.asMap().get("aktuellerSpieler");
 
-            Connection c = jdbcTemplate.getDataSource().getConnection();
-            Statement s = c.createStatement();
-
-            ResultSet resultSet1 = s.executeQuery("select * from bestellung_details");
-            ResultSetMetaData resultSetMetaData1 = resultSet1.getMetaData();
-            ResultSet resultSet2 = statement.executeQuery("select * from spieler");
-            ResultSetMetaData resultSetMetaData2 = resultSet2.getMetaData();
-
-            log.info("float = "+ resultSetMetaData1.getColumnType(3));
-            log.info("int = " + resultSetMetaData2.getColumnType(1));
-            log.info("string = " + resultSetMetaData2.getColumnType(2));
-        }catch (SQLException e){
-            log.info(e.getMessage());
-        }
-
-        boolean test =
-                checkQueryAnswer("select bew.name as kauefer_name,i.name as Insel_name , bst.id as bestellung_id\n" +
-                                "from bestellung bst, bewohner bew, insel i\n" +
-                                "where bst.kaeufer_id = bew.id and bew.ort_id = i.id and i.name = 'frühling' and\n" +
-                                "(bst.verkaeufer_id  in (select bewohner.id from bewohner, insel where bewohner.ort_id = insel.id and insel.name = 'sommer'))",
-                        6);
-
-        log.info("korrekt oder nicht  ###### " + test);*/
-
-        spieler = spielerService.getPlayerByName(spieler.getName()).get();
-
-        // aktiver Spieler
-        int id = spieler.getId();
-        String name = spieler.getName();
-        aktivSpieler.setId(id);
-        aktivSpieler.setName(name);
-
-        Spielstand spielstand = spielstandService.findSpielStandByPlayerId(id).get();
+        Spielstand spielstand = spielstandService.findSpielStandByPlayerId(aktuellerSpieler.getId()).get();
         log.info(spielstand.toString());
-
-        int aktuelleFrageId = spielstand.getAktuelleFrageId();
-        log.info("aktuelle Frage = " + spielstand.getAktuelleFrageId());
-        if (aktuelleFrageId == 0)
-        {
-            model.addAttribute("aktuelleFrage", 0);
-
-        }
-        else
-        {
-            log.info("line 121   "+frageService.findQuestionById(aktuelleFrageId).get().getText());
-        }
 
         model.addAttribute("spielstand", spielstand);
         model.addAttribute("listFragen", frageService.findAllQuestions());
 
-        log.info(spieler.toString());
-        return "level1";
+        log.info(aktuellerSpieler.toString());
+        return "main";
     }
 
-    @Transactional
     @PostMapping(value = "/sendCode")
     public @ResponseBody
-    ObjectNode codeBewertung(@RequestParam String spielerCodeData){
+    ObjectNode codeBewertung(@RequestParam String spielerCodeData, Model model){
 
-        Spielstand spielstand = spielstandService.findSpielStandByPlayerId(aktivSpieler.getId()).get();
+        AktuellerSpieler aktuellerSpieler =(AktuellerSpieler) model.asMap().get("aktuellerSpieler");
+
+        Spielstand spielstand = spielstandService.findSpielStandByPlayerId(aktuellerSpieler.getId()).get();
 
         log.info(spielerCodeData);
         ObjectNode objectNode = objectMapper.createObjectNode();
@@ -144,19 +82,31 @@ public class MainController {
         int frageId = data.getInt("aktFragId");
 
         // die Frage hat der Spieler richtig geantwortet oder das ist keine Frage
-        if (frageId == spielstand.getAktuelleFrageId()-1 || frageService.questionWithoutAnswer(frageId)){
+        // ein leeres ObjectNode wird zurückgegeben
+        if (frageId == spielstand.getAktuelleFrageId()-1 || frageService.findQuestionById(frageId).get().getAntw() == null){
             return objectNode;
         }
 
+        Connection c1 = null;
+        Statement s1 = null;
+        Connection c2 = null;
+        Statement s2 = null;
+
         //boolean check = checkQueryAnswer(spieler_code,frageId);
         try {
-            objectNode = checkQueryAnswer(spieler_code, frageId);
+            c1 = jdbcTemplate.getDataSource().getConnection();
+            s1 = c1.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            c2 = jdbcTemplate.getDataSource().getConnection();
+            s2 = c2.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
+
+            objectNode = checkQueryAnswer(spieler_code, frageId, s1,s2,c1,c2);
             // wenn die Antwort richtig ist
             if (objectNode.get("bewertung").asBoolean(true))
             {
                 // war das die letzte Frage ?
                 if (frageId == frageService.countFrage()){
-                    int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getMax_punkte();
+                    int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getPunkte();
                     log.info("maximal punkte: " + neuPunkte);
                     spielstandService.updateSpielstand(spielstand.getSpielStandId(), neuPunkte);
                     objectNode.put("punkte", neuPunkte);
@@ -164,7 +114,8 @@ public class MainController {
                     return objectNode;
                 }
                 // update level, punkte, aktuelle FrageId in spielstand
-                int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getMax_punkte();
+                int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getPunkte();
+                log.info("neunPunkte: " + neuPunkte);
                 if (frageId == 3){
                     spielstandService.updateSpielstand(spielstand.getSpielStandId(),2, neuPunkte,frageId+1);
                     objectNode.put("level", 2);
@@ -181,45 +132,25 @@ public class MainController {
         }catch (SQLException e){
             objectNode.put("bewertung", false);
             objectNode.put("feedback" , e.getMessage());
+        }finally {
+            if (c1 != null) {
+                try {
+                    closeConnection(s1,c1);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (c2 != null) {
+                try {
+                    closeConnection(s2,c2);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
 
-        /*boolean check = true;
-        objectNode.put("bewertung", check);
-        if (check){
-            // der Spieler hat die letzte frage richtig geanwortet
-            if (frageId == frageService.countFrage()){
-
-                int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getMax_punkte();
-                log.info("maximal punkte: " + neuPunkte);
-                spielstandService.updateSpielstand(spielstand.getSpielStandId(), neuPunkte);
-                objectNode.put("punkte", neuPunkte);
-                objectNode.put("feedback", "Glückwunsch, du hast gewonnen"+ "\n deine Punkte: " + neuPunkte);
-                return objectNode;
-            }
-
-
-            int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getMax_punkte();
-            if (frageId == 3){
-                spielstandService.updateSpielstand(spielstand.getSpielStandId(),2, neuPunkte,frageId+1);
-                objectNode.put("level", 2);
-            }
-            if (frageId == 5){
-                spielstandService.updateSpielstand(spielstand.getSpielStandId(),3, neuPunkte,frageId+1);
-                objectNode.put("level", 3);
-            }
-            spielstandService.updateSpielstand(spielstand.getSpielStandId(), neuPunkte,frageId+1);
-            objectNode.put("punkte",neuPunkte);
-            objectNode.put("feedback",
-                    "glückwunsch, deine Antwort ist richtig, " +
-                            " deine Punkte : " + neuPunkte);
-        }
-        else objectNode.put("feedback", "dein antwort ist leider nicht richtig");
-
-        return objectNode;*/
         return objectNode;
     }
-
-
 
     @PostMapping(value = "/test")
     public @ResponseBody
@@ -237,42 +168,34 @@ public class MainController {
         return objectNode;
     }
 
-    @Transactional
-    ObjectNode checkQueryAnswer(String spieler_antwort, int frageId) throws SQLException {
+    @PostMapping("/neustart")
+    public String neustart (Model model){
+        AktuellerSpieler aktuellerSpieler =(AktuellerSpieler) model.asMap().get("aktuellerSpieler");
+        int aktuellerSpielerId = aktuellerSpieler.getId();
 
-        int antwortId = frageService.findAnswerIdByQuestionId(frageId);
-        Antwort antwort = antwortService.findAnswerById(antwortId).get();
-        String antwort_text = antwort.getSQL().replace("\\\"", "'");
+        spielstandService.updateSpielstadNeustart(aktuellerSpielerId,1,0,0,1);
+
+        Spielstand spielstand = spielstandService.findSpielStandByPlayerId(aktuellerSpielerId).get();
+
+        model.addAttribute("spielstand", spielstand);
+        model.addAttribute("listFragen", frageService.findAllQuestions());
+
+        return "main";
+    }
+
+    ObjectNode checkQueryAnswer(String spieler_antwort, int frageId, Statement s1, Statement s2,
+                                Connection c1, Connection c2) throws SQLException {
+
+
+        String antwort = frageService.findQuestionById(frageId).get().getAntw().replace("\\\"", "'");
         ObjectNode objectNode = objectMapper.createObjectNode();
 
-        /*if (antwort.getAntwortTyp() == 1) // zahl
-        {
-            try {
-                int spieler_count = jdbcTemplate.queryForObject(spieler_antwort, Integer.class);
-                int count = jdbcTemplate.queryForObject(antwort_text, Integer.class);
-                if (count == spieler_count)
-                    return true;
-                else {
-                    log.info("count stimmt nicht antwort = "+ spieler_count +"spieler_cout = "+ count);
-                    return false;
-                }
-            }catch (Exception e){
-                log.info("line 187 mainController # " + e.getMessage()
-                );
-                return false;
-            }
 
-        }*/
-        /*else*/  // resultset
-
-        Connection c1 = jdbcTemplate.getDataSource().getConnection();
-        Statement s1 = c1.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         ResultSet spieler_rst = s1.executeQuery(spieler_antwort);
         ResultSetMetaData spieler_rsmt = spieler_rst.getMetaData();
 
-        Connection c2 = jdbcTemplate.getDataSource().getConnection();
-        Statement s2 = c2.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        ResultSet korrekt_rst = s2.executeQuery(antwort_text);
+
+        ResultSet korrekt_rst = s2.executeQuery(antwort);
         ResultSetMetaData korrekt_rsmt = korrekt_rst.getMetaData();
 
         log.info("line 278 anzahl an spalten "+ spieler_rsmt.getColumnCount() +
@@ -332,7 +255,7 @@ public class MainController {
                     closeConnection(s2,c2);
                     return objectNode;
                 }
-                if (colTyp == -5){ // bigInt für count
+                if (colTyp == -5){ // bigInt wird zurückgegeben, wenn count durchgeführt wird
                     if (spieler_rst.getLong(col) != korrekt_rst.getLong(col))
                     {
                         log.info("hier ist falsch: der Typ ist BigInt : col " + col + "zeile: " +aktuelleZeile);
@@ -361,6 +284,7 @@ public class MainController {
                     }
                     else continue;
                 }
+
                 if (colTyp == 8) // der Typ ist float
                 {
                     if (spieler_rst.getInt(col) != korrekt_rst.getInt(col))
@@ -376,7 +300,22 @@ public class MainController {
                     }
                     else continue;
                 }
-                if (colTyp == 91)
+                if (colTyp == 2) // der Typ ist numeric (double)
+                {
+                    if (spieler_rst.getDouble(col) != korrekt_rst.getDouble(col))
+                    {
+                        log.info("hier ist falsch : der Typ ist double : col " + col + "zeile: " +aktuelleZeile);
+                        objectNode.put("bewertung", false);
+                        objectNode.put("feedback", col+".Spalte, " + aktuelleZeile+".Zeile"
+                                +" hat falschen double Wert");
+                        resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+                        closeConnection(s1,c1);
+                        closeConnection(s2,c2);
+                        return objectNode;
+                    }
+                    else continue;
+                }
+                if (colTyp == 91) // der Typ ist Date
                 {
                     if (!spieler_rst.getDate(col).equals(korrekt_rst.getDate(col)))
                     {
@@ -429,7 +368,6 @@ public class MainController {
 
 
     // objectNode : "spaltenAnz", "zeilenAnz", "spaltenName1" , "spaltenName2", ..., "data#data#data..."
-    @Transactional
     void resultSetToObjectNode(ObjectNode objectNode, ResultSet resultSet,
                                ResultSetMetaData resultSetMetaData) throws SQLException {
         // Anzahl an Spalten
@@ -451,7 +389,12 @@ public class MainController {
                     data.append("#");
                 }
                 if (colTyp == 8){
-                    data.append(resultSet.getFloat(i));
+                    data.append(String.format("%.2f", resultSet.getFloat(i)));
+                    log.info("String.format " + String.format("%.2f", resultSet.getFloat(i)));
+                    data.append("#");
+                }
+                if (colTyp == 2){
+                    data.append(String.format("%.2f", resultSet.getDouble(i)));
                     data.append("#");
                 }
                 if (colTyp == 91){
@@ -465,8 +408,11 @@ public class MainController {
 
             }
         }
+        log.info("zeilen anzahl = " + zeilenAnz);
+
         // das letzte # entfernen
-        data.deleteCharAt(data.length()-1);
+        if (data.length() != 0)
+            data.deleteCharAt(data.length()-1);
         // Anzahl an Zeilen
         objectNode.put("zeilenAnz", zeilenAnz);
         // Spaltennamen in objectNode übertragen

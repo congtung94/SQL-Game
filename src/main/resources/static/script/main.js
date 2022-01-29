@@ -1,48 +1,60 @@
-let listFragebObject = Object.values(listFragen);
-let spielstandObject = Object.values(spielstand);
 
-let frageAnzahl = listFragen.length;
+const listFragebObject = Object.values(listFragen);
+const spielstandObject = Object.values(spielstand);
 
-let weiterBtn = document.getElementById("weiterBtn");
-let ausfuhrenBtn = document.getElementById("ausfuehrenBtn");
-let frageText = document.getElementById("frageText");
 
-var aktuelleFrageId = spielstandObject[5];
+const frageAnzahl = listFragen.length;
+
+const weiterBtn = document.getElementById("weiterBtn");
+const ausfuhrenBtn = document.getElementById("ausfuehrenBtn");
+const frageText = document.getElementById("frageText");
+const spielInfos = document.getElementById("spielInfos");
+
+
+let aktuelleFrageId = spielstandObject[2];
 console.log(aktuelleFrageId);
 frageText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[1];
 
-if (Object.values(listFragebObject[aktuelleFrageId-1])[4] == 0) // antwort_id == 0
-{
-    weiterBtn.disabled = false;
-}
-else weiterBtn.disabled = true;
+setVisibilityWeiterBtn();
+
 
 function nachsteFrage() {
-    if (aktuelleFrageId == frageAnzahl){
+    if (aktuelleFrageId === frageAnzahl){
         // das Spiel gewonnen
         weiterBtn.disabled = true;
         return;
     }
+
     aktuelleFrageId++;
-    frageText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[1]; // nächste Frage text
-    if (Object.values(listFragebObject[aktuelleFrageId-1])[4] == 0) // antwort_id == 0
+    if (aktuelleFrageId === 2) // jetzt läuft die Zeit
     {
-        weiterBtn.disabled = false;
+        Clock.start();
     }
-    else weiterBtn.disabled = true;
+
+    frageText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[1]; // nächste Frage text
+    setVisibilityWeiterBtn();
+    document.getElementById("navi").scrollIntoView();
 }
 
+function setVisibilityWeiterBtn (){
+    if (Object.values(listFragebObject[aktuelleFrageId-1])[3] == null) // antwort_id == 0, es ist keine Frage
+    {
+        weiterBtn.style.visibility = "visible";
+    }
+    else weiterBtn.style.visibility = "hidden";
+}
 
 function ausfuhren(){
-    var codeArea = document.getElementById("codeArea");
-    var code = codeArea.value;
-    var feedbackArea = document.getElementById("ausgabe");
+
+    const code = sqlEditor.getValue();
+    const feedbackArea = document.getElementById("ausgabe");
+
 
     if (code == "")
     {
         let div = document.createElement("div");
         let label = document.createElement("label");
-        label.innerHTML = "du hast kein code eingegen !";
+        label.innerHTML = "du hast kein code eingegeben !";
         div.appendChild(label);
         div.appendChild(document.createElement("br"));
 
@@ -52,7 +64,7 @@ function ausfuhren(){
     }
     else
     {
-        var dataToServer = {
+        const dataToServer = {
             aktFragId: aktuelleFrageId,
             spielerCode: code
         };
@@ -62,6 +74,9 @@ function ausfuhren(){
             url: "/sendCode",
             data: {
                 spielerCodeData: JSON.stringify(dataToServer)
+            },
+            beforeSend: function (xhr){
+                xhr.setRequestHeader(csrf_header, csrf_token);
             },
             // response : bewertung,feedback, spaltenAnz, zeilenAnz,
             //          spaltenName1,spaltenName2, ..., data#data#data..., level, punkte, gewinn
@@ -92,8 +107,8 @@ function ausfuhren(){
                 let spaltenNamen = new Array();
                 let daten = new Array();
                 for (let i = 4; i< spaltenAnz +4; i++){
-                    var key = Object.keys(response)[i];
-                    var spaltenName = response[key];
+                    const key = Object.keys(response)[i];
+                    const spaltenName = response[key];
                     spaltenNamen.push(spaltenName);
                 }
                 daten = dataInString.split ("#");
@@ -112,53 +127,38 @@ function ausfuhren(){
                 feedbackArea.insertBefore(div, letztesFeedback);
 
                 if (response.bewertung){
-                    weiterBtn.disabled = false;
+                    weiterBtn.style.visibility = "visible";
                     // update womöglich level in page-navigation
                     if (response.level != undefined){
-                        document.getElementById("levelSpan").innerText = "Level: "+ response.level; // nächstes Level
+                        let newLevel = response.level;
+                        document.getElementById("level").innerText = newLevel; // nächstes Level
                         alert("Glückwünsch ! Du hast Level "+ response.level + " erreicht !!");
+                        const tabelleList = document.getElementById("tabelle-liste");
+                        if (newLevel === 2){
+                            loadLevel2(tabelleList);
+                        }
+                        if (newLevel === 3){
+                            loadLevel3(tabelleList);
+                        }
                     }
                     // der Spieler hat gewonnen
                     if (response.gewinn != undefined){
-                        ausfuhrenBtn.disabled = true;
+                        ausfuhrenBtn.style.visibility = "hidden";
                         alert("Glückwunsch, du hast das Spiel gewonnen !!!");
                     }
                     // update punkte
-                    document.getElementById("punkteSpan").innerText = "Punkte: " + response.punkte;
-                }else weiterBtn.disabled = true;
+                    document.getElementById("punkte").innerText =response.punkte;
+                }else weiterBtn.style.visibility = "hidden";
             }
         });
     }
+    feedbackArea.scrollIntoView();
 }
 
-function tabelleGenerator (spaltenAnz, zeilenAnz, spaltenNamen, daten){
-    var tabelle = document.createElement("table");
-    tabelle.border =1;
-    tabelle.style.borderCollapse = "collapse";
-    var tabelleKopf = document.createElement("tr");
-    for (let i = 0; i< spaltenAnz; i++){
-        var th = document.createElement("th");
-        th.appendChild(document.createTextNode(spaltenNamen[i]));
-        tabelleKopf.appendChild(th);
-    }
-    tabelle.appendChild(tabelleKopf);
-
-    for (let i = 0; i< zeilenAnz; i++){
-        var tabelleZeile = document.createElement("tr");
-        for (let j = 0; j< spaltenAnz; j++){
-            var td = document.createElement("td");
-            td.appendChild(document.createTextNode(daten[i*spaltenAnz + j]));
-            tabelleZeile.appendChild(td);
-        }
-        tabelle.appendChild(tabelleZeile);
-    }
-
-    return tabelle;
-}
 
 
 function test() {
-    var obj = {
+    const obj = {
         val1: 1,
         val2: "frühling",
         val3: "schön"
@@ -177,3 +177,4 @@ function test() {
         }
     });
 }
+

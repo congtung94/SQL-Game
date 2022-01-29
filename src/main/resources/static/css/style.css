@@ -1,8 +1,284 @@
-.scrollContainer{
-    height: 300px;
-    overflow-y: scroll;
+/*start seite stylen*/
+
+/*https://fonts.google.com/specimen/Special+Elite*/
+body{
+    background-color: #fefaf9;
+    font-family: 'Special Elite';
 }
 
-li{
-    margin: 10px 0;
+.form-control{
+    border: 1px solid #7A9E35;
+    width: 50%;
 }
+
+
+@media screen and (max-width:576px) {
+    body {
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+}
+
+
+@media screen and (min-width: 768px){
+    .form-control{
+        width: 35%;
+    }
+}
+
+@media screen and (min-width: 992px){
+    .form-control{
+        width: 25%;
+    }
+    
+}
+
+#navi {
+    padding-right: 1rem;
+    padding-left: 1rem;
+    background-color: #7A9E35;
+}
+
+
+#navi-dropdown {
+    width: 10rem;
+    height: 6rem;
+    min-width: 0;
+    right: -1.94rem;
+    left: auto;
+    background-color: #7A9E35;
+    color: white;
+    border: 0;
+}
+
+#navi-dropdown form{
+    margin-top: 0.5rem;
+}
+
+a.dropdown-item {
+    text-align: center;
+    margin-top: 0.25rem;
+    color: white;
+}
+
+a.dropdown-item:hover{
+    background-color: #a15b5a;
+    color: white;
+}
+
+input.dropdown-item {
+    padding: 3px;
+    text-align: center;
+    color: white;
+}
+
+input.dropdown-item:hover{
+    background-color: #a15b5a;
+    color: white;
+}
+
+.div-navi{
+    padding: 0;
+}
+
+.navi-links{
+    color: white;
+}
+
+.navi-links:hover{
+    color: #a15b5a;
+}
+
+#gameLogo{
+    width: 15%;
+    height: 100%;
+    padding: 0;
+}
+
+#logo{
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+@media screen and (min-width: 992px){
+    #gameLogo{
+        width: 8%;
+    }
+}
+
+/*https://www.geeksforgeeks.org/how-to-change-hamburger-toggler-color-in-bootstrap/*/
+.custom-toggler .navbar-toggler-icon {
+    background-image: url(
+    "data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+
+.custom-toggler.navbar-toggler {
+    border-color: white;
+}
+
+#tabelle-liste{
+    width: 100%;
+    padding: 0.25rem;
+    border: 0px;
+}
+
+div#tabelle-liste {
+    background-color: #fefaf9;
+}
+
+
+
+.clock{
+    margin: 0px;
+    border: 1px solid #FFB800;
+    padding-left: 5%;
+    padding-right: 5%;
+    background-color: #FFD600;
+}
+
+.clock-div{
+    font-size: 2rem;
+}
+
+.level-punkte{
+    padding-right: 0;
+    padding-left: 0;
+    margin-bottom: 0;
+    border: 1px solid #7A9E35;
+    font-size: 1.25rem;
+    height: 2rem;
+    width: 40%;
+}
+
+@media screen and (min-width: 778px) and (max-width: 992px){
+    #level:before{
+        content: "\a";
+        white-space: pre;
+    }
+
+    .level-punkte{
+        font-size: 1rem;
+        height: 3rem;
+        width: 45%;
+    }
+}
+
+@media screen and (min-width: 992px){
+    #level:before{
+        content: "\a";
+        white-space: pre;
+    }
+
+    #punkte:before{
+        content: "\a";
+        white-space: pre;
+    }
+
+    .level-punkte{
+        height: 3rem;
+        width: 45%;
+        line-height: 1.2;
+        padding-top: 1%;
+    }
+    .clock{
+        padding-top: 3%;
+    }
+}
+
+#datenbankschema{
+    border: 0px;
+    background-color: #fefaf9;
+}
+
+.tabelle{
+    width: 100%;
+}
+
+.container{
+    padding-left: 0;
+    padding-right: 0;
+}
+
+button{
+    background-color: #7A9E35;
+    color: white;
+}
+
+button:hover{
+    background-color: #a15b5a;
+}
+
+.spielInfos-items{
+    margin-left: 0;
+    margin-right: 0;
+}
+
+
+.game-mitteilung-box{
+    display: flex;
+    width: 100%;
+    border: 1px;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 0.5rem;
+}
+
+.game-miteilung-text{
+    margin-top: 2px;
+    max-width: 90%;
+    height: auto;
+    box-sizing: border-box;
+    padding: 2%;
+    border: 1px solid #7A9E35;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.dreieck{
+    width: 2%;
+    border: 1px solid #7A9E35;
+    margin-right: -1%;
+    margin-top: 2%;
+    border-top: 0px solid #7A9E35;
+    border-right: 0px solid #7A9E35;
+    border-left: 1px solid #7A9E35;
+    border-bottom: 1px solid #7A9E35;
+    transform: rotate(45deg);
+    background-color: #fefaf9;
+}
+
+.dreieck::before{
+    content: "";
+    float: left;
+    padding-top: 100%;
+}
+
+#ausgabe {
+    overflow-y: scroll;
+    max-width: 100%;
+    max-height: 400px;
+}
+
+table{
+    max-width: 100%;
+    font-size: 0.95rem;
+}
+
+table td, th{
+    border: 1px solid #ddd;
+    text-align: center;
+    padding: 3px;
+}
+
+table tr:nth-child(even){background-color: #F5F5ED;}
+
+table tr:hover {background-color: #ebcdc3;}
+
+table th{
+    background-color: #7A9E35;
+    color: white;
+}
+
+
+

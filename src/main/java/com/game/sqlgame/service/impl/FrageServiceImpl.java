@@ -1,6 +1,6 @@
 package com.game.sqlgame.service.impl;
 
-import com.game.sqlgame.game_components.Frage;
+import com.game.sqlgame.model.Frage;
 import com.game.sqlgame.repository.FrageRepository;
 import com.game.sqlgame.service.FrageService;
 import org.springframework.stereotype.Service;
@@ -32,10 +32,6 @@ public class FrageServiceImpl implements FrageService {
         return frageRepository.findAllQuestionsIdGreater(id);
     }
 
-    @Override
-    public boolean questionWithoutAnswer(int id) {
-        return frageRepository.questionWithoutAnswer(id);
-    }
 
     @Override
     public boolean existsById(int id) {

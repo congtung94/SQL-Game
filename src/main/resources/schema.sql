@@ -4,123 +4,123 @@ CREATE SCHEMA public;
 GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO public;
 
+create table koordinaten
+(
+    id integer generated always as identity primary key ,
+    breite_grad integer ,
+    breite_richtung varchar (1),
+    laenge_grad integer ,
+    laenge_richtung varchar (1)
+);
+
+create table wetter
+(
+    koord_id integer ,
+    zeit date ,
+    feuchtigkeit integer ,
+    wind_geschw integer,
+    primary key (koord_id, zeit),
+    foreign key (koord_id) references koordinaten on delete cascade
+);
+
 create table insel
 (
     id integer generated always as identity primary key ,
-    name varchar (30) not null,
-    beschr varchar (50)
+    koord_id integer ,
+    name varchar (30),
+    abstand integer ,
+    foreign key (koord_id) references koordinaten on delete cascade
 );
 
 create table bewohner
 (
-    id integer  generated always as identity primary key ,
-    name varchar (30) not null ,
-    ort_id integer,
-    gold integer,
-    beruf varchar (30),
-    status varchar (30),
-    foreign key (ort_id) references insel on delete cascade
-);
-
-create table kategorie
-(
     id integer generated always as identity primary key ,
+    insel_id integer ,
     name varchar (30),
-    beschr varchar (50)
+    alter integer ,
+    hobby varchar (30),
+    beruf varchar (30),
+    beruf_erfahrung integer ,
+    status varchar (30),
+    IQ integer ,
+    einkommen integer ,
+    foreign key (insel_id) references insel on delete set null
 );
 
 create table produkt
 (
     id integer generated always as identity primary key ,
-    name varchar (30) not null ,
-    menge integer ,
     besitzer_id integer ,
-    kat_id integer ,
-    foreign key (besitzer_id) references bewohner on delete set null ,
-    foreign key (kat_id) references kategorie on delete set null
+    name varchar (30),
+    preis integer ,
+    menge integer ,
+    status varchar (30),
+    kategorie varchar (30),
+    foreign key (besitzer_id) references bewohner on delete set null
 );
 
+-- datenbank für 3.Level
 
-create table hobby
+create table hersteller
 (
     id integer generated always as identity primary key ,
     name varchar (30),
-    beschr varchar (50)
+    bekanntheitsgrad integer
 );
 
-create table bew_hobby
+create table ware
 (
-    bew_id integer references bewohner on delete cascade ,
-    hb_id integer references hobby on delete cascade,
-    primary key (bew_id, hb_id)
+    id integer generated always as identity primary key ,
+    hersteller_id integer ,
+    name varchar (30),
+    preis integer ,
+    foreign key (hersteller_id) references hersteller on delete cascade
 );
+
+create table kaeufe
+(
+    id integer ,
+    ware_id integer ,
+    anzahl integer ,
+    tag date ,
+    foreign key (ware_id) references ware on delete cascade
+);
+
 
 -- game logic
 
-create table antwort
+create table spieler
 (
     id integer generated always as identity primary key ,
-    col_anz integer ,
-    zeile_anz integer ,
-    typ integer , -- 1 - zahl, 2- objekt, 3 - list
-    sql varchar (2000)
+    name varchar (30),
+    passwort varchar (100)
 );
 
 create table frage
 (
     id integer generated always as identity primary key ,
     text varchar (2000) ,
-    level integer ,
-    max_punkte integer ,
-    antw_id integer,
-    foreign key (antw_id) references antwort on delete set null
-);
-
-
-create table lieferant
-(
-      id integer generated always as identity primary key ,
-      name varchar (30),
-      beschr varchar (50)
-);
-
-create table bestellung
-(
-    id integer generated always as identity primary key ,
-    kaeufer_id integer ,
-    verkaeufer_id integer ,
-    bst_tag date ,
-    lieferung_tag date ,
-    lieferant_id integer ,
-    foreign key (kaeufer_id) references bewohner on delete set null ,
-    foreign key (verkaeufer_id) references bewohner on delete set null ,
-    foreign key (lieferant_id) references bewohner on delete set null
-);
-
-create table bestellung_details
-(
-    bst_id integer references bestellung on delete cascade ,
-    prod_id integer references produkt on delete cascade ,
-    einzel_preis float ,
-    bst_menge integer ,
-    primary key (bst_id, prod_id)
-);
-
-create table spieler
-(
-    id integer generated always as identity primary key ,
-    name varchar (30),
-    passwort varchar (30)
+    punkte integer ,
+    antw varchar (2000)
 );
 
 create table spielstand
 (
     spl_std_id integer generated always as identity primary key ,
     spieler_id integer ,
+    akt_frage_id integer,
     level integer ,
     punkte integer ,
     zeit integer ,
-    akt_frage_id integer,
     foreign key (akt_frage_id) references frage on delete set null,
+    foreign key (spieler_id) references spieler on delete cascade
+);
+
+create table spiel_komponente
+(
+    spieler_id integer ,
+    name varchar (30),
+    menge integer ,
+    primary key (spieler_id),
     foreign key (spieler_id) references spieler on delete cascade
 );
