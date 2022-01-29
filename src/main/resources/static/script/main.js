@@ -147,7 +147,7 @@ function ausfuhren(){
                         alert("Glückwunsch, du hast das Spiel gewonnen !!!");
                     }
                     // update punkte
-                    document.getElementById("punkte").innerText = "Punkte: "+ response.punkte;
+                    document.getElementById("punkte").innerText =response.punkte;
                 }else weiterBtn.style.visibility = "hidden";
             }
         });

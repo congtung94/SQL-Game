@@ -23,14 +23,14 @@
     <!--linker Bereich: Spiel-Infos-->
     <div class="row">
         <div id="spielInfos" class="col-12 col-md-3">
-            <div class="row spielInfos-items justify-content-center text-center my-2">
-                <p class="col-2 clock text-center" id="min">00</p>
-                <p class="col-1 clock text-center">:</p>
-                <p class="col-2 clock text-center" id="sec" >00</p>
+            <div class="row spielInfos-items justify-content-center text-center my-2 clock-div">
+                <p class="clock text-center" id="min">00</p>
+                <p class="clock text-center">:</p>
+                <p class="clock text-center" id="sec" >00</p>
             </div>
             <div class="row spielInfos-items justify-content-around text-center my-2">
-                <p class="col-5 level-punkte" >Level: <span id="level" th:text="${spielstand.level}"></span></p>
-                <p class="col-5 level-punkte" id="punkte" th:text="'Punkte: '+${spielstand.punkte}">punkte</p>
+                <p class="level-punkte" >Level: <span id="level" th:text="${spielstand.level}"></span></p>
+                <p class="level-punkte">Punkte: <span id="punkte" th:text="${spielstand.punkte}"></span></p>
             </div>
 
             <div class="row spielInfos-items my-2">
@@ -202,22 +202,13 @@
     let csrf_token = document.querySelector("meta[name='_csrf']").getAttribute("content");
     let csrf_header = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
 
-    let sqlEditor = CodeMirror.fromTextArea(document.getElementById("codeArea"),{
+    const sqlEditor = CodeMirror.fromTextArea(document.getElementById("codeArea"),{
         mode: "sql",
         lineNumbers: true,
         lineWrapping: true
     });
 
-    window.addEventListener('resize', function (event) {
-        if (window.innerWidth < 768){
-            document.getElementById("datenbankschema").classList.remove("show");
-        }
-        else {
-            document.getElementById("datenbankschema").classList.add("show");
-        }
-    });
 
-    //sqlEditor.setValue('\n\n\n');
 </script>
 
 <script th:src="@{/script/main.js}"></script>

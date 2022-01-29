@@ -77,5 +77,15 @@ function createTableDetails (tableName, attributtes){
     newTable.appendChild(listAttributes);
 
     return newTable;
-
 }
+
+/* datenbankschema nach window-größe anpassen (zeigen oder verstecken)  */
+
+window.addEventListener('resize', function (event) {
+    if (window.innerWidth < 768){
+        document.getElementById("datenbankschema").classList.remove("show");
+    }
+    else {
+        document.getElementById("datenbankschema").classList.add("show");
+    }
+});
