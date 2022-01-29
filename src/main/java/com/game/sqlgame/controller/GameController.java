@@ -54,48 +54,8 @@ public class GameController {
 
         AktuellerSpieler aktuellerSpieler =(AktuellerSpieler) model.asMap().get("aktuellerSpieler");
 
-        /*try {
-            Connection connection = jdbcTemplate.getDataSource().getConnection();
-            Statement statement = connection.createStatement();
-
-            Connection c = jdbcTemplate.getDataSource().getConnection();
-            Statement s = c.createStatement();
-
-            ResultSet resultSet1 = s.executeQuery("select * from bestellung_details");
-            ResultSetMetaData resultSetMetaData1 = resultSet1.getMetaData();
-            ResultSet resultSet2 = statement.executeQuery("select * from spieler");
-            ResultSetMetaData resultSetMetaData2 = resultSet2.getMetaData();
-
-            log.info("float = "+ resultSetMetaData1.getColumnType(3));
-            log.info("int = " + resultSetMetaData2.getColumnType(1));
-            log.info("string = " + resultSetMetaData2.getColumnType(2));
-        }catch (SQLException e){
-            log.info(e.getMessage());
-        }
-
-        boolean test =
-                checkQueryAnswer("select bew.name as kauefer_name,i.name as Insel_name , bst.id as bestellung_id\n" +
-                                "from bestellung bst, bewohner bew, insel i\n" +
-                                "where bst.kaeufer_id = bew.id and bew.ort_id = i.id and i.name = 'frühling' and\n" +
-                                "(bst.verkaeufer_id  in (select bewohner.id from bewohner, insel where bewohner.ort_id = insel.id and insel.name = 'sommer'))",
-                        6);
-
-        log.info("korrekt oder nicht  ###### " + test);*/
-
         Spielstand spielstand = spielstandService.findSpielStandByPlayerId(aktuellerSpieler.getId()).get();
         log.info(spielstand.toString());
-
-        /*int aktuelleFrageId = spielstand.getAktuelleFrageId();
-        log.info("aktuelle Frage = " + spielstand.getAktuelleFrageId());
-        if (aktuelleFrageId == 0)
-        {
-            model.addAttribute("aktuelleFrage", 0);
-
-        }
-        else
-        {
-            log.info("line 121   "+frageService.findQuestionById(aktuelleFrageId).get().getText());
-        }*/
 
         model.addAttribute("spielstand", spielstand);
         model.addAttribute("listFragen", frageService.findAllQuestions());
@@ -189,40 +149,6 @@ public class GameController {
             }
         }
 
-        /*boolean check = true;
-        objectNode.put("bewertung", check);
-        if (check){
-            // der Spieler hat die letzte frage richtig geanwortet
-            if (frageId == frageService.countFrage()){
-
-                int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getMax_punkte();
-                log.info("maximal punkte: " + neuPunkte);
-                spielstandService.updateSpielstand(spielstand.getSpielStandId(), neuPunkte);
-                objectNode.put("punkte", neuPunkte);
-                objectNode.put("feedback", "Glückwunsch, du hast gewonnen"+ "\n deine Punkte: " + neuPunkte);
-                return objectNode;
-            }
-
-
-            int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getMax_punkte();
-            if (frageId == 3){
-                spielstandService.updateSpielstand(spielstand.getSpielStandId(),2, neuPunkte,frageId+1);
-                objectNode.put("level", 2);
-            }
-            if (frageId == 5){
-                spielstandService.updateSpielstand(spielstand.getSpielStandId(),3, neuPunkte,frageId+1);
-                objectNode.put("level", 3);
-            }
-            spielstandService.updateSpielstand(spielstand.getSpielStandId(), neuPunkte,frageId+1);
-            objectNode.put("punkte",neuPunkte);
-            objectNode.put("feedback",
-                    "glückwunsch, deine Antwort ist richtig, " +
-                            " deine Punkte : " + neuPunkte);
-        }
-        else objectNode.put("feedback", "dein antwort ist leider nicht richtig");
-
-        return objectNode;*/
-        log.info(objectNode.toString());
         return objectNode;
     }
 
@@ -263,26 +189,6 @@ public class GameController {
 
         String antwort = frageService.findQuestionById(frageId).get().getAntw().replace("\\\"", "'");
         ObjectNode objectNode = objectMapper.createObjectNode();
-
-        /*if (antwort.getAntwortTyp() == 1) // zahl
-        {
-            try {
-                int spieler_count = jdbcTemplate.queryForObject(spieler_antwort, Integer.class);
-                int count = jdbcTemplate.queryForObject(antwort_text, Integer.class);
-                if (count == spieler_count)
-                    return true;
-                else {
-                    log.info("count stimmt nicht antwort = "+ spieler_count +"spieler_cout = "+ count);
-                    return false;
-                }
-            }catch (Exception e){
-                log.info("line 187 mainController # " + e.getMessage()
-                );
-                return false;
-            }
-
-        }*/
-        /*else*/  // resultset
 
 
         ResultSet spieler_rst = s1.executeQuery(spieler_antwort);
