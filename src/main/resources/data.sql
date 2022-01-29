@@ -231,10 +231,10 @@ values (6, 3, '2021-02-02');
 
 -- frage
 --1
-insert into frage (text, punkte, antw) values ('Du liebst Abenteuer und möchtest endlich reisen.\n' ||
-'Dafür brauchst du eine  Mannschaft und mentale Stärke, um die spannenden Aufgaben zu erledigen\n' ||
-'Je schneller du die Probleme löst, desto besser ist dein Ranking.\n' ||
-'Viel Spaß !!!', 0, null );
+insert into frage (text, punkte, antw) values ('Du liebst Abenteuer und möchtest endlich reisen.
+Dafür brauchst du eine  Mannschaft und mentale Stärke, um die spannenden Aufgaben zu erledigen.
+Je schneller du die Probleme löst, desto besser ist dein Ranking.
+Viel Spaß !!!', 0, null );
 --2
 insert into frage (text, punkte, antw)
 values ('Zeigen Sie die Tabelle Bewohner an', 10, 'select * from bewohner');
