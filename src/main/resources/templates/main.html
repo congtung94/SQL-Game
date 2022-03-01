@@ -11,13 +11,34 @@
 <body>
 <div class="container" id="mainbody">
 
-    <div class="col-12 div-navi" th:insert="fragments/body :: navigation (true, ${aktuellerSpieler.name})"></div>
+    <div class="col-12 div-navi" th:insert="fragments/body :: navigation (true, ${aktuellerSpieler.name}, ${spielerRanking})"></div>
 
 
     <input id="pauseButton" type="hidden"  value="Pause">
     <input id="resumeButton" type="hidden" value="Resume">
     <input id="resetButton" type="hidden" value="Reset">
     <input id="restartButton" type="hidden" value="Restart">
+
+    <!--https://getbootstrap.com/docs/4.0/components/modal/-->
+
+    <div class="modal fade" id="leaderboardModal" tabindex="-1" role="dialog"  aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Leaderboard</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <!--linker Bereich: Spiel-Infos-->
@@ -207,6 +228,16 @@
         lineNumbers: true,
         lineWrapping: true
     });
+
+
+    function getLeaderboard() {
+        $('#leaderboardModal').modal('show').find(".modal-body").load("/getLeaderboard/leaderboard");
+    }
+
+    function getRanking() {
+        $('#leaderboardModal').modal('show').find(".modal-title").text("Ranking");
+        $('#leaderboardModal').modal('show').find(".modal-body").load("/getLeaderboard/rank");
+    }
 
 
 </script>

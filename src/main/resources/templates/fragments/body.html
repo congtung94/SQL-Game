@@ -2,7 +2,7 @@
 <html lang="de" xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<navigation th:fragment="navi (all, spielerName)">
+<navigation th:fragment="navi (all, spielerName, spielerRanking)">
     <nav id="navi" class="navbar navbar-expand-md">
         <div class="container-fluid">
             <a class="navbar-brand navi-links" id="gameLogo" href="javascript:logout()">
@@ -15,10 +15,14 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav text-uppercase ml-auto ">
                     <li class="nav-item " th:if="${all == true}" >
-                        <a class="nav-link navi-links" href="#">Ranking</a>
+                        <a class="nav-link navi-links" href="#" onclick="getRanking()">
+                            Ranking <span id="rankingNumber" style="color: #FFB800"
+                                          th:text="${spielerRanking}"></span>
+                        </a>
                     </li>
                     <li class="nav-item " th:if="${all == true}" >
-                        <a class="nav-link navi-links" href="#">Leaderboard</a>
+                        <a class="nav-link navi-links" id="leaderboard" onclick="getLeaderboard()"
+                           href="#">Leaderboard</a>
                     </li>
 
                     <li class="nav-item dropdown" th:if="${all == true}">

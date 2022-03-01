@@ -47,6 +47,31 @@ public class DBInit {
         nga.setPasswort("demo");
         spielerRepository.save(nga);
 
+        Spieler phan = new Spieler();
+        phan.setName("phan");
+        phan.setPasswort("demo");
+        spielerRepository.save(phan);
+
+        Spieler dong = new Spieler();
+        dong.setName("dong");
+        dong.setPasswort("demo");
+        spielerRepository.save(dong);
+
+        Spieler teo = new Spieler();
+        teo.setName("teo");
+        teo.setPasswort("demo");
+        spielerRepository.save(teo);
+
+        Spieler tien = new Spieler();
+        tien.setName("tien");
+        tien.setPasswort("demo");
+        spielerRepository.save(tien);
+
+        Spieler duong = new Spieler();
+        duong.setName("duong");
+        duong.setPasswort("demo");
+        spielerRepository.save(duong);
+
         Spielstand spielstandTung = new Spielstand();
         spielstandTung.setLevel(1);
         spielstandTung.setSpielerId(1);
@@ -75,6 +100,44 @@ public class DBInit {
         spielstandNga.setAktuelleFrageId(1);
         spielstandRepository.save(spielstandNga);
 
+        Spielstand spielstandPhan = new Spielstand();
+        spielstandPhan.setLevel(2);
+        spielstandPhan.setSpielerId(4);
+        spielstandPhan.setPunkte(50);
+        spielstandPhan.setZeit(100);
+        spielstandPhan.setAktuelleFrageId(6);
+        spielstandRepository.save(spielstandPhan);
 
+        Spielstand spielstandDong = new Spielstand();
+        spielstandDong.setLevel(2);
+        spielstandDong.setSpielerId(5);
+        spielstandDong.setPunkte(90);
+        spielstandDong.setZeit(2000);
+        spielstandDong.setAktuelleFrageId(10);
+        spielstandRepository.save(spielstandDong);
+
+        Spielstand spielstandTeo = new Spielstand();
+        spielstandTeo.setLevel(3);
+        spielstandTeo.setSpielerId(6);
+        spielstandTeo.setPunkte(90);
+        spielstandTeo.setZeit(2000);
+        spielstandTeo.setAktuelleFrageId(10);
+        spielstandRepository.save(spielstandTeo);
+
+        Spielstand spielstandTien = new Spielstand();
+        spielstandTien.setLevel(3);
+        spielstandTien.setSpielerId(7);
+        spielstandTien.setPunkte(140);
+        spielstandTien.setZeit(3000);
+        spielstandTien.setAktuelleFrageId(15);
+        spielstandRepository.save(spielstandTien);
+
+        Spielstand spielstandDuong = new Spielstand();
+        spielstandDuong.setLevel(2);
+        spielstandDuong.setSpielerId(8);
+        spielstandDuong.setPunkte(90);
+        spielstandDuong.setZeit(3001);
+        spielstandDuong.setAktuelleFrageId(11);
+        spielstandRepository.save(spielstandDuong);
     }
 }

@@ -126,6 +126,7 @@ function ausfuhren(){
                 let letztesFeedback = feedbackArea.firstChild;
                 feedbackArea.insertBefore(div, letztesFeedback);
 
+                // spieler hat die Frage richtig geantwortet
                 if (response.bewertung){
                     weiterBtn.style.visibility = "visible";
                     // update womöglich level in page-navigation
@@ -148,6 +149,7 @@ function ausfuhren(){
                     }
                     // update punkte
                     document.getElementById("punkte").innerText =response.punkte;
+                    document.getElementById("rankingNumber").innerText =response.ranking;
                 }else weiterBtn.style.visibility = "hidden";
             }
         });

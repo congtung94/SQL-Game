@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<body>
+    <table id="ranking-leaderboard-table">
+        <tr>
+            <th>Rang</th>
+            <th>Name</th>
+            <th>Punkte</th>
+            <th>Zeit</th>
+        </tr>
+        <tr th:each="spieler : ${topSpieler}">
+            <td th:text="${spieler.get('rang').textValue()}">rang</td>
+            <td th:text="${spieler.get('name').textValue()}">name</td>
+            <td th:text="${spieler.get('punkte').textValue()}">punkte</td>
+            <td th:text="${spieler.get('zeit').textValue()}">zeit</td>
+        </tr>
+        <tr th:each="spieler : ${aktSpielerUndSpielerDaneben}">
+            <td th:text="${spieler.get('rang').textValue()}">rang</td>
+            <td th:text="${spieler.get('name').textValue()}">name</td>
+            <td th:text="${spieler.get('punkte').textValue()}">punkte</td>
+            <td th:text="${spieler.get('zeit').textValue()}">zeit</td>
+        </tr>
+    </table>
+</body>
+</html>

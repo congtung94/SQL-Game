@@ -63,5 +63,4 @@ public class SpielerRepository {
         return jdbcTemplate.query(sql, new SpielerRowmapper());
     }
 
-
 }

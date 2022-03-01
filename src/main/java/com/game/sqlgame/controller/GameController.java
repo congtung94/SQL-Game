@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 @Controller
 public class GameController {
@@ -59,6 +60,7 @@ public class GameController {
 
         model.addAttribute("spielstand", spielstand);
         model.addAttribute("listFragen", frageService.findAllQuestions());
+        model.addAttribute("spielerRanking", getRangAktuellerSpieler(aktuellerSpieler.getName()));
 
         log.info(aktuellerSpieler.toString());
         return "main";
@@ -126,6 +128,7 @@ public class GameController {
                 }
                 spielstandService.updateSpielstand(spielstand.getSpielStandId(), neuPunkte,frageId+1);
                 objectNode.put("punkte",neuPunkte);
+                objectNode.put("ranking", getRangAktuellerSpieler(aktuellerSpieler.getName()));
             }
             else
                 return objectNode;
@@ -168,6 +171,102 @@ public class GameController {
         return objectNode;
     }
 
+    private int getRangAktuellerSpieler (String spielerName){
+        int rang = -1;
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        String sql = "select rang " +
+                "from (" +
+                "select spieler.name, spielstand.punkte, spielstand.zeit, dense_rank() over w as rang " +
+                "from spieler, spielstand " +
+                "where spieler.id = spielstand.spieler_id " +
+                "window w as (order by punkte desc, zeit) " +
+                ") as tmp " +
+                "where name = ?";
+
+        rang = jdbcTemplate.queryForObject(sql, new Object[] {spielerName}, Integer.class);
+        return rang;
+    }
+
+    @GetMapping(value = "/getLeaderboard/{rank_or_leaderboard}")
+    public String getLeaderboard(Model model, @PathVariable(value = "rank_or_leaderboard") String rank_or_leaderboard){
+
+        ArrayList<ObjectNode> topSpieler = new ArrayList<>();
+        // list von aktuelle Spieler und die Nachbarn in Ranking liste
+        ArrayList<ObjectNode> aktSpielerUndSpielerDaneben = new ArrayList<>();
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        // Spieler nach ihrem Rang suchen
+        String rang_sql = "select * " +
+                "from (" +
+                "select spieler.name, spielstand.punkte, spielstand.zeit, dense_rank() over w as rang " +
+                "from spieler, spielstand " +
+                "where spieler.id = spielstand.spieler_id " +
+                "window w as (order by punkte desc, zeit) " +
+                ") as tmp " +
+                "where rang <= ? and rang >= ?";
+
+
+
+        try {
+            connection = jdbcTemplate.getDataSource().getConnection();
+            statement = connection.prepareStatement(rang_sql);
+
+
+            if (rank_or_leaderboard.equals("leaderboard")){
+                statement.setInt(1, 5);
+                statement.setInt(2, 1);
+                ResultSet resultSet = statement.executeQuery();
+                while (resultSet.next()){
+                    ObjectNode spieler = objectMapper.createObjectNode();
+                    spieler.put("name", resultSet.getString("name"));
+                    spieler.put("punkte", resultSet.getString("punkte"));
+                    int seconds = resultSet.getInt("zeit");
+                    String zeit = "" + seconds / 60 + ":" + seconds % 60;
+                    spieler.put("zeit", zeit);
+                    spieler.put("rang", resultSet.getString("rang"));
+                    topSpieler.add(spieler);
+                }
+            }
+
+            if (rank_or_leaderboard.equals("rank")){
+                AktuellerSpieler aktuellerSpieler =(AktuellerSpieler) model.asMap().get("aktuellerSpieler");
+                int rang = getRangAktuellerSpieler(aktuellerSpieler.getName());
+                if (rang != -1){
+                    statement.setInt(1, rang+1);
+                    statement.setInt(2, rang-2);
+                    ResultSet resultSet1 = statement.executeQuery();
+                    while (resultSet1.next()){
+                        ObjectNode spieler = objectMapper.createObjectNode();
+                        spieler.put("name", resultSet1.getString("name"));
+                        spieler.put("punkte", resultSet1.getString("punkte"));
+                        int seconds = resultSet1.getInt("zeit");
+                        String zeit = "" + seconds / 60 + ":" + seconds % 60;
+                        spieler.put("zeit", zeit);
+                        spieler.put("rang", resultSet1.getString("rang"));
+                        aktSpielerUndSpielerDaneben.add(spieler);
+                    }
+                }
+            }
+
+        }catch (SQLException e){
+            model.addAttribute("error", "die Top-Spieler nicht gefunden");
+        }finally {
+            try {
+                closeConnection(statement, connection);
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+        model.addAttribute("aktSpielerUndSpielerDaneben", aktSpielerUndSpielerDaneben);
+        model.addAttribute("topSpieler", topSpieler);
+        return "leaderboard-ranking-modal";
+    }
+
+
     @PostMapping("/neustart")
     public String neustart (Model model){
         AktuellerSpieler aktuellerSpieler =(AktuellerSpieler) model.asMap().get("aktuellerSpieler");
@@ -179,6 +278,7 @@ public class GameController {
 
         model.addAttribute("spielstand", spielstand);
         model.addAttribute("listFragen", frageService.findAllQuestions());
+        model.addAttribute("spielerRanking", getRangAktuellerSpieler(aktuellerSpieler.getName()));
 
         return "main";
     }
