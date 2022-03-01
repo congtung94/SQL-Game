@@ -8,6 +8,7 @@ import com.game.sqlgame.gameComponents.user_verwaltung.AktuellerSpieler;
 import com.game.sqlgame.service.FrageService;
 import com.game.sqlgame.service.SpielerService;
 import com.game.sqlgame.service.SpielstandService;
+import com.game.sqlgame.service.UbersprungenFragenService;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,17 +31,19 @@ public class GameController {
     private final SpielerService spielerService;
     private final FrageService frageService;
     private final SpielstandService spielstandService;
+    private final UbersprungenFragenService ubersprungenFragenService;
 
     private final ObjectMapper objectMapper;
 
 
     public GameController(JdbcTemplate jdbcTemplate, SpielerService spielerService,
                           FrageService frageService, SpielstandService spielstandService,
-                           ObjectMapper objectMapper) {
+                          UbersprungenFragenService ubersprungenFragenService, ObjectMapper objectMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.spielerService = spielerService;
         this.frageService = frageService;
         this.spielstandService = spielstandService;
+        this.ubersprungenFragenService = ubersprungenFragenService;
         this.objectMapper = objectMapper;
 
     }
@@ -110,7 +113,7 @@ public class GameController {
                 if (frageId == frageService.countFrage()){
                     int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getPunkte();
                     log.info("maximal punkte: " + neuPunkte);
-                    spielstandService.updateSpielstand(spielstand.getSpielStandId(), neuPunkte);
+                    spielstandService.updateSpielstand(spielstand.getSpielerId(), neuPunkte);
                     objectNode.put("punkte", neuPunkte);
                     objectNode.put("gewinn", "Glückwunsch, du hast gewonnen"+ "\n deine Punkte: " + neuPunkte);
                     return objectNode;
@@ -119,14 +122,14 @@ public class GameController {
                 int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getPunkte();
                 log.info("neunPunkte: " + neuPunkte);
                 if (frageId == 3){
-                    spielstandService.updateSpielstand(spielstand.getSpielStandId(),2, neuPunkte,frageId+1);
+                    spielstandService.updateSpielstand(spielstand.getSpielerId(),2, neuPunkte,frageId+1);
                     objectNode.put("level", 2);
                 }
                 if (frageId == 5){
-                    spielstandService.updateSpielstand(spielstand.getSpielStandId(),3, neuPunkte,frageId+1);
+                    spielstandService.updateSpielstand(spielstand.getSpielerId(),3, neuPunkte,frageId+1);
                     objectNode.put("level", 3);
                 }
-                spielstandService.updateSpielstand(spielstand.getSpielStandId(), neuPunkte,frageId+1);
+                spielstandService.updateSpielstand(spielstand.getSpielerId(), neuPunkte,frageId+1);
                 objectNode.put("punkte",neuPunkte);
                 objectNode.put("ranking", getRangAktuellerSpieler(aktuellerSpieler.getName()));
             }

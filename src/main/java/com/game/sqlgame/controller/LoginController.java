@@ -1,11 +1,11 @@
 package com.game.sqlgame.controller;
 
-import com.game.sqlgame.model.SpielKomponente;
+import com.game.sqlgame.model.UbersprungenFragen;
 import com.game.sqlgame.model.Spielstand;
 import com.game.sqlgame.model.Spieler;
 import com.game.sqlgame.gameComponents.user_verwaltung.registrierung.RegistrierungForm;
 import com.game.sqlgame.gameComponents.user_verwaltung.registrierung.RegistrierungValidator;
-import com.game.sqlgame.service.SpielKomponenteService;
+import com.game.sqlgame.service.UbersprungenFragenService;
 import com.game.sqlgame.service.SpielerService;
 import com.game.sqlgame.service.SpielstandService;
 import org.slf4j.Logger;
@@ -30,9 +30,9 @@ public class LoginController {
     private final RegistrierungValidator validator;
     private final SpielerService spielerService;
     private final SpielstandService spielstandService;
-    private final SpielKomponenteService spielKomponenteService;
+    private final UbersprungenFragenService spielKomponenteService;
 
-    public LoginController(RegistrierungValidator validator, SpielerService spielerService, SpielstandService spielstandService, SpielKomponenteService spielKomponenteService) {
+    public LoginController(RegistrierungValidator validator, SpielerService spielerService, SpielstandService spielstandService, UbersprungenFragenService spielKomponenteService) {
         this.validator = validator;
         this.spielerService = spielerService;
         this.spielstandService = spielstandService;
@@ -68,7 +68,7 @@ public class LoginController {
         spielstand.setSpielerId(spielerId);
         spielstandService.save(spielstand);
 
-        SpielKomponente spielKomponente = new SpielKomponente();
+        UbersprungenFragen spielKomponente = new UbersprungenFragen();
         spielKomponente.setSpieler_id(spielerId);
         spielKomponenteService.save(spielKomponente);
 

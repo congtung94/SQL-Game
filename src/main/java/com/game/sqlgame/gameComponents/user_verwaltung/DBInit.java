@@ -1,9 +1,8 @@
 package com.game.sqlgame.gameComponents.user_verwaltung;
 
-import com.game.sqlgame.model.SpielKomponente;
 import com.game.sqlgame.model.Spielstand;
 import com.game.sqlgame.model.Spieler;
-import com.game.sqlgame.repository.SpielKomponenteRepository;
+import com.game.sqlgame.repository.UbersprungenFragenRepository;
 import com.game.sqlgame.repository.SpielerRepository;
 import com.game.sqlgame.repository.SpielstandRepository;
 import org.slf4j.Logger;
@@ -19,10 +18,10 @@ public class DBInit {
 
     private final SpielerRepository spielerRepository;
     private final SpielstandRepository spielstandRepository;
-    private final SpielKomponenteRepository spielKomponenteRepository;
+    private final UbersprungenFragenRepository spielKomponenteRepository;
 
 
-    public DBInit(SpielerRepository spielerRepository, SpielstandRepository spielstandRepository, SpielKomponenteRepository spielKomponenteRepository) {
+    public DBInit(SpielerRepository spielerRepository, SpielstandRepository spielstandRepository, UbersprungenFragenRepository spielKomponenteRepository) {
         this.spielerRepository = spielerRepository;
         this.spielstandRepository = spielstandRepository;
         this.spielKomponenteRepository = spielKomponenteRepository;
@@ -72,6 +71,11 @@ public class DBInit {
         duong.setPasswort("demo");
         spielerRepository.save(duong);
 
+        Spieler cu = new Spieler();
+        cu.setName("cu");
+        cu.setPasswort("demo");
+        spielerRepository.save(cu);
+
         Spielstand spielstandTung = new Spielstand();
         spielstandTung.setLevel(1);
         spielstandTung.setSpielerId(1);
@@ -80,9 +84,6 @@ public class DBInit {
         spielstandTung.setAktuelleFrageId(1);
         spielstandRepository.save(spielstandTung);
 
-        SpielKomponente spielKomponenteTung = new SpielKomponente();
-        spielKomponenteTung.setSpieler_id(1);
-        spielKomponenteRepository.save(spielKomponenteTung);
 
         Spielstand spielstandMai = new Spielstand();
         spielstandMai.setLevel(3);
@@ -139,5 +140,13 @@ public class DBInit {
         spielstandDuong.setZeit(3001);
         spielstandDuong.setAktuelleFrageId(11);
         spielstandRepository.save(spielstandDuong);
+
+        Spielstand spielstandCu = new Spielstand();
+        spielstandCu.setLevel(2);
+        spielstandCu.setSpielerId(9);
+        spielstandCu.setPunkte(100);
+        spielstandCu.setZeit(3001);
+        spielstandCu.setAktuelleFrageId(16);
+        spielstandRepository.save(spielstandCu);
     }
 }

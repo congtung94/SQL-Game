@@ -7,16 +7,21 @@ const frageAnzahl = listFragen.length;
 
 const weiterBtn = document.getElementById("weiterBtn");
 const ausfuhrenBtn = document.getElementById("ausfuehrenBtn");
+const uberspringenBtn = document.getElementById("ueberspringen")
 const frageText = document.getElementById("frageText");
+const tipsText = document.getElementById("tipsText");
+const tipsCollapse = document.getElementById("tips");
 const spielInfos = document.getElementById("spielInfos");
 
 
-let aktuelleFrageId = spielstandObject[2];
-console.log(aktuelleFrageId);
+let aktuelleFrageId = spielstandObject[1];
+// frageText anzeigen
 frageText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[1];
+// Tips anzeigen
+tipsText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[4];
 
 setVisibilityWeiterBtn();
-
+setVisibilityUberspringenBtn();
 
 function nachsteFrage() {
     if (aktuelleFrageId === frageAnzahl){
@@ -24,7 +29,6 @@ function nachsteFrage() {
         weiterBtn.disabled = true;
         return;
     }
-
     aktuelleFrageId++;
     if (aktuelleFrageId === 2) // jetzt läuft die Zeit
     {
@@ -32,9 +36,14 @@ function nachsteFrage() {
     }
 
     frageText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[1]; // nächste Frage text
+    // tips zuklappen
+    $('#tips').collapse('hide');
+    tipsText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[4];
     setVisibilityWeiterBtn();
+    setVisibilityUberspringenBtn();
     document.getElementById("navi").scrollIntoView();
 }
+
 
 function setVisibilityWeiterBtn (){
     if (Object.values(listFragebObject[aktuelleFrageId-1])[3] == null) // antwort_id == 0, es ist keine Frage
@@ -42,6 +51,17 @@ function setVisibilityWeiterBtn (){
         weiterBtn.style.visibility = "visible";
     }
     else weiterBtn.style.visibility = "hidden";
+}
+
+// die Spieler können bei ein paar fragen überspringen
+function setVisibilityUberspringenBtn(){
+    const fragen = [7,16,25,30,37,40,41,42];
+    if (fragen.includes(aktuelleFrageId)){
+        uberspringenBtn.style.visibility = "visible";
+    }
+    else {
+        uberspringenBtn.style.visibility = "hidden";
+    }
 }
 
 function ausfuhren(){
@@ -157,7 +177,19 @@ function ausfuhren(){
     feedbackArea.scrollIntoView();
 }
 
+function ueberspringen() {
 
+}
+
+
+function getLeaderboard() {
+    $('#leaderboardModal').modal('show').find(".modal-body").load("/getLeaderboard/leaderboard");
+}
+
+function getRanking() {
+    $('#leaderboardModal').modal('show').find(".modal-title").text("Ranking");
+    $('#leaderboardModal').modal('show').find(".modal-body").load("/getLeaderboard/rank");
+}
 
 function test() {
     const obj = {

@@ -43,31 +43,31 @@ public class SpielstandRepository {
         return Optional.ofNullable(spielstand);
     }
 
-    public boolean updateSpielstand (int spielstandId,  int level, int neuPunkte, int aktuelleFrageId){
+    public boolean updateSpielstand (int spieler_id,  int level, int neuPunkte, int aktuelleFrageId){
 
         int tmp = jdbcTemplate.
-                update("update spielstand set level = ?, punkte = ?, akt_frage_id =? where spl_std_id = ?",
-                        level, neuPunkte , aktuelleFrageId, spielstandId);
+                update("update spielstand set level = ?, punkte = ?, akt_frage_id =? where spieler_id = ?",
+                        level, neuPunkte , aktuelleFrageId, spieler_id);
         if (tmp == 1){
             return true;
         }
         return false;
     }
 
-    public boolean updateSpielstand (int spielstandId, int neuPunkte, int aktuelleFrageId){
+    public boolean updateSpielstand (int spieler_id, int neuPunkte, int aktuelleFrageId){
         int tmp = jdbcTemplate.
-                update("update spielstand set punkte = ?, akt_frage_id =? where spl_std_id = ?",
-                         neuPunkte, aktuelleFrageId, spielstandId);
+                update("update spielstand set punkte = ?, akt_frage_id =? where spieler_id = ?",
+                         neuPunkte, aktuelleFrageId, spieler_id);
         if (tmp == 1){
             return true;
         }
         return false;
     }
 
-    public boolean updateSpielstand (int spielstandId, int neuPunkte){
+    public boolean updateSpielstand (int spielerId, int neuPunkte){
         int tmp = jdbcTemplate.
-                update("update spielstand set punkte = ? where spl_std_id = ?",
-                        neuPunkte, spielstandId);
+                update("update spielstand set punkte = ? where spieler_id = ?",
+                        neuPunkte, spielerId);
         if (tmp == 1){
             return true;
         }

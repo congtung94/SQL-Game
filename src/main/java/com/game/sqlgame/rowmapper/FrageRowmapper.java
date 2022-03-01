@@ -14,6 +14,7 @@ public class FrageRowmapper implements RowMapper<Frage> {
         frage.setText(rs.getString("text"));
         frage.setPunkte(rs.getInt("punkte"));
         frage.setAntw(rs.getString("antw"));
+        frage.setTips(rs.getString("tips"));
         return frage;
     }
 }

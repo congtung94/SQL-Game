@@ -11,7 +11,6 @@ public class SpielstandRowmapper implements RowMapper<Spielstand> {
     @Override
     public Spielstand mapRow(ResultSet rs, int rowNum) throws SQLException {
         Spielstand spielstand = new Spielstand();
-        spielstand.setSpielStandId(rs.getInt("spl_std_id"));
         spielstand.setSpielerId(rs.getInt("spieler_id"));
         spielstand.setAktuelleFrageId(rs.getInt("akt_frage_id"));
         spielstand.setLevel(rs.getInt("level"));

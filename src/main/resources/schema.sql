@@ -101,26 +101,26 @@ create table frage
     id integer generated always as identity primary key ,
     text varchar (2000) ,
     punkte integer ,
-    antw varchar (2000)
+    antw varchar (2000),
+    tips varchar (2000)
 );
 
 create table spielstand
 (
-    spl_std_id integer generated always as identity primary key ,
     spieler_id integer ,
     akt_frage_id integer,
     level integer ,
     punkte integer ,
     zeit integer ,
+    primary key (spieler_id),
     foreign key (akt_frage_id) references frage on delete set null,
     foreign key (spieler_id) references spieler on delete cascade
 );
 
-create table spiel_komponente
+create table ubersprungenFragen
 (
     spieler_id integer ,
-    name varchar (30),
-    menge integer ,
+    frageId integer ,
     primary key (spieler_id),
     foreign key (spieler_id) references spieler on delete cascade
 );

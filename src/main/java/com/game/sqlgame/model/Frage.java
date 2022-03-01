@@ -8,4 +8,5 @@ public class Frage {
     private String text;
     private int punkte;
     private String antw;
+    private String tips;
 }

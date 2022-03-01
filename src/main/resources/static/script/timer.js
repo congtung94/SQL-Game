@@ -41,7 +41,7 @@ const Clock = {
 };
 
 // Spielzeit anzeigen
-let aktuelleZeit = spielstandObject[5];
+let aktuelleZeit = spielstandObject[4];
 Clock.totalSeconds = aktuelleZeit;
 
 if (aktuelleFrageId > 1){ // das Spiel hat begonnen

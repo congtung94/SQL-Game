@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Spielstand {
-    private int spielStandId;
+
     private int spielerId;
     private int aktuelleFrageId;
     private int level;

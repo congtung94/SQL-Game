@@ -154,10 +154,12 @@
                     Tips
                 </button>
                 <div class="collapse" id="tips">
-                    <div class="card card-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus
-                        terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore
-                        wes anderson cred nesciunt sapiente ea proident.
+                    <div class="card card-body" >
+                        <p id="tipsText"></p>
+                        <button id="ueberspringen" onclick="ueberspringen()" class="btn" style="visibility: hidden"
+                                type="button" >
+                            Überspringen
+                        </button>
                     </div>
                 </div>
             </div>
@@ -230,14 +232,6 @@
     });
 
 
-    function getLeaderboard() {
-        $('#leaderboardModal').modal('show').find(".modal-body").load("/getLeaderboard/leaderboard");
-    }
-
-    function getRanking() {
-        $('#leaderboardModal').modal('show').find(".modal-title").text("Ranking");
-        $('#leaderboardModal').modal('show').find(".modal-body").load("/getLeaderboard/rank");
-    }
 
 
 </script>
