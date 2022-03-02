@@ -26,7 +26,7 @@ public class UbersprungenFragenRepository {
 
     public boolean save (UbersprungenFragen ubersprungenFrage)
     {
-        String sql = "insert into ubersprungenFragen(spieler_id, frageId) values (?,?)";
+        String sql = "insert into ubersprungenFragen(spieler_id, frage_id) values (?,?)";
         int insert = jdbcTemplate.update(sql, ubersprungenFrage.getSpieler_id(), ubersprungenFrage.getFrageId());
         if (insert == 1){
             return true;
@@ -34,11 +34,21 @@ public class UbersprungenFragenRepository {
         else return false;
     }
 
-    public List<Frage> getUberspringenFrageWithSpielerId(int spielerId){
-        String sql = "select frage.id, frage.text, frage.punkte, frage.antw, frage.tips " +
-                "from ubersprungenFragen, frage " +
-                "where ubersprungenFragen.frageId = frage.id and ubersprungenFragen.spieler_id = ?";
-        return jdbcTemplate.query(sql, new Object[]{spielerId}, new FrageRowmapper());
+    public List<Integer> getUberspringenFrageWithSpielerId(int spielerId){
+        String sql = "select frage_id " +
+                "from ubersprungenFragen " +
+                "where spieler_id = ?";
+        return jdbcTemplate.queryForList(sql, new Object[]{spielerId}, Integer.class);
+    }
+
+    public boolean deleteUbersprungenFrage(int spielerId, int frageId){
+        String sql = "delete from ubersprungenFragen where spieler_id = ? and frage_id = ?";
+        return jdbcTemplate.update(sql, new Object[]{spielerId,frageId}) == 1;
+    }
+
+    public boolean deleteAllUbersprungenFrage (int spielerId){
+        String sql = "delete from ubersprungenFragen where spieler_id = ?";
+        return jdbcTemplate.update(sql, new Object[]{spielerId}) == 1;
     }
 
     public boolean existsUberspringenFrage (int spielerId){

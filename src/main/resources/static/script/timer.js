@@ -47,22 +47,23 @@ Clock.totalSeconds = aktuelleZeit;
 if (aktuelleFrageId > 1){ // das Spiel hat begonnen
     min.innerHTML = pad(Math.floor(aktuelleZeit /60 % 60));
     sec.innerHTML = pad(parseInt(aktuelleZeit % 60));
-    console.log(aktuelleZeit);
     Clock.start();
 }
 
 function logout (){
     Clock.pause();
-    const zeit = {
-        time: Clock.totalSeconds,
-        aktFrag: aktuelleFrageId
+    const data = {
+        aktFrag: aktuelleFrageId,
+        level: level,
+        punkte: punkte,
+        zeit: Clock.totalSeconds
     };
 
     $.ajax({
         type: "POST",
         url: "/custom_logout",
         data: {
-            sek: JSON.stringify(zeit)
+            dataToLogout: JSON.stringify(data)
         },
         beforeSend: function (xhr){
             xhr.setRequestHeader(csrf_header, csrf_token);

@@ -26,15 +26,17 @@ public class LogoutController {
 
 
     @PostMapping("/custom_logout")
-    public String logout (@RequestParam String sek, Model model, HttpServletRequest request){
-        log.info("hier logout controller " + sek);
-        JSONObject jsonObject = new JSONObject(sek);
+    public String logout (@RequestParam String dataToLogout, Model model, HttpServletRequest request){
+        log.info("hier logout controller " + dataToLogout);
+        JSONObject dataJson = new JSONObject(dataToLogout);
         AktuellerSpieler aktuellerSpieler =(AktuellerSpieler) model.asMap().get("aktuellerSpieler");
-        log.info("hier logout controller "+aktuellerSpieler.toString());
+        log.info("hier logout controller "+aktuellerSpieler.toString()+"\n" +
+                dataJson.getInt("level")+", "+dataJson.getInt("punkte")+ ", "+
+                dataJson.getInt("zeit")+", "+dataJson.getInt("aktFrag"));
 
-        // update Spielzeit und aktuelle Frage vor Logout
-        spielstandService.updateSpielstandBySpielerId(aktuellerSpieler.getId(), jsonObject.getInt("time"));
-        spielstandService.updateNeueFrageId(aktuellerSpieler.getId(), jsonObject.getInt("aktFrag"));
+        // update level, punkte, zeit, aktuelle Frage vor Logout
+        spielstandService.updateSpielstand(aktuellerSpieler.getId(), dataJson.getInt("level"),
+                dataJson.getInt("punkte"), dataJson.getInt("zeit"), dataJson.getInt("aktFrag"));
 
         SecurityContextHolder.clearContext();
         HttpSession session = request.getSession(false);

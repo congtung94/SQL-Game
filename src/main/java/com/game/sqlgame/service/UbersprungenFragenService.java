@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface UbersprungenFragenService {
     boolean save (UbersprungenFragen ubersprungenFrage);
-    List<Frage> getUberspringenFrageWithSpielerId(int spielerId);
+    List<Integer> getUberspringenFrageWithSpielerId(int spielerId);
     boolean existsUberspringenFrage (int spielerId);
+    boolean deleteUbersprungenFrage(int spielerId, int frageId);
 }

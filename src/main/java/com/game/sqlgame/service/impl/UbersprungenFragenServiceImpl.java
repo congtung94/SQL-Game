@@ -24,12 +24,17 @@ public class UbersprungenFragenServiceImpl implements UbersprungenFragenService 
     }
 
     @Override
-    public List<Frage> getUberspringenFrageWithSpielerId(int spielerId) {
+    public List<Integer> getUberspringenFrageWithSpielerId(int spielerId) {
         return ubersprungenFragenRepository.getUberspringenFrageWithSpielerId(spielerId);
     }
 
     @Override
     public boolean existsUberspringenFrage(int spielerId) {
         return ubersprungenFragenRepository.existsUberspringenFrage(spielerId);
+    }
+
+    @Override
+    public boolean deleteUbersprungenFrage(int spielerId, int frageId) {
+        return ubersprungenFragenRepository.deleteUbersprungenFrage(spielerId,frageId);
     }
 }

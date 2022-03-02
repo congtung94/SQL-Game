@@ -24,37 +24,37 @@ function tabelleGenerator (spaltenAnz, zeilenAnz, spaltenNamen, daten){
 }
 
 /* datenbankschema nach level anzeigen */
-function loadLevel2 (databaseshema){
-    let lastTable = databaseshema.lastChild;
+function loadLevel2 (tabelleListe){
+    let lastTable = tabelleListe.lastChild;
     let newTable = createTableDetails("insel", ["id", "koord_id","name", "abstand"]);
-    databaseshema.insertBefore(newTable, lastTable);
+    tabelleListe.insertBefore(newTable, lastTable);
 
-    lastTable = databaseshema.lastChild;
+    lastTable = tabelleListe.lastChild;
     newTable = createTableDetails("koordinaten",
         ["id", "breite_grad","breite_richtung", "laenge_grad", "laenge_richtung"]);
-    databaseshema.insertBefore(newTable, lastTable);
+    tabelleListe.insertBefore(newTable, lastTable);
 
-    lastTable = databaseshema.lastChild;
+    lastTable = tabelleListe.lastChild;
     newTable = createTableDetails("wetter",
         ["koord_id", "zeit","feuchtigkeit", "wind_geschw"]);
-    databaseshema.insertBefore(newTable, lastTable);
+    tabelleListe.insertBefore(newTable, lastTable);
 
 }
 
-function loadLevel3 (schema){
-    let lastTable = schema.lastChild;
+function loadLevel3 (tabelleListe){
+    let lastTable = tabelleListe.lastChild;
     let newTable = createTableDetails("hersteller", ["id", "name","bekanntheitsgrad"]);
-    schema.insertBefore(newTable, lastTable);
+    tabelleListe.insertBefore(newTable, lastTable);
 
-    lastTable = schema.lastChild;
+    lastTable = tabelleListe.lastChild;
     newTable = createTableDetails("ware",
         ["id", "hersteller_id","name", "preis"]);
-    schema.insertBefore(newTable, lastTable);
+    tabelleListe.insertBefore(newTable, lastTable);
 
-    lastTable = schema.lastChild;
+    lastTable = tabelleListe.lastChild;
     newTable = createTableDetails("kaeufe",
         ["id", "ware_id","anzahl", "tag"]);
-    schema.insertBefore(newTable, lastTable);
+    tabelleListe.insertBefore(newTable, lastTable);
 }
 
 function createTableDetails (tableName, attributtes){

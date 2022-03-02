@@ -120,7 +120,6 @@ create table spielstand
 create table ubersprungenFragen
 (
     spieler_id integer ,
-    frageId integer ,
-    primary key (spieler_id),
+    frage_id integer ,
     foreign key (spieler_id) references spieler on delete cascade
 );

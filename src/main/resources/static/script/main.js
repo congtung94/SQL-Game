@@ -10,11 +10,20 @@ const ausfuhrenBtn = document.getElementById("ausfuehrenBtn");
 const uberspringenBtn = document.getElementById("ueberspringen")
 const frageText = document.getElementById("frageText");
 const tipsText = document.getElementById("tipsText");
-const tipsCollapse = document.getElementById("tips");
-const spielInfos = document.getElementById("spielInfos");
 
 
+// level, punkte , aktuelle Frage von Spieler
 let aktuelleFrageId = spielstandObject[1];
+let level = spielstandObject[2];
+let punkte = spielstandObject[3];
+
+// wenn es um eine übersprungene Frage, wird es bemerkt
+let istUbersprungenFrage = false;
+if (ubersprungenFragen.includes(aktuelleFrageId)){
+    $('#mitteilungModal').modal('show').find(".modal-title").text("Mitteilung");
+    $('#mitteilungModal').modal('show').find(".modal-body").text("Folgende sind die Fragen, die Sie übersprungen haben ");
+    istUbersprungenFrage = true;
+}
 // frageText anzeigen
 frageText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[1];
 // Tips anzeigen
@@ -24,24 +33,54 @@ setVisibilityWeiterBtn();
 setVisibilityUberspringenBtn();
 
 function nachsteFrage() {
-    if (aktuelleFrageId === frageAnzahl){
+    // wenn aktuelle Frage eine übersprungene Frage ist, dann die nächste Frage ist in der Liste von übersprungenen Fragen
+    if (istUbersprungenFrage){
+        // die aktuelle Frage in der übersprungenen Fragen liste entfernen
+        ubersprungenFragen.shift();
         // das Spiel gewonnen
-        weiterBtn.disabled = true;
-        return;
+        if (ubersprungenFragen.length === 0){
+            ausfuhrenBtn.style.visibility = "hidden";
+            weiterBtn.style.visibility = "hidden";;
+            alert("Glückwunsch, du hast das Spiel gewonnen !!!");
+        }
+        else {
+            // die nächste Frage ist die erste Frage in übersprungener Fragenliste
+            aktuelleFrageId = ubersprungenFragen[0];
+            setViewForNextQuestion();
+        }
     }
-    aktuelleFrageId++;
-    if (aktuelleFrageId === 2) // jetzt läuft die Zeit
-    {
-        Clock.start();
+    else {
+        //wenn der Spieler die letzte Frage geantwortet hat, dann soll er noch die zuvor übersprungene Fragen antworten
+        // es wird auch bemerkt, ob es um eine solche Frage handelt
+        if (aktuelleFrageId === frageAnzahl){
+            if (ubersprungenFragen.length == 0){
+                // das Spiel gewonnen
+                ausfuhrenBtn.style.visibility = "hidden";
+                weiterBtn.style.visibility = "hidden";
+                alert("Glückwunsch, du hast das Spiel gewonnen !!!");
+            }
+            else {
+                // bemerken, dass ab jetzt die übersprungene Fragen geantwortet werden sollen
+                istUbersprungenFrage = true;
+                $('#mitteilungModal').modal('show').find(".modal-title").text("Mitteilung");
+                $('#mitteilungModal').modal('show').find(".modal-body").text("Folgende sind die Fragen, die Sie übersprungen haben ");
+                // die übersprungene Frage beantworten
+                aktuelleFrageId = ubersprungenFragen[0];
+                setViewForNextQuestion();
+            }
+        }
+        // Spieler antwortet die nächste Frage in der Fragenliste
+        else {
+            aktuelleFrageId++;
+            if (aktuelleFrageId === 2) // jetzt läuft die Zeit
+            {
+                Clock.start();
+            }
+            setViewForNextQuestion();
+        }
     }
 
-    frageText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[1]; // nächste Frage text
-    // tips zuklappen
-    $('#tips').collapse('hide');
-    tipsText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[4];
-    setVisibilityWeiterBtn();
-    setVisibilityUberspringenBtn();
-    document.getElementById("navi").scrollIntoView();
+
 }
 
 
@@ -49,14 +88,24 @@ function setVisibilityWeiterBtn (){
     if (Object.values(listFragebObject[aktuelleFrageId-1])[3] == null) // antwort_id == 0, es ist keine Frage
     {
         weiterBtn.style.visibility = "visible";
+        ausfuhrenBtn.style.visibility = "hidden";
     }
-    else weiterBtn.style.visibility = "hidden";
+    else {
+        weiterBtn.style.visibility = "hidden";
+        ausfuhrenBtn.style.visibility = "visible";
+    }
 }
 
 // die Spieler können bei ein paar fragen überspringen
 function setVisibilityUberspringenBtn(){
-    const fragen = [7,16,25,30,37,40,41,42];
-    if (fragen.includes(aktuelleFrageId)){
+    // die Fragen kann man nur einmal überspringen
+    if (istUbersprungenFrage){
+        uberspringenBtn.style.visibility = "hidden";
+        return;
+    }
+    // Liste der Fragen, die Spieler überspringen kann
+    const fragenZuUberspringen = [7,16,25,30,37,40,41,42];
+    if (fragenZuUberspringen.includes(aktuelleFrageId)){
         uberspringenBtn.style.visibility = "visible";
     }
     else {
@@ -86,6 +135,8 @@ function ausfuhren(){
     {
         const dataToServer = {
             aktFragId: aktuelleFrageId,
+            aktZeit: Clock.totalSeconds,
+            istUbersprungenFrage: istUbersprungenFrage,
             spielerCode: code
         };
 
@@ -106,8 +157,8 @@ function ausfuhren(){
                     return;
                 }
 
-                // syntax error, ein SQLException wurde geworfen
-                if (Object.keys(response).length === 2){
+                // ein SQLException wurde geworfen
+                if (response.syntaxfehler != undefined){
                     let div = document.createElement("div");
                     let label = document.createElement("label");
                     label.innerHTML = response.feedback;
@@ -116,9 +167,10 @@ function ausfuhren(){
 
                     let letztesFeedback = feedbackArea.firstChild;
                     feedbackArea.insertBefore(div, letztesFeedback);
-
                     return;
                 }
+
+                // daten aus der Server-Antwort zu holen
                 let spaltenAnz = response.spaltenAnz;
                 let zeilenAnz = response.zeilenAnz;
                 let dataInString = response.data;
@@ -132,10 +184,10 @@ function ausfuhren(){
                     spaltenNamen.push(spaltenName);
                 }
                 daten = dataInString.split ("#");
-                console.log(daten);
+                // tabelle für die Ausgabe erstellen
                 let ausgabeTabelle = tabelleGenerator(spaltenAnz, zeilenAnz, spaltenNamen, daten);
 
-
+                // feedback für die Antwort erstellen
                 let div = document.createElement("div");
                 let label = document.createElement("label");
                 label.innerHTML = response.feedback;
@@ -143,52 +195,102 @@ function ausfuhren(){
                 div.appendChild(ausgabeTabelle);
                 div.appendChild(document.createElement("br"));
 
+                // feedback und die Tabelle der Antwort ausgeben
                 let letztesFeedback = feedbackArea.firstChild;
                 feedbackArea.insertBefore(div, letztesFeedback);
 
                 // spieler hat die Frage richtig geantwortet
                 if (response.bewertung){
                     weiterBtn.style.visibility = "visible";
-                    // update womöglich level in page-navigation
-                    if (response.level != undefined){
-                        let newLevel = response.level;
-                        document.getElementById("level").innerText = newLevel; // nächstes Level
-                        alert("Glückwünsch ! Du hast Level "+ response.level + " erreicht !!");
-                        const tabelleList = document.getElementById("tabelle-liste");
-                        if (newLevel === 2){
-                            loadLevel2(tabelleList);
-                        }
-                        if (newLevel === 3){
-                            loadLevel3(tabelleList);
-                        }
-                    }
-                    // der Spieler hat gewonnen
-                    if (response.gewinn != undefined){
-                        ausfuhrenBtn.style.visibility = "hidden";
-                        alert("Glückwunsch, du hast das Spiel gewonnen !!!");
-                    }
+                    ausfuhrenBtn.style.visibility = "hidden";
                     // update punkte
-                    document.getElementById("punkte").innerText =response.punkte;
+                    punkte += Object.values(listFragebObject[aktuelleFrageId-1])[2];
+                    document.getElementById("punkte").innerText = punkte;
+
+                    // update womöglich level
+                    if (aktuelleFrageId == 2){
+                        const tabelleList = document.getElementById("tabelle-liste");
+                        level = 2;
+                        alert("Glückwünsch ! Du hast Level "+ level + " erreicht !!");
+                        document.getElementById("level").innerText = level;
+                        loadLevel2(tabelleList);
+                    }
+
+                    if (aktuelleFrageId == 3){
+                        const tabelleList = document.getElementById("tabelle-liste");
+                        level = 3;
+                        alert("Glückwünsch ! Du hast Level "+ level + " erreicht !!");
+                        document.getElementById("level").innerText = level;
+                        loadLevel3(tabelleList);
+                    }
+
+                    // update ranking
                     document.getElementById("rankingNumber").innerText =response.ranking;
-                }else weiterBtn.style.visibility = "hidden";
+                }else {
+                    weiterBtn.style.visibility = "hidden";
+                    ausfuhrenBtn.style.visibility = "visible";
+                }
             }
         });
     }
     feedbackArea.scrollIntoView();
 }
 
-function ueberspringen() {
+function setViewForNextQuestion() {
+    frageText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[1]; // nächste Frage text
+    // tips zuklappen
+    $('#tips').collapse('hide');
+    tipsText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[4];
+    setVisibilityWeiterBtn();
+    setVisibilityUberspringenBtn();
+    document.getElementById("navi").scrollIntoView();
+}
 
+// schickt die übersprungene Frage zu Server, um die Info in Datenbank zu speichern
+function ueberspringen() {
+    const ubersprungenFrage = {
+        id : aktuelleFrageId
+    };
+
+    $.ajax({
+        type: "POST",
+        url: "/uberspringen",
+        data: {
+            ubersprungenFrageToServer: JSON.stringify(ubersprungenFrage)
+        },
+        beforeSend: function (xhr){
+            xhr.setRequestHeader(csrf_header, csrf_token);
+        },
+        success: function (response) {
+            // speichere die übersprungene Frage in ihre Liste
+            ubersprungenFragen.push(aktuelleFrageId);
+            nachsteFrage();
+        }
+    });
 }
 
 
 function getLeaderboard() {
-    $('#leaderboardModal').modal('show').find(".modal-body").load("/getLeaderboard/leaderboard");
+    $('#mitteilungModal').modal('show').find(".modal-title").text("Leaderboard");
+    $('#mitteilungModal').modal('show').find(".modal-body").load("/getLeaderboard/leaderboard");
 }
 
 function getRanking() {
-    $('#leaderboardModal').modal('show').find(".modal-title").text("Ranking");
-    $('#leaderboardModal').modal('show').find(".modal-body").load("/getLeaderboard/rank");
+    $('#mitteilungModal').modal('show').find(".modal-title").text("Ranking");
+    $('#mitteilungModal').modal('show').find(".modal-body").load("/getLeaderboard/rank");
+}
+
+function neustart(){
+    $.ajax({
+        type: "POST",
+        url: "/neustart",
+        beforeSend: function (xhr){
+            xhr.setRequestHeader(csrf_header, csrf_token);
+        },
+        success: function (response) {
+            location.reload();
+        }
+    });
 }
 
 function test() {
@@ -204,10 +306,11 @@ function test() {
         data: {
             insel: JSON.stringify(obj)
         },
+        beforeSend: function (xhr){
+            xhr.setRequestHeader(csrf_header, csrf_token);
+        },
         success: function (response) {
-            var code = document.getElementById("codetext");
-            code.innerText = response.hi + " ##1 " + response.ba +" ##2 " +response.bon ;
-            console.log(response);
+            console.log(response.hi + " ##1 " + response.ba +" ##2 " +response.bon);
         }
     });
 }

@@ -2,6 +2,7 @@ package com.game.sqlgame.gameComponents.user_verwaltung;
 
 import com.game.sqlgame.model.Spielstand;
 import com.game.sqlgame.model.Spieler;
+import com.game.sqlgame.model.UbersprungenFragen;
 import com.game.sqlgame.repository.UbersprungenFragenRepository;
 import com.game.sqlgame.repository.SpielerRepository;
 import com.game.sqlgame.repository.SpielstandRepository;
@@ -18,13 +19,13 @@ public class DBInit {
 
     private final SpielerRepository spielerRepository;
     private final SpielstandRepository spielstandRepository;
-    private final UbersprungenFragenRepository spielKomponenteRepository;
+    private final UbersprungenFragenRepository ubersprungenFragenRepository;
 
 
-    public DBInit(SpielerRepository spielerRepository, SpielstandRepository spielstandRepository, UbersprungenFragenRepository spielKomponenteRepository) {
+    public DBInit(SpielerRepository spielerRepository, SpielstandRepository spielstandRepository, UbersprungenFragenRepository ubersprungenFragenRepository) {
         this.spielerRepository = spielerRepository;
         this.spielstandRepository = spielstandRepository;
-        this.spielKomponenteRepository = spielKomponenteRepository;
+        this.ubersprungenFragenRepository = ubersprungenFragenRepository;
     }
 
     @PostConstruct
@@ -144,9 +145,19 @@ public class DBInit {
         Spielstand spielstandCu = new Spielstand();
         spielstandCu.setLevel(2);
         spielstandCu.setSpielerId(9);
-        spielstandCu.setPunkte(100);
+        spielstandCu.setPunkte(200);
         spielstandCu.setZeit(3001);
-        spielstandCu.setAktuelleFrageId(16);
+        spielstandCu.setAktuelleFrageId(56);
         spielstandRepository.save(spielstandCu);
+
+        UbersprungenFragen fragen = new UbersprungenFragen(9, 7);
+        UbersprungenFragen fragen1 = new UbersprungenFragen(9, 16);
+        UbersprungenFragen fragen2 = new UbersprungenFragen(9, 25);
+        UbersprungenFragen fragen3 = new UbersprungenFragen(9, 30);
+        ubersprungenFragenRepository.save(fragen);
+        ubersprungenFragenRepository.save(fragen1);
+        ubersprungenFragenRepository.save(fragen2);
+        ubersprungenFragenRepository.save(fragen3);
+
     }
 }

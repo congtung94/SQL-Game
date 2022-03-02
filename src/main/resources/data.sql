@@ -355,7 +355,7 @@ values ('Die nächste Insel ist eine dieser 2 Insel, welche die kleiner Abstand 
         'select name, abstand,breite_grad,breite_richtung, laenge_grad,laenge_richtung from insel, koordinaten ' ||
         'where insel.koord_id = koordinaten.id and (insel.id = 2 or insel.id = 5) ' ||
         'and insel.abstand = (select min(abstand) from insel where id = 2 or id = 5)'
-         ,'merken Sie sich die id dieser Inseln von letzter Frage');
+         ,'merken Sie sich die id dieser Inseln von letzter Frage. Die sind 2 und 5');
 insert into frage (text, punkte, antw, tips)
 values ('Alles klar ! Die Insel Ohara ist unser nächstes Ziel !', 0, null ,null);
 insert into frage (text, punkte, antw, tips)
@@ -507,8 +507,8 @@ values ('Was ist das dominante Hobby der Bewohner auf der Insel ?
         'with hobby_statistik as
         (select hobby, count (*) as interessierte from insel, bewohner where insel.id = bewohner.insel_id and insel.id = 2 group by hobby)
         select hobby, interessierte from hobby_statistik where interessierte = (select max(interessierte) from hobby_statistik)',null);
-insert into frage (text, punkte, antw, tips)
+/*insert into frage (text, punkte, antw, tips)
 values ('Wer von Ihnen kann sein Hobby Archaeologie zum Beruf machen ? ' ||
         'Zeigen Sie die Liste dieser Bewohner mit ihrer id und ihrem name an.',10,
-        '',null);
+        '',null);*/
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.game.sqlgame.model.Spielstand;
 import com.game.sqlgame.gameComponents.user_verwaltung.AktuellerSpieler;
+import com.game.sqlgame.model.UbersprungenFragen;
 import com.game.sqlgame.service.FrageService;
 import com.game.sqlgame.service.SpielerService;
 import com.game.sqlgame.service.SpielstandService;
@@ -48,6 +49,17 @@ public class GameController {
 
     }
 
+    @PostMapping("/uberspringen")
+    @ResponseBody
+    public void saveUbersprungenFrage(@RequestParam String ubersprungenFrageToServer, Model model){
+        JSONObject jsonObject = new JSONObject(ubersprungenFrageToServer);
+        int frageId = jsonObject.getInt("id");
+
+        AktuellerSpieler aktuellerSpieler =(AktuellerSpieler) model.asMap().get("aktuellerSpieler");
+        ubersprungenFragenService.save(new UbersprungenFragen(aktuellerSpieler.getId(), frageId));
+
+    }
+
     @GetMapping("/")
     public String start(Model model) {
         return "start";
@@ -64,6 +76,7 @@ public class GameController {
         model.addAttribute("spielstand", spielstand);
         model.addAttribute("listFragen", frageService.findAllQuestions());
         model.addAttribute("spielerRanking", getRangAktuellerSpieler(aktuellerSpieler.getName()));
+        model.addAttribute("ubersprungeneFragen", ubersprungenFragenService.getUberspringenFrageWithSpielerId(aktuellerSpieler.getId()));
 
         log.info(aktuellerSpieler.toString());
         return "main";
@@ -85,19 +98,15 @@ public class GameController {
         String spieler_code = data.getString("spielerCode");
         log.info(spieler_code);
         int frageId = data.getInt("aktFragId");
+        boolean istUbersprungenFrage = data.getBoolean("istUbersprungenFrage");
+        int aktZeit = data.getInt("aktZeit");
 
-        // die Frage hat der Spieler richtig geantwortet oder das ist keine Frage
-        // ein leeres ObjectNode wird zurückgegeben
-        if (frageId == spielstand.getAktuelleFrageId()-1 || frageService.findQuestionById(frageId).get().getAntw() == null){
-            return objectNode;
-        }
 
         Connection c1 = null;
         Statement s1 = null;
         Connection c2 = null;
         Statement s2 = null;
 
-        //boolean check = checkQueryAnswer(spieler_code,frageId);
         try {
             c1 = jdbcTemplate.getDataSource().getConnection();
             s1 = c1.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -109,34 +118,23 @@ public class GameController {
             // wenn die Antwort richtig ist
             if (objectNode.get("bewertung").asBoolean(true))
             {
-                // war das die letzte Frage ?
-                if (frageId == frageService.countFrage()){
-                    int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getPunkte();
-                    log.info("maximal punkte: " + neuPunkte);
-                    spielstandService.updateSpielstand(spielstand.getSpielerId(), neuPunkte);
-                    objectNode.put("punkte", neuPunkte);
-                    objectNode.put("gewinn", "Glückwunsch, du hast gewonnen"+ "\n deine Punkte: " + neuPunkte);
-                    return objectNode;
+                // wenn es um eine übersprungene Frage, wird es aus der Datenbank entfernt
+                if(istUbersprungenFrage){
+                    ubersprungenFragenService.deleteUbersprungenFrage(aktuellerSpieler.getId(), frageId);
                 }
-                // update level, punkte, aktuelle FrageId in spielstand
-                int neuPunkte = spielstand.getPunkte() + frageService.findQuestionById(frageId).get().getPunkte();
-                log.info("neunPunkte: " + neuPunkte);
-                if (frageId == 3){
-                    spielstandService.updateSpielstand(spielstand.getSpielerId(),2, neuPunkte,frageId+1);
-                    objectNode.put("level", 2);
-                }
-                if (frageId == 5){
-                    spielstandService.updateSpielstand(spielstand.getSpielerId(),3, neuPunkte,frageId+1);
-                    objectNode.put("level", 3);
-                }
-                spielstandService.updateSpielstand(spielstand.getSpielerId(), neuPunkte,frageId+1);
-                objectNode.put("punkte",neuPunkte);
+                // update punkte und zeit in der Datenbank
+                int aktPunkte = spielstand.getPunkte();
+                int neuPunkte = frageService.findQuestionById(frageId).get().getPunkte() + aktPunkte;
+                spielstandService.updateSpielstand(aktuellerSpieler.getId(), neuPunkte, aktZeit);
+
+                // update ranking vom Spieler
                 objectNode.put("ranking", getRangAktuellerSpieler(aktuellerSpieler.getName()));
             }
             else
                 return objectNode;
         }catch (SQLException e){
             objectNode.put("bewertung", false);
+            objectNode.put("syntaxfehler", true);
             objectNode.put("feedback" , e.getMessage());
         }finally {
             if (c1 != null) {
@@ -275,14 +273,16 @@ public class GameController {
         AktuellerSpieler aktuellerSpieler =(AktuellerSpieler) model.asMap().get("aktuellerSpieler");
         int aktuellerSpielerId = aktuellerSpieler.getId();
 
-        spielstandService.updateSpielstadNeustart(aktuellerSpielerId,1,0,0,1);
+        spielstandService.updateSpielstand(aktuellerSpielerId,1,0,0,1);
+        ubersprungenFragenService.getUberspringenFrageWithSpielerId(aktuellerSpielerId);
 
         Spielstand spielstand = spielstandService.findSpielStandByPlayerId(aktuellerSpielerId).get();
 
         model.addAttribute("spielstand", spielstand);
         model.addAttribute("listFragen", frageService.findAllQuestions());
         model.addAttribute("spielerRanking", getRangAktuellerSpieler(aktuellerSpieler.getName()));
-
+        model.addAttribute("ubersprungeneFragen", ubersprungenFragenService.getUberspringenFrageWithSpielerId(aktuellerSpieler.getId()));
+        System.out.println("loooooooogggggoooout");
         return "main";
     }
 

@@ -1,6 +1,6 @@
 package com.game.sqlgame.controller;
 
-import com.game.sqlgame.model.UbersprungenFragen;
+
 import com.game.sqlgame.model.Spielstand;
 import com.game.sqlgame.model.Spieler;
 import com.game.sqlgame.gameComponents.user_verwaltung.registrierung.RegistrierungForm;
@@ -68,9 +68,6 @@ public class LoginController {
         spielstand.setSpielerId(spielerId);
         spielstandService.save(spielstand);
 
-        UbersprungenFragen spielKomponente = new UbersprungenFragen();
-        spielKomponente.setSpieler_id(spielerId);
-        spielKomponenteService.save(spielKomponente);
 
         authWithHttpServletRequest(request, spieler.getName(), spieler.getPasswort());
 
