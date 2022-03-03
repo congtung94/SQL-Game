@@ -102,7 +102,7 @@ public class GameController {
         int aktZeit = data.getInt("aktZeit");
         int level = data.getInt("level");
 
-        if (level == 1){
+        if (level == 1 || frageId <= 22){
             spieler_code = "with bewohner as " +
                     "(select id, name, alter, hobby, beruf, beruf_erfahrung, status " +
                     "from bewohner " +
@@ -142,8 +142,19 @@ public class GameController {
                 return objectNode;
         }catch (SQLException e){
             objectNode.put("bewertung", false);
-            objectNode.put("syntaxfehler", true);
-            objectNode.put("feedback" , e.getMessage());
+            objectNode.put("SQLException", true);
+            String message = e.getMessage();
+            // für die Fragen im Level 1, muss bei Fehlern richtige Position ausgegeben werden
+            System.out.println(message.contains("Position") && level == 1);
+            if (level == 1 && message.contains("Position")){
+                String positionInString =  message.substring(message.lastIndexOf(" ")+1);
+                int position = Integer.parseInt(positionInString);
+                position -= 114;
+                message = message.replace(positionInString, position+"");
+                objectNode.put("feedback", message);
+            }
+            else
+                objectNode.put("feedback" , e.getMessage());
         }finally {
             if (c1 != null) {
                 try {

@@ -121,121 +121,124 @@ function ausfuhren(){
 
     if (code == "")
     {
-        let div = document.createElement("div");
-        let label = document.createElement("label");
-        label.innerHTML = "du hast kein code eingegeben !";
-        div.appendChild(label);
+        const div = createDivFeedback("Sie haben kein code eingegeben !", "#A43741");
         div.appendChild(document.createElement("br"));
 
-        let letztesFeedback = feedbackArea.firstChild;
+        const letztesFeedback = feedbackArea.firstChild;
         feedbackArea.insertBefore(div, letztesFeedback);
-        console.log("kein code");
+        return;
     }
-    else
-    {
-        const dataToServer = {
-            aktFragId: aktuelleFrageId,
-            aktZeit: Clock.totalSeconds,
-            istUbersprungenFrage: istUbersprungenFrage,
-            level: level,
-            spielerCode: code
-        };
+    // code vom spieler wird auf Sicherheit überprüft
+    // der Spieler darf das Datenbankschema nicht ändern
+    let codeLowercase = code.toLowerCase();
+    if (codeLowercase.includes("create") || codeLowercase.includes("update")
+        || codeLowercase.includes("delete") || codeLowercase.includes("drop")
+        || codeLowercase.includes("table") || codeLowercase.includes("insert")){
+        const div = createDivFeedback("keine Abfrage erkannt ", "#A43741");
+        div.appendChild(document.createElement("br"));
 
-        $.ajax({
-            type: "POST",
-            url: "/sendCode",
-            data: {
-                spielerCodeData: JSON.stringify(dataToServer)
-            },
-            beforeSend: function (xhr){
-                xhr.setRequestHeader(csrf_header, csrf_token);
-            },
-            // response : bewertung,feedback, spaltenAnz, zeilenAnz,
-            //          spaltenName1,spaltenName2, ..., data#data#data..., level, punkte, gewinn
-            success: function (response) {
-                // die Frage hat der Spieler richtig geantwortet oder das ist keine Frage
-                if (Object.keys(response).length === 0){
-                    return;
-                }
+        const letztesFeedback = feedbackArea.firstChild;
+        feedbackArea.insertBefore(div, letztesFeedback);
+        return;
+    }
+    // code vom Spieler wird zur bewertung an Server geschickt
+    const dataToServer = {
+        aktFragId: aktuelleFrageId,
+        aktZeit: Clock.totalSeconds,
+        istUbersprungenFrage: istUbersprungenFrage,
+        level: level,
+        spielerCode: code
+    };
 
-                // ein SQLException wurde geworfen
-                if (response.syntaxfehler != undefined){
-                    let div = document.createElement("div");
-                    let label = document.createElement("label");
-                    label.innerHTML = response.feedback;
-                    div.appendChild(label);
-                    div.appendChild(document.createElement("br"));
-
-                    let letztesFeedback = feedbackArea.firstChild;
-                    feedbackArea.insertBefore(div, letztesFeedback);
-                    return;
-                }
-
-                // daten aus der Server-Antwort zu holen
-                let spaltenAnz = response.spaltenAnz;
-                let zeilenAnz = response.zeilenAnz;
-                let dataInString = response.data;
-
-                // daten für Ausgabe-Tabelle
-                let spaltenNamen = new Array();
-                let daten = new Array();
-                for (let i = 4; i< spaltenAnz +4; i++){
-                    const key = Object.keys(response)[i];
-                    const spaltenName = response[key];
-                    spaltenNamen.push(spaltenName);
-                }
-                daten = dataInString.split ("#");
-                // tabelle für die Ausgabe erstellen
-                let ausgabeTabelle = tabelleGenerator(spaltenAnz, zeilenAnz, spaltenNamen, daten);
-
-                // feedback für die Antwort erstellen
-                let div = document.createElement("div");
-                let label = document.createElement("label");
-                label.innerHTML = response.feedback;
-                div.appendChild(label);
-                div.appendChild(ausgabeTabelle);
+    $.ajax({
+        type: "POST",
+        url: "/sendCode",
+        data: {
+            spielerCodeData: JSON.stringify(dataToServer)
+        },
+        beforeSend: function (xhr){
+            xhr.setRequestHeader(csrf_header, csrf_token);
+        },
+        // response : bewertung,feedback, spaltenAnz, zeilenAnz,
+        //          spaltenName1,spaltenName2, ..., data#data#data..., level, punkte, gewinn
+        success: function (response) {
+            // ein SQLException wurde geworfen
+            if (response.SQLException != undefined){
+                const div = createDivFeedback(response.feedback, "#A43741");
                 div.appendChild(document.createElement("br"));
 
-                // feedback und die Tabelle der Antwort ausgeben
-                let letztesFeedback = feedbackArea.firstChild;
+                const letztesFeedback = feedbackArea.firstChild;
                 feedbackArea.insertBefore(div, letztesFeedback);
-
-                // spieler hat die Frage richtig geantwortet
-                if (response.bewertung){
-                    weiterBtn.style.visibility = "visible";
-                    ausfuhrenBtn.style.visibility = "hidden";
-                    // update punkte
-                    punkte += Object.values(listFragebObject[aktuelleFrageId-1])[2];
-                    document.getElementById("punkte").innerText = punkte;
-
-                    // update womöglich level
-                    if (aktuelleFrageId == 22){ // 22
-                        const tabelleListe = document.getElementById("tabelle-liste");
-                        level = 2;
-                        $('#mitteilungModal').modal('show').find('.modal-header').text("Glückwunsch");
-                        $('#mitteilungModal').modal('show').find('.modal-body').text("Sie haben Level 2 erreicht !");
-                        document.getElementById("level").innerText = level;
-                        loadLevel2(tabelleListe);
-                    }
-
-                    if (aktuelleFrageId == 42){ // 42
-                        const tabelleListe = document.getElementById("tabelle-liste");
-                        level = 3;
-                        $('#mitteilungModal').modal('show').find('.modal-header').text("Glückwunsch");
-                        $('#mitteilungModal').modal('show').find('.modal-body').text("Sie haben Level 3 erreicht !");
-                        document.getElementById("level").innerText = level;
-                        loadLevel3(tabelleListe);
-                    }
-
-                    // update ranking
-                    document.getElementById("rankingNumber").innerText =response.ranking;
-                }else {
-                    weiterBtn.style.visibility = "hidden";
-                    ausfuhrenBtn.style.visibility = "visible";
-                }
+                return;
             }
-        });
-    }
+
+            // daten aus der Server-Antwort zu holen
+            let spaltenAnz = response.spaltenAnz;
+            let zeilenAnz = response.zeilenAnz;
+            let dataInString = response.data;
+
+            // daten für Ausgabe-Tabelle
+            let spaltenNamen = new Array();
+            let daten = new Array();
+            for (let i = 4; i< spaltenAnz +4; i++){
+                const key = Object.keys(response)[i];
+                const spaltenName = response[key];
+                spaltenNamen.push(spaltenName);
+            }
+            daten = dataInString.split ("#");
+            // tabelle für die Ausgabe erstellen
+            let ausgabeTabelle = tabelleGenerator(spaltenAnz, zeilenAnz, spaltenNamen, daten);
+
+            // spieler hat falsch geantwortet, wird das feedback rot gefärbt
+            let labelColor = "";
+            if (!response.bewertung){
+                labelColor = "#A43741";
+            }else labelColor = "#2D882D";
+            // feedback ausgeben
+            const div = createDivFeedback(response.feedback, labelColor);
+            div.appendChild(ausgabeTabelle);
+            div.appendChild(document.createElement("br"));
+
+            // feedback und die Tabelle der Antwort ausgeben
+            let letztesFeedback = feedbackArea.firstChild;
+            feedbackArea.insertBefore(div, letztesFeedback);
+
+            // spieler hat die Frage richtig geantwortet
+            if (response.bewertung){
+                weiterBtn.style.visibility = "visible";
+                ausfuhrenBtn.style.visibility = "hidden";
+                // update punkte
+                punkte += Object.values(listFragebObject[aktuelleFrageId-1])[2];
+                document.getElementById("punkte").innerText = punkte;
+
+                // update womöglich level
+                if (aktuelleFrageId == 22){ // 22
+                    const tabelleListe = document.getElementById("tabelle-liste");
+                    level = 2;
+                    $('#mitteilungModal').modal('show').find('.modal-header').text("Glückwunsch");
+                    $('#mitteilungModal').modal('show').find('.modal-body').text("Sie haben Level 2 erreicht !");
+                    document.getElementById("level").innerText = level;
+                    loadLevel2(tabelleListe);
+                }
+
+                if (aktuelleFrageId == 42){ // 42
+                    const tabelleListe = document.getElementById("tabelle-liste");
+                    level = 3;
+                    $('#mitteilungModal').modal('show').find('.modal-header').text("Glückwunsch");
+                    $('#mitteilungModal').modal('show').find('.modal-body').text("Sie haben Level 3 erreicht !");
+                    document.getElementById("level").innerText = level;
+                    loadLevel3(tabelleListe);
+                }
+
+                // update ranking
+                document.getElementById("rankingNumber").innerText =response.ranking;
+            }else {
+                weiterBtn.style.visibility = "hidden";
+                ausfuhrenBtn.style.visibility = "visible";
+            }
+        }
+    });
+
     feedbackArea.scrollIntoView();
 }
 

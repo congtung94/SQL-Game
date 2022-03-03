@@ -104,15 +104,15 @@
                             <summary>bewohner</summary>
                             <ul>
                                 <li>id</li>
-                                <li>insel_id</li>
+                                <li th:if="${spielstand.level >1}">insel_id</li>
                                 <li>name</li>
                                 <li>alter</li>
                                 <li>hobby</li>
                                 <li>beruf</li>
                                 <li>beruf_erfahrung</li>
                                 <li>status</li>
-                                <li>iq</li>
-                                <li>einkommen</li>
+                                <li th:if="${spielstand.level >1}">iq</li>
+                                <li th:if="${spielstand.level >1}">einkommen</li>
                             </ul>
                         </details>
                         <details>

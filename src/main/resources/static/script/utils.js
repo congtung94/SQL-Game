@@ -77,6 +77,16 @@ function createTableDetails (tableName, attributtes){
     return newTable;
 }
 
+// neues div-element, welches das Label für Feedback und vielleicht Tabelle der Antwort im Ausgabe-Bereich erstellen
+function createDivFeedback(feedback, textColor) {
+    let div = document.createElement("div");
+    let label = document.createElement("label");
+    label.style.color = textColor;
+    label.innerHTML = feedback;
+    div.appendChild(label);
+    return div;
+}
+
 /* datenbankschema nach window-größe anpassen (zeigen oder verstecken)  */
 
 window.addEventListener('resize', function (event) {
