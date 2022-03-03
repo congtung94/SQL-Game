@@ -137,6 +137,7 @@ function ausfuhren(){
             aktFragId: aktuelleFrageId,
             aktZeit: Clock.totalSeconds,
             istUbersprungenFrage: istUbersprungenFrage,
+            level: level,
             spielerCode: code
         };
 
@@ -208,20 +209,22 @@ function ausfuhren(){
                     document.getElementById("punkte").innerText = punkte;
 
                     // update womöglich level
-                    if (aktuelleFrageId == 2){
-                        const tabelleList = document.getElementById("tabelle-liste");
+                    if (aktuelleFrageId == 22){ // 22
+                        const tabelleListe = document.getElementById("tabelle-liste");
                         level = 2;
-                        alert("Glückwünsch ! Du hast Level "+ level + " erreicht !!");
+                        $('#mitteilungModal').modal('show').find('.modal-header').text("Glückwunsch");
+                        $('#mitteilungModal').modal('show').find('.modal-body').text("Sie haben Level 2 erreicht !");
                         document.getElementById("level").innerText = level;
-                        loadLevel2(tabelleList);
+                        loadLevel2(tabelleListe);
                     }
 
-                    if (aktuelleFrageId == 3){
-                        const tabelleList = document.getElementById("tabelle-liste");
+                    if (aktuelleFrageId == 42){ // 42
+                        const tabelleListe = document.getElementById("tabelle-liste");
                         level = 3;
-                        alert("Glückwünsch ! Du hast Level "+ level + " erreicht !!");
+                        $('#mitteilungModal').modal('show').find('.modal-header').text("Glückwunsch");
+                        $('#mitteilungModal').modal('show').find('.modal-body').text("Sie haben Level 3 erreicht !");
                         document.getElementById("level").innerText = level;
-                        loadLevel3(tabelleList);
+                        loadLevel3(tabelleListe);
                     }
 
                     // update ranking
@@ -278,6 +281,32 @@ function getLeaderboard() {
 function getRanking() {
     $('#mitteilungModal').modal('show').find(".modal-title").text("Ranking");
     $('#mitteilungModal').modal('show').find(".modal-body").load("/getLeaderboard/rank");
+}
+
+function showSchema() {
+    if (level === 1){
+        $("#datenbankschemaImage").attr("src", "/images/level1-diagram.png");
+        if (window.innerWidth >= 992){
+            document.getElementById("datenbankschemaImage").style.width = "55%";
+        }
+        else {
+            if (window.innerWidth >= 778){
+                document.getElementById("datenbankschemaImage").style.width = "68%";
+            }
+            else {
+                if (window.innerWidth >= 576){
+                    document.getElementById("datenbankschemaImage").style.width = "85%";
+                }
+            }
+        }
+    }
+    if (level === 2){
+        $("#datenbankschemaImage").attr("src", "/images/level2-diagram.png");
+    }
+    if (level === 3){
+        $("#datenbankschemaImage").attr("src", "/images/level3-diagram.png");
+    }
+    $('#datenbankschemaModal').modal('show');
 }
 
 function neustart(){

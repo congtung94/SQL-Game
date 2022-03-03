@@ -44,9 +44,9 @@ public class SpielstandRepository {
     }
 
 
-    public boolean updateSpielstand (int spieler_id, int neuPunkte, int neueZeit){
-        return jdbcTemplate.update("update spielstand set punkte = ?, zeit = ? where spieler_id = ?",
-                         neuPunkte, neueZeit, spieler_id) == 1;
+    public boolean updateSpielstand (int spieler_id, int level, int neuPunkte, int neueZeit){
+        return jdbcTemplate.update("update spielstand set level = ?, punkte = ?, zeit = ? where spieler_id = ?",
+                         level, neuPunkte, neueZeit, spieler_id) == 1;
     }
 
 

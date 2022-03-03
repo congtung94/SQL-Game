@@ -23,8 +23,8 @@ public class SpielstandServiceImpl implements SpielstandService {
     }
 
     @Override
-    public boolean updateSpielstand(int spieler_id, int neuPunkte, int neueZeit) {
-        return spielstandRepository.updateSpielstand(spieler_id, neuPunkte,neueZeit);
+    public boolean updateSpielstand(int spieler_id, int level, int neuPunkte, int neueZeit) {
+        return spielstandRepository.updateSpielstand(spieler_id, level, neuPunkte,neueZeit);
     }
 
 

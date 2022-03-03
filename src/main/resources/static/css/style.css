@@ -149,6 +149,7 @@ div#tabelle-liste {
     font-size: 1.25rem;
     height: 2rem;
     width: 40%;
+    border-radius: 5px;
 }
 
 @media screen and (min-width: 778px) and (max-width: 992px){
@@ -313,6 +314,22 @@ table th{
     border-left-width: 0;
     border-right-width: 0;
 }
+
+#datenbankschemaModal .modal-dialog{
+    max-width: 900px;
+}
+
+#datenbankschemaImage{
+    width: 100%;
+}
+
+@media (max-width: 575px){
+    #datenbankschemaModal {
+        left: 0;
+    }
+}
+
+
 
 
 

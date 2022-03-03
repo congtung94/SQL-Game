@@ -79,7 +79,7 @@ create table ware
 
 create table kaeufe
 (
-    id integer ,
+    id integer generated always as identity primary key,
     ware_id integer ,
     anzahl integer ,
     tag date ,

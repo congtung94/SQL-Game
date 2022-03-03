@@ -96,11 +96,19 @@ public class GameController {
         JSONObject data = new JSONObject(spielerCodeData);
 
         String spieler_code = data.getString("spielerCode");
-        log.info(spieler_code);
+
         int frageId = data.getInt("aktFragId");
         boolean istUbersprungenFrage = data.getBoolean("istUbersprungenFrage");
         int aktZeit = data.getInt("aktZeit");
+        int level = data.getInt("level");
 
+        if (level == 1){
+            spieler_code = "with bewohner as " +
+                    "(select id, name, alter, hobby, beruf, beruf_erfahrung, status " +
+                    "from bewohner " +
+                    "where insel_id = 1) " + spieler_code;
+        }
+        log.info(spieler_code);
 
         Connection c1 = null;
         Statement s1 = null;
@@ -125,7 +133,7 @@ public class GameController {
                 // update punkte und zeit in der Datenbank
                 int aktPunkte = spielstand.getPunkte();
                 int neuPunkte = frageService.findQuestionById(frageId).get().getPunkte() + aktPunkte;
-                spielstandService.updateSpielstand(aktuellerSpieler.getId(), neuPunkte, aktZeit);
+                spielstandService.updateSpielstand(aktuellerSpieler.getId(),level, neuPunkte, aktZeit);
 
                 // update ranking vom Spieler
                 objectNode.put("ranking", getRangAktuellerSpieler(aktuellerSpieler.getName()));
@@ -286,7 +294,7 @@ public class GameController {
         return "main";
     }
 
-    ObjectNode checkQueryAnswer(String spieler_antwort, int frageId, Statement s1, Statement s2,
+    ObjectNode checkQueryAnswer(String spieler_code, int frageId, Statement s1, Statement s2,
                                 Connection c1, Connection c2) throws SQLException {
 
 
@@ -294,7 +302,7 @@ public class GameController {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
 
-        ResultSet spieler_rst = s1.executeQuery(spieler_antwort);
+        ResultSet spieler_rst = s1.executeQuery(spieler_code);
         ResultSetMetaData spieler_rsmt = spieler_rst.getMetaData();
 
 
