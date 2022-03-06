@@ -141,6 +141,16 @@ function ausfuhren(){
         feedbackArea.insertBefore(div, letztesFeedback);
         return;
     }
+    // diese Schlüsselworte darf der Spieler nicht benutzen, weil sie für Tabellen in Datenbank reserviert sind
+    if (codeLowercase.includes("spieler") || codeLowercase.includes("spielstand")
+        || codeLowercase.includes("frage") || codeLowercase.includes("ubersprungenFragen")){
+        const div = createDivFeedback("code enthält nicht erlaubte Schlüsselworte", "#A43741");
+        div.appendChild(document.createElement("br"));
+
+        const letztesFeedback = feedbackArea.firstChild;
+        feedbackArea.insertBefore(div, letztesFeedback);
+        return;
+    }
     // code vom Spieler wird zur bewertung an Server geschickt
     const dataToServer = {
         aktFragId: aktuelleFrageId,
