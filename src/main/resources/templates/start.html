@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head th:include="fragments/header :: header">
 <body>
 <div class="container mx-auto" >
@@ -50,15 +50,12 @@
         </form>
 
         <a id="registrierenLink" th:href="@{/registrieren}" style="color: #a15b5a;" class="mt-5">Registrieren</a>
-
     </div>
-
 
 </div>
 
-
-
-<div th:insert="fragments/footer :: footer"></div>
-
 </body>
+<footer class="container">
+    <div th:insert="fragments/footer :: footer"></div>
+</footer>
 </html>

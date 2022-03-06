@@ -1,9 +1,18 @@
 /*start seite stylen*/
 
 /*https://fonts.google.com/specimen/Special+Elite*/
+
+/*https://dev.to/nehalahmadkhan/how-to-make-footer-stick-to-bottom-of-web-page-3i14*/
 body{
     background-color: #fefaf9;
     font-family: 'Special Elite';
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+footer{
+    margin-top: auto;
 }
 
 .form-control{
@@ -255,11 +264,11 @@ button:hover{
     padding-top: 100%;
 }
 
-#ausgabe {
+/*#ausgabe {
     overflow-y: scroll;
     max-width: 100%;
     max-height: 400px;
-}
+}*/
 
 table{
     max-width: 100%;
@@ -329,7 +338,14 @@ table th{
     }
 }
 
+#footerBereich{
+    border-top: 2px solid #AA6639;
+    font-family: Arial ;
+    font-size: small;
+}
 
-
+#footerBereich p{
+    margin-bottom: 0;
+}
 
 

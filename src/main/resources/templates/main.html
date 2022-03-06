@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <div th:include="fragments/header :: header"></div>
     <!--codemirror für sql-->
@@ -9,7 +9,7 @@
     <link th:href="@{/codemirror/lib/codemirror.css}" rel="stylesheet" />
 </head>
 <body>
-<div class="container" id="mainbody">
+<main class="container" id="mainbody">
 
     <div class="col-12 div-navi" th:insert="fragments/body :: navigation (true, ${aktuellerSpieler.name}, ${spielerRanking})"></div>
 
@@ -258,7 +258,11 @@
         </div>
     </div>
 
-</div>
+</main>
+
+<footer class="container">
+    <div th:insert="fragments/footer :: footer"></div>
+</footer>
 
 <script th:inline="javascript">
     const listFragen = [[${listFragen}]];
@@ -277,14 +281,10 @@
         lineWrapping: true
     });
 
-
-
-
 </script>
-
-<div th:insert="fragments/footer :: footer"></div>
 <script th:src="@{/script/main.js}"></script>
 <script th:src="@{/script/timer.js}"></script>
 <script th:src="@{/script/utils.js}"></script>
 </body>
+
 </html>
