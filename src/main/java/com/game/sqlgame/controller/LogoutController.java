@@ -1,7 +1,7 @@
 package com.game.sqlgame.controller;
 
 import com.game.sqlgame.gameComponents.user_verwaltung.AktuellerSpieler;
-import com.game.sqlgame.service.SpielstandService;
+import com.game.sqlgame.repository.SpielstandRepository;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +18,10 @@ import javax.servlet.http.HttpSession;
 public class LogoutController {
 
     private static final Logger log = LoggerFactory.getLogger(LogoutController.class);
-    private final SpielstandService spielstandService;
+    private final SpielstandRepository spielstandRepository;
 
-    public LogoutController(SpielstandService spielstandService) {
-        this.spielstandService = spielstandService;
+    public LogoutController(SpielstandRepository spielstandRepository) {
+        this.spielstandRepository = spielstandRepository;
     }
 
 
@@ -35,7 +35,7 @@ public class LogoutController {
                 dataJson.getInt("zeit")+", "+dataJson.getInt("aktFrag"));
 
         // update level, punkte, zeit, aktuelle Frage vor Logout
-        spielstandService.updateSpielstand(aktuellerSpieler.getId(), dataJson.getInt("level"),
+        spielstandRepository.updateSpielstand(aktuellerSpieler.getId(), dataJson.getInt("level"),
                 dataJson.getInt("punkte"), dataJson.getInt("zeit"), dataJson.getInt("aktFrag"));
 
         SecurityContextHolder.clearContext();

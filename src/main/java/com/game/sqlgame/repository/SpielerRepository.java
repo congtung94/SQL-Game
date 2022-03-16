@@ -18,8 +18,20 @@ public class SpielerRepository {
     private static final Logger log = LoggerFactory.getLogger(SpielerRepository.class);
     private final JdbcTemplate jdbcTemplate;
 
-    public SpielerRepository (JdbcTemplate jdbcTemplate){
+
+    public SpielerRepository(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public Optional<Spieler> getPlayerByName (String name){
+        String sql = "SELECT id,name,passwort from spieler where name = ?";
+        Spieler spieler = null;
+        try {
+            spieler = jdbcTemplate.queryForObject(sql, new Object[]{name}, new SpielerRowmapper());
+        }catch (DataAccessException ex) {
+            log.info("Spieler not found: " + name);
+        }
+        return Optional.ofNullable(spieler);
     }
 
     public boolean save (Spieler spieler){
@@ -43,16 +55,7 @@ public class SpielerRepository {
         return Optional.ofNullable(spieler);
     }
 
-    public Optional<Spieler> getPlayerByName (String name){
-        String sql = "SELECT id,name,passwort from spieler where name = ?";
-        Spieler spieler = null;
-        try {
-            spieler = jdbcTemplate.queryForObject(sql, new Object[]{name}, new SpielerRowmapper());
-        }catch (DataAccessException ex) {
-            log.info("Spieler not found: " + name);
-        }
-        return Optional.ofNullable(spieler);
-    }
+
 
     public boolean existsByName (String name){
         return getPlayerByName(name).isPresent();

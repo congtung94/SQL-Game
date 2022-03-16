@@ -1,7 +1,6 @@
 /*start seite stylen*/
 
 /*https://fonts.google.com/specimen/Special+Elite*/
-
 /*https://dev.to/nehalahmadkhan/how-to-make-footer-stick-to-bottom-of-web-page-3i14*/
 body{
     background-color: #fefaf9;
@@ -224,7 +223,8 @@ button:hover{
     margin-right: 0;
 }
 
-
+/*https://mademyday.de/height-equals-width-with-pure-css/*/
+/*https://www.chefblogger.me/2020/04/14/wie-erstellt-man-mit-css-eine-info-box-nur-css-und-html-anleitung-tutorial/*/
 .game-mitteilung-box{
     display: flex;
     width: 100%;

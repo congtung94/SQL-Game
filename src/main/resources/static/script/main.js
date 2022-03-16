@@ -162,7 +162,7 @@ function ausfuhren(){
 
     $.ajax({
         type: "POST",
-        url: "/sendCode",
+        url: "/code-evaluation",
         data: {
             spielerCodeData: JSON.stringify(dataToServer)
         },
@@ -270,7 +270,7 @@ function ueberspringen() {
 
     $.ajax({
         type: "POST",
-        url: "/uberspringen",
+        url: "/question-skipping",
         data: {
             ubersprungenFrageToServer: JSON.stringify(ubersprungenFrage)
         },
@@ -288,12 +288,12 @@ function ueberspringen() {
 
 function getLeaderboard() {
     $('#mitteilungModal').modal('show').find(".modal-title").text("Leaderboard");
-    $('#mitteilungModal').modal('show').find(".modal-body").load("/getLeaderboard/leaderboard");
+    $('#mitteilungModal').modal('show').find(".modal-body").load("/leaderboard");
 }
 
 function getRanking() {
     $('#mitteilungModal').modal('show').find(".modal-title").text("Ranking");
-    $('#mitteilungModal').modal('show').find(".modal-body").load("/getLeaderboard/rank");
+    $('#mitteilungModal').modal('show').find(".modal-body").load("/rank");
 }
 
 function showSchema() {

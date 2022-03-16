@@ -1,6 +1,6 @@
 package com.game.sqlgame.gameComponents.user_verwaltung.registrierung;
 
-import com.game.sqlgame.service.SpielerService;
+import com.game.sqlgame.repository.SpielerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -10,10 +10,10 @@ import org.springframework.validation.Validator;
 @Component
 public class RegistrierungValidator implements Validator {
     private final static Logger log = LoggerFactory.getLogger(RegistrierungValidator.class);
-    private final SpielerService spielerService;
+    private final SpielerRepository spielerRepository;
 
-    public RegistrierungValidator(SpielerService spielerService) {
-        this.spielerService = spielerService;
+    public RegistrierungValidator(SpielerRepository spielerRepository) {
+        this.spielerRepository = spielerRepository;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class RegistrierungValidator implements Validator {
     }
 
     private void validateName (Errors errors, RegistrierungForm form){
-        if (spielerService.existsByName(form.getName())){
+        if (spielerRepository.existsByName(form.getName())){
             errors.reject("name", "der Username ist schon vergeben");
         }
     }

@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()*/
                 .formLogin()
                     .loginPage("/")
-                    .defaultSuccessUrl("/spielen",true)
+                    .defaultSuccessUrl("/playing",true)
                     .passwordParameter("password")
                     .usernameParameter("name")
                 .and()

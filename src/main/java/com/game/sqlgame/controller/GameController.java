@@ -6,10 +6,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.game.sqlgame.model.Spielstand;
 import com.game.sqlgame.gameComponents.user_verwaltung.AktuellerSpieler;
 import com.game.sqlgame.model.UbersprungenFragen;
-import com.game.sqlgame.service.FrageService;
-import com.game.sqlgame.service.SpielerService;
-import com.game.sqlgame.service.SpielstandService;
-import com.game.sqlgame.service.UbersprungenFragenService;
+import com.game.sqlgame.repository.FrageRepository;
+import com.game.sqlgame.repository.SpielstandRepository;
+import com.game.sqlgame.repository.UbersprungenFragenRepository;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,66 +28,54 @@ public class GameController {
     private static final Logger log = LoggerFactory.getLogger(GameController.class);
     private final JdbcTemplate jdbcTemplate;
 
-    private final SpielerService spielerService;
-    private final FrageService frageService;
-    private final SpielstandService spielstandService;
-    private final UbersprungenFragenService ubersprungenFragenService;
+    private final FrageRepository frageRepository;
+    private final SpielstandRepository spielstandRepository;
+    private final UbersprungenFragenRepository ubersprungenFragenRepository;
 
     private final ObjectMapper objectMapper;
 
 
-    public GameController(JdbcTemplate jdbcTemplate, SpielerService spielerService,
-                          FrageService frageService, SpielstandService spielstandService,
-                          UbersprungenFragenService ubersprungenFragenService, ObjectMapper objectMapper) {
+    public GameController(JdbcTemplate jdbcTemplate, FrageRepository frageRepository,
+                          SpielstandRepository spielstandRepository,
+                          UbersprungenFragenRepository ubersprungenFragenRepository,
+                          ObjectMapper objectMapper) {
         this.jdbcTemplate = jdbcTemplate;
-        this.spielerService = spielerService;
-        this.frageService = frageService;
-        this.spielstandService = spielstandService;
-        this.ubersprungenFragenService = ubersprungenFragenService;
+        this.frageRepository = frageRepository;
+        this.spielstandRepository = spielstandRepository;
+        this.ubersprungenFragenRepository = ubersprungenFragenRepository;
         this.objectMapper = objectMapper;
-
-    }
-
-    @PostMapping("/uberspringen")
-    @ResponseBody
-    public void saveUbersprungenFrage(@RequestParam String ubersprungenFrageToServer, Model model){
-        JSONObject jsonObject = new JSONObject(ubersprungenFrageToServer);
-        int frageId = jsonObject.getInt("id");
-
-        AktuellerSpieler aktuellerSpieler =(AktuellerSpieler) model.asMap().get("aktuellerSpieler");
-        ubersprungenFragenService.save(new UbersprungenFragen(aktuellerSpieler.getId(), frageId));
 
     }
 
     @GetMapping("/")
     public String start(Model model) {
-        return "start";
+        return "loginPage";
     }
 
-    @GetMapping("/spielen")
+    @GetMapping("/playing")
     public String login(Model model) {
 
         AktuellerSpieler aktuellerSpieler =(AktuellerSpieler) model.asMap().get("aktuellerSpieler");
 
-        Spielstand spielstand = spielstandService.findSpielStandByPlayerId(aktuellerSpieler.getId()).get();
+        Spielstand spielstand = spielstandRepository.findSpielstandByPlayerId(aktuellerSpieler.getId()).get();
         log.info(spielstand.toString());
 
         model.addAttribute("spielstand", spielstand);
-        model.addAttribute("listFragen", frageService.findAllQuestions());
+        model.addAttribute("listFragen", frageRepository.findAllQuestions());
         model.addAttribute("spielerRanking", getRangAktuellerSpieler(aktuellerSpieler.getName()));
-        model.addAttribute("ubersprungeneFragen", ubersprungenFragenService.getUberspringenFrageWithSpielerId(aktuellerSpieler.getId()));
+        model.addAttribute("ubersprungeneFragen", ubersprungenFragenRepository.getUberspringenFrageWithSpielerId(aktuellerSpieler.getId()));
 
         log.info(aktuellerSpieler.toString());
-        return "main";
+        return "playingPage";
     }
 
-    @PostMapping(value = "/sendCode")
+    @PostMapping(value = "/code-evaluation")
     public @ResponseBody
     ObjectNode codeBewertung(@RequestParam String spielerCodeData, Model model){
 
         AktuellerSpieler aktuellerSpieler =(AktuellerSpieler) model.asMap().get("aktuellerSpieler");
 
-        Spielstand spielstand = spielstandService.findSpielStandByPlayerId(aktuellerSpieler.getId()).get();
+        Spielstand spielstand = spielstandRepository.findSpielstandByPlayerId(aktuellerSpieler.getId()).get();
 
         log.info(spielerCodeData);
         ObjectNode objectNode = objectMapper.createObjectNode();
@@ -128,12 +115,12 @@ public class GameController {
             {
                 // wenn es um eine übersprungene Frage, wird es aus der Datenbank entfernt
                 if(istUbersprungenFrage){
-                    ubersprungenFragenService.deleteUbersprungenFrage(aktuellerSpieler.getId(), frageId);
+                    ubersprungenFragenRepository.deleteUbersprungenFrage(aktuellerSpieler.getId(), frageId);
                 }
                 // update punkte und zeit in der Datenbank
                 int aktPunkte = spielstand.getPunkte();
-                int neuPunkte = frageService.findQuestionById(frageId).get().getPunkte() + aktPunkte;
-                spielstandService.updateSpielstand(aktuellerSpieler.getId(),level, neuPunkte, aktZeit);
+                int neuPunkte = frageRepository.findQuestionById(frageId).get().getPunkte() + aktPunkte;
+                spielstandRepository.updateSpielstand(aktuellerSpieler.getId(),level, neuPunkte, aktZeit);
 
                 // update ranking vom Spieler
                 objectNode.put("ranking", getRangAktuellerSpieler(aktuellerSpieler.getName()));
@@ -155,7 +142,8 @@ public class GameController {
             }
             else
                 objectNode.put("feedback" , e.getMessage());
-        }finally {
+        }
+        finally {
             if (c1 != null) {
                 try {
                     closeConnection(s1,c1);
@@ -191,25 +179,7 @@ public class GameController {
         return objectNode;
     }
 
-    private int getRangAktuellerSpieler (String spielerName){
-        int rang = -1;
-        Connection connection = null;
-        PreparedStatement statement = null;
-
-        String sql = "select rang " +
-                "from (" +
-                "select spieler.name, spielstand.punkte, spielstand.zeit, dense_rank() over w as rang " +
-                "from spieler, spielstand " +
-                "where spieler.id = spielstand.spieler_id " +
-                "window w as (order by punkte desc, zeit) " +
-                ") as tmp " +
-                "where name = ?";
-
-        rang = jdbcTemplate.queryForObject(sql, new Object[] {spielerName}, Integer.class);
-        return rang;
-    }
-
-    @GetMapping(value = "/getLeaderboard/{rank_or_leaderboard}")
+    @GetMapping(value = "/{rank_or_leaderboard}")
     public String getLeaderboard(Model model, @PathVariable(value = "rank_or_leaderboard") String rank_or_leaderboard){
 
         ArrayList<ObjectNode> topSpieler = new ArrayList<>();
@@ -237,6 +207,7 @@ public class GameController {
 
 
             if (rank_or_leaderboard.equals("leaderboard")){
+                // Spieler mit dem Rang von 1 bis 5 ermitteln
                 statement.setInt(1, 5);
                 statement.setInt(2, 1);
                 ResultSet resultSet = statement.executeQuery();
@@ -256,6 +227,7 @@ public class GameController {
                 AktuellerSpieler aktuellerSpieler =(AktuellerSpieler) model.asMap().get("aktuellerSpieler");
                 int rang = getRangAktuellerSpieler(aktuellerSpieler.getName());
                 if (rang != -1){
+                    // Spieler mit 2 Rang besser  und 1 Rang schlechter als aktueller Spieler
                     statement.setInt(1, rang+1);
                     statement.setInt(2, rang-2);
                     ResultSet resultSet1 = statement.executeQuery();
@@ -286,30 +258,40 @@ public class GameController {
         return "leaderboard-ranking-modal";
     }
 
+    @PostMapping("/question-skipping")
+    @ResponseBody
+    public void saveUbersprungenFrage(@RequestParam String ubersprungenFrageToServer, Model model){
+        JSONObject jsonObject = new JSONObject(ubersprungenFrageToServer);
+        int frageId = jsonObject.getInt("id");
+
+        AktuellerSpieler aktuellerSpieler =(AktuellerSpieler) model.asMap().get("aktuellerSpieler");
+        ubersprungenFragenRepository.save(new UbersprungenFragen(aktuellerSpieler.getId(), frageId));
+
+    }
 
     @PostMapping("/neustart")
     public String neustart (Model model){
         AktuellerSpieler aktuellerSpieler =(AktuellerSpieler) model.asMap().get("aktuellerSpieler");
         int aktuellerSpielerId = aktuellerSpieler.getId();
 
-        spielstandService.updateSpielstand(aktuellerSpielerId,1,0,0,1);
-        ubersprungenFragenService.getUberspringenFrageWithSpielerId(aktuellerSpielerId);
+        spielstandRepository.updateSpielstand(aktuellerSpielerId,1,0,0,1);
+        ubersprungenFragenRepository.getUberspringenFrageWithSpielerId(aktuellerSpielerId);
 
-        Spielstand spielstand = spielstandService.findSpielStandByPlayerId(aktuellerSpielerId).get();
+        Spielstand spielstand = spielstandRepository.findSpielstandByPlayerId(aktuellerSpielerId).get();
 
         model.addAttribute("spielstand", spielstand);
-        model.addAttribute("listFragen", frageService.findAllQuestions());
+        model.addAttribute("listFragen", frageRepository.findAllQuestions());
         model.addAttribute("spielerRanking", getRangAktuellerSpieler(aktuellerSpieler.getName()));
-        model.addAttribute("ubersprungeneFragen", ubersprungenFragenService.getUberspringenFrageWithSpielerId(aktuellerSpieler.getId()));
+        model.addAttribute("ubersprungeneFragen", ubersprungenFragenRepository.getUberspringenFrageWithSpielerId(aktuellerSpieler.getId()));
         System.out.println("loooooooogggggoooout");
-        return "main";
+        return "playingPage";
     }
 
-    ObjectNode checkQueryAnswer(String spieler_code, int frageId, Statement s1, Statement s2,
+    private ObjectNode checkQueryAnswer(String spieler_code, int frageId, Statement s1, Statement s2,
                                 Connection c1, Connection c2) throws SQLException {
 
 
-        String antwort = frageService.findQuestionById(frageId).get().getAntw().replace("\\\"", "'");
+        String antwort = frageRepository.findQuestionById(frageId).get().getAntw().replace("\\\"", "'");
         ObjectNode objectNode = objectMapper.createObjectNode();
 
 
@@ -488,6 +470,23 @@ public class GameController {
         return objectNode;
     }
 
+    private int getRangAktuellerSpieler (String spielerName){
+        int rang = -1;
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        String sql = "select rang " +
+                "from (" +
+                "select spieler.name, spielstand.punkte, spielstand.zeit, dense_rank() over w as rang " +
+                "from spieler, spielstand " +
+                "where spieler.id = spielstand.spieler_id " +
+                "window w as (order by punkte desc, zeit) " +
+                ") as tmp " +
+                "where name = ?";
+
+        rang = jdbcTemplate.queryForObject(sql, new Object[] {spielerName}, Integer.class);
+        return rang;
+    }
 
     // objectNode : "spaltenAnz", "zeilenAnz", "spaltenName1" , "spaltenName2", ..., "data#data#data..."
     void resultSetToObjectNode(ObjectNode objectNode, ResultSet resultSet,
