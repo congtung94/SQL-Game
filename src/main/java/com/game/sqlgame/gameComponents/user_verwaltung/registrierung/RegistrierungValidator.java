@@ -31,7 +31,7 @@ public class RegistrierungValidator implements Validator {
 
     private void validatePassword (Errors errors, RegistrierungForm form){
         if (!form.getPasswort().equals(form.getPasswortWiederholung())){
-            errors.reject("password", "unterschiedliche Passworte eingeben");
+            errors.reject("password", "unterschiedliche Passworte eingegeben !!!");
             log.info("unterschiedliche Passworte eingegeben !!!");
         }
     }

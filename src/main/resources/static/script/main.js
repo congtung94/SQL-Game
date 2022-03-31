@@ -40,8 +40,10 @@ function nachsteFrage() {
         // das Spiel gewonnen
         if (ubersprungenFragen.length === 0){
             ausfuhrenBtn.style.visibility = "hidden";
-            weiterBtn.style.visibility = "hidden";;
-            alert("Glückwunsch, du hast das Spiel gewonnen !!!");
+            weiterBtn.style.visibility = "hidden";
+            $('#mitteilungModal').modal('show').find(".modal-title").text("Mitteilung");
+            $('#mitteilungModal').modal('show').find(".modal-body").text("Glückwunsch, du hast das Spiel gewonnen !!!");
+            //alert("Glückwunsch, du hast das Spiel gewonnen !!!");
         }
         else {
             // die nächste Frage ist die erste Frage in übersprungener Fragenliste
@@ -57,7 +59,9 @@ function nachsteFrage() {
                 // das Spiel gewonnen
                 ausfuhrenBtn.style.visibility = "hidden";
                 weiterBtn.style.visibility = "hidden";
-                alert("Glückwunsch, du hast das Spiel gewonnen !!!");
+                $('#mitteilungModal').modal('show').find(".modal-title").text("Mitteilung");
+                $('#mitteilungModal').modal('show').find(".modal-body").text("Glückwunsch, du hast das Spiel gewonnen !!!");
+                //alert("Glückwunsch, du hast das Spiel gewonnen !!!");
             }
             else {
                 // bemerken, dass ab jetzt die übersprungene Fragen geantwortet werden sollen

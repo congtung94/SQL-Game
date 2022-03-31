@@ -24,9 +24,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                /*.authorizeRequests()
+                .authorizeRequests()
+                .antMatchers("/","/css/**","/images/**", "/registration").permitAll()
                 .anyRequest().authenticated()
-                .and()*/
+                .and()
                 .formLogin()
                     .loginPage("/")
                     .defaultSuccessUrl("/playing",true)
@@ -41,6 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .logoutSuccessUrl("/");
 
     }
+
     /*@Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         super.configure(auth);

@@ -151,13 +151,13 @@ public class DBInit {
         spielstandRepository.save(spielstandCu);
 
         UbersprungenFragen fragen = new UbersprungenFragen(9, 7);
-        UbersprungenFragen fragen1 = new UbersprungenFragen(9, 16);
+        /*UbersprungenFragen fragen1 = new UbersprungenFragen(9, 16);
         UbersprungenFragen fragen2 = new UbersprungenFragen(9, 25);
-        UbersprungenFragen fragen3 = new UbersprungenFragen(9, 30);
+        UbersprungenFragen fragen3 = new UbersprungenFragen(9, 30);*/
         ubersprungenFragenRepository.save(fragen);
-        ubersprungenFragenRepository.save(fragen1);
+        /*ubersprungenFragenRepository.save(fragen1);
         ubersprungenFragenRepository.save(fragen2);
-        ubersprungenFragenRepository.save(fragen3);
+        ubersprungenFragenRepository.save(fragen3);*/
 
     }
 }

@@ -302,10 +302,6 @@ public class GameController {
         ResultSet korrekt_rst = s2.executeQuery(antwort);
         ResultSetMetaData korrekt_rsmt = korrekt_rst.getMetaData();
 
-        log.info("line 278 anzahl an spalten "+ spieler_rsmt.getColumnCount() +
-                ", type " + spieler_rsmt.getColumnType(1));
-
-
         // objNode : "bewertung","feedback", spaltenAnz", "zeilenAnz",
         // "spaltenName1" , "spaltenName2", ..., "data#data#data..."
 
@@ -334,7 +330,6 @@ public class GameController {
         while (korrekt_rst.next())
         {
             aktuelleZeile++;
-            log.info("aktuelle zeile " + aktuelleZeile);
             if (!spieler_rst.next()) // spieler_rst hat zu wenig zeilen
             {
                 log.info("hier ist falsch: spieler_rst hat zu wenig zeilen" );
