@@ -45,35 +45,35 @@ values (6, '2021-11-21', 100, 60);
 
 -- bewohner
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
-values (1, 'jadon', 21, 'Fußball', 'Guitarist', 5, 'frei', 90, 3000);
+values (1, 'Jadon', 21, 'Fußball', 'Guitarist', 5, 'frei', 90, 3000);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
-values (1, 'alex', 24, 'Abenteuer', 'Navigator', 5, 'beschaeftigt', 85, 4000);
+values (1, 'Alex', 24, 'Abenteuer', 'Navigator', 5, 'beschaeftigt', 85, 4000);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
-values (1, 'malen', 35, 'Reisen', 'Koch', 10, 'frei', 90, 3000);
+values (1, 'Malen', 35, 'Reisen', 'Koch', 10, 'frei', 90, 3000);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
 values (1, 'Tuco', 44, 'Reisen', 'Koch', 10, 'beschaeftigt', 90, 3000);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
-values (1, 'jadon', 21, 'Volleyball', 'Koch', 8, 'beschaeftigt', 90, 2500);
+values (1, 'Jadon', 21, 'Volleyball', 'Koch', 8, 'beschaeftigt', 90, 2500);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
-values (1, 'thomas', 21, 'Reisen', 'Saenger', 5, 'frei', 100,3500);
+values (1, 'Thomas', 21, 'Reisen', 'Saenger', 5, 'frei', 100,3500);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
-values (1, 'ana', 29, 'Reisen', 'Navigator', 4, 'frei', 110,5000);
+values (1, 'Ana', 29, 'Reisen', 'Navigator', 4, 'frei', 110,5000);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
-values (1, 'jadon', 41, 'Lesen', 'Pianist', 20, 'frei', 89,2000);
+values (1, 'Jadon', 41, 'Lesen', 'Pianist', 20, 'frei', 89,2000);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
-values (1, 'lena', 31, 'Tennis', 'Koch', 5, 'frei', 90, 1500);
+values (1, 'Lena', 31, 'Tennis', 'Koch', 5, 'frei', 90, 1500);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
-values (1, 'petra', 56, 'Tennis', 'Kauffrau', 5, 'beschaeftigt', 98, 4200);
+values (1, 'Petra', 56, 'Tennis', 'Kauffrau', 5, 'beschaeftigt', 98, 4200);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
-values (1, 'tung', 27, 'Reisen', 'Student', 0, 'frei', 99, 300);
+values (1, 'Tung', 27, 'Reisen', 'Student', 0, 'frei', 99, 300);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
-values (1, 'nami', 21, 'Abenteuer', 'Navigator', 3, 'frei', 92, 9000);
+values (1, 'Nami', 21, 'Abenteuer', 'Navigator', 3, 'frei', 92, 9000);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
-values (1, 'bruno', 53, 'Sport', 'Baecker', 30, 'frei', 89, 2400);
+values (1, 'Bruno', 53, 'Sport', 'Baecker', 30, 'frei', 89, 2400);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
-values (1, 'markus', 59, 'Sport', 'Schiffbauer', 30, 'beschaeftigt', 89,6000);
+values (1, 'Markus', 59, 'Sport', 'Schiffbauer', 30, 'beschaeftigt', 89,6000);
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
-values (1, 'philipp', 44, 'Arbeiten', 'Schiffbauer', 10, 'frei', 98, 2500);
+values (1, 'Philipp', 44, 'Arbeiten', 'Schiffbauer', 10, 'frei', 98, 2500);
 ----
 insert into bewohner (insel_id,name,alter,hobby,beruf,beruf_erfahrung,status,IQ,einkommen)
 values (2, 'Franziska', 20, 'Lesen', 'Musiker', 2, 'frei', 98, 6500);
@@ -232,99 +232,100 @@ values (6, 3, '2021-02-02');
 -- frage
 --1
 insert into frage (text, punkte, antw, tips) values ('Du liebst Abenteuer und möchtest endlich reisen.
-Dafür brauchst du eine  Mannschaft und mentale Stärke, um die spannenden Aufgaben zu erledigen.
+Dafür brauchst du eine  Mannschaft und mentale Stärke, um die Herausforderungen zu bezwingen.
 Je schneller du die Probleme löst, desto besser ist dein Ranking.
 Viel Spaß !!!', 0, null ,null );
 --2
 insert into frage (text, punkte, antw,tips )
-values ('Zeigen Sie die Tabelle bewohner an [10p]', 10,
+values ('Zeig bitte die Tabelle bewohner an [10p]', 10,
         'with bewohner as (select id, name, alter, hobby, beruf, beruf_erfahrung, status from bewohner where insel_id = 1)' ||
                                                   'select * from bewohner','select * from <tabelle_name>');
 --3
 insert into frage (text, punkte, antw, tips )
-values ('Suchen Sie erstmal einen Koch. Suchen Sie alle Bewohner, die als Koch arbeiten.
-         Hinweis : Achten Sie auf Großbuchstaben [10p]',
+values ('Du sollst erstmal einen Koch suchen. Finde alle Bewohner, die als Koch arbeiten.
+         Hinweis : Achte auf die Großbuchstaben [10p]',
         10,
         'with bewohner as (select id, name, alter, hobby, beruf, beruf_erfahrung, status from bewohner where insel_id = 1) ' ||
         'select * from bewohner where beruf = \"Koch\"'
         ,'Benutze die Where - Klause, um die Bedingungen für Suchen zu stellen');
 --4
 insert into frage (text, punkte, antw, tips )
-values ('Suchen Sie die Köche, die frei sind und sein Hobby Reisen ist [10p]', 10,
+values ('Suche die Köche, die frei sind und sein Hobby Reisen ist [10p]', 10,
         'with bewohner as (select id, name, alter, hobby, beruf, beruf_erfahrung, status from bewohner where insel_id = 1) ' ||
         'select * from bewohner where beruf = \"Koch\" and hobby = \"Reisen\" and status = \"frei\"',
         'in der Where-Klause die Bedingungen mit logischen Operatoren wie *and* oder *or* zu verknüpfen');
 --5
 insert into frage (text, punkte, antw, tips)
-values ('Suchen Sie alle Bewohner, die als Navigator arbeiten [10p]', 10,
+values ('Suche alle Bewohner, die als Navigator arbeiten [10p]', 10,
         'with bewohner as (select id, name, alter, hobby, beruf, beruf_erfahrung, status from bewohner where insel_id = 1) ' ||
         'select * from bewohner where beruf = \"Navigator\"'
         ,'Achten Sie auf Großbuchstaben');
 --6
 insert into frage (text, punkte, antw, tips)
-values ('Suchen Sie die Id und Name des Navigators, der mit mindestens 5 Jahren Erfahrung hat [10p]', 10,
+values ('Suche die Id und Name des Navigators, der mit mindestens 5 Jahren Erfahrung hat [10p]', 10,
         'with bewohner as (select id, name, alter, hobby, beruf, beruf_erfahrung, status from bewohner where insel_id = 1) ' ||
         'select id, name from bewohner where beruf = \"Navigator\" and beruf_erfahrung >= 5',
-        'SQL bietet Vergleichsoperatoren wie >, <, >=, <=');
+        'Achte darauf, dass nur id und name des Navigators erforderlich ist. SQL bietet Vergleichsoperatoren wie >, <, >=, <=');
 --7
 insert into frage (text, punkte, antw, tips)
 values ('Alex ist leider beschäftigt. ' ||
-        'Suchen Sie den jüngsten Navigator, der mindestens 3 Jahre Erfahrung hat und noch frei ist [30p]', 30,
+        'Suche den jüngsten Navigator, der mindestens 3 Jahre Erfahrung hat und noch frei ist [30p]', 30,
         'with bewohner as (select id, name, alter, hobby, beruf, beruf_erfahrung, status from bewohner where insel_id = 1) ' ||
         'select * from bewohner where beruf = \"Navigator\" and alter = (select min(alter) from bewohner ' ||
         'where beruf = \"Navigator\" and status = \"frei\" and beruf_erfahrung >= 3)',
-        'Hier brauchen Sie einen Unteranfrage, um das kleinste Alter der Navigatoren erstmal zu suchen.' ||
-        'Sie können aber vorerst diese Frage überspringen');
+        'Hier brauchst du eine Unteranfrage, um das kleinste Alter der Navigatoren erstmal zu ermitteln.' ||
+        'Du kannst aber vorerst diese Frage überspringen.
+         *with* - Klause ist hier nicht möglich');
 --8
 insert into frage (text, punkte, antw, tips)
-values ('Jetzt brauchen Sie noch einen Musiker', 0, null ,'');
+values ('Jetzt brauchst du noch einen Musiker', 0, null ,'');
 --9
 insert into frage (text, punkte, antw, tips)
-values ('Suchen Sie die Bewohner, die als Sänger , Gitarrist oder Pianist frei sind
-         und das Hobby Reisen oder Abenteuer ist. [10p]', 10,
+values ('Suche die Bewohner, die als Saenger , Gitarrist oder Pianist tätig sind
+         Außerdem ihr Hobby Reisen oder Abenteuer ist. [10p]', 10,
         'with bewohner as (select id, name, alter, hobby, beruf, beruf_erfahrung, status from bewohner where insel_id = 1) ' ||
         'select * from bewohner where (beruf = \"Saenger\" or beruf = \"Gitarrist\" or beruf = \"Pianist\")' ||
         'and (hobby = \"Reisen\" or hobby = \"Abenteuer\")',
-        'achten Sie auf die logische Operatoren und den Klammer');
+        'achten Sie auf die logische Operatoren (and, or) und den Klammern');
 --10
 insert into frage (text, punkte, antw, tips)
 values ('Thomas ist bereit, mitzureisen', 0, null ,null);
 --11
 insert into frage (text, punkte, antw, tips)
-values ('Suchen Sie alle Bewohner (nur ihre Id und Name erforderlich),' ||
+values ('Suche alle Bewohner (nur ihre Id und Name erforderlich),' ||
         ' die als Schiffbauer arbeiten. [10p]'
         , 10, 'with bewohner as (select id, name, alter, hobby, beruf, beruf_erfahrung, status from bewohner where insel_id = 1) ' ||
               'select id, name from bewohner where beruf = \"Schiffbauer\"','');
 --12
 insert into frage (text, punkte, antw, tips)
-values ('Suchen Sie die Schiffbauer, die altes Schiff mit dem Status *zu verkaufen* haben.
-        Hinweis : die Spalten für die Anfrage sind : bewohner.id, bewohner.name, produkt.name as produkt,
-        produkt.preis, produkt.menge, produkt.status [10p]',
+values ('Suche die Schiffbauer, die altes Schiff mit dem Status *zu verkaufen* haben.
+        Hinweis : die Spalten für die Anfrage sind : bewohner.id, bewohner.name, produkt.name as produkt, produkt.preis, produkt.menge, produkt.status [10p]',
         10,'with bewohner as (select id, name, alter, hobby, beruf, beruf_erfahrung, status from bewohner where insel_id = 1) ' ||
-           'select bewohner.id, bewohner.name, produkt.name as produkt,produkt.preis,produkt.menge,produkt.status ' ||
+           'select bewohner.id, bewohner.name, produkt.name as produkt, produkt.preis, produkt.menge, produkt.status ' ||
            'from bewohner, produkt where bewohner.id = produkt.besitzer_id ' ||
            'and produkt.name =\"altes Schiff\" and produkt.status = \"zu verkaufen\"',
-        'Join - Operator und Join-Bedingung');
+        'Join - Operator und Join-Bedingung.
+         select-Teil der Anfrage sieht so aus: select bewohner.id, bewohner.name, produkt.name as produkt,produkt.preis,produkt.menge,produkt.status ');
 insert into frage (text, punkte, antw, tips)
 values ('Bruno ist bereit, sein altes Schiff zu verkaufen.
-        Nach der Untersuchung brauchen Sie für das Schiff neuen Segel und Steuerrad.
-        Suchen Sie die Bewohner (nur ihre name, produkt_name und preis erforderlich),
-        die entweder Segel oder Steuerrad zu verkaufen haben [10p]', 10,
+        Nach der Untersuchung brauchst du für das Schiff neuen Segel und Steuerrad.
+        Suche die Bewohner, die entweder Segel oder Steuerrad zu verkaufen haben [10p]
+        Hinweis: erforderliche Spalten : name (der Bewohner), produkt (Alias-Name für den Name des Produktes), preis (Preis des Produktes)', 10,
         'with bewohner as (select id, name, alter, hobby, beruf, beruf_erfahrung, status from bewohner where insel_id = 1) ' ||
         'select bewohner.name, produkt.name as produkt_name, produkt.preis from bewohner, produkt ' ||
         'where bewohner.id = produkt.besitzer_id ' ||
         'and (produkt.name = \"Segel\" or produkt.name = \"Steuerrad\") ' ||
         'and produkt.status = \"zu verkaufen\"','Join-Operator, logische Operatoren in where-Klause');
 insert into frage (text, punkte, antw, tips)
-values ('Jetzt brauchen Sie Lebensmittel für die Reise', 0, null,null);
+values ('Jetzt brauchst du Lebensmittel für die Reise', 0, null,null);
 insert into frage (text, punkte, antw, tips)
 values ('Finden Sie heraus, was ist der durchschnittliche Preis aller Produkte aus der Tabelle produkt [10p]'
 , 10, 'with bewohner as (select id, name, alter, hobby, beruf, beruf_erfahrung, status from bewohner where insel_id = 1) ' ||
       'select avg(preis) from produkt'
 ,'Syntax für Durchschnitt: avg(<spalten_name>) ');
 insert into frage (text, punkte, antw, tips)
-values ('Finden Sie heraus, was ist der durchschnittliche Preis aller Produkte jeder Kategorie.
-        Ordnen Sie nach Preis aufsteigend.
+values ('Was ist der durchschnittliche Preis aller Produkte jeder Kategorie.
+        Der Preis soll aufsteigend sortiert werden.
         Hinweis : die Antwort hat 2 Spalten : kategorie, preis_durchschnitt.[20p]'
        , 20, 'with bewohner as (select id, name, alter, hobby, beruf, beruf_erfahrung, status from bewohner where insel_id = 1) ' ||
              'select kategorie, avg(preis) as preis_durchschnitt from produkt group by kategorie order by preis_durchschnitt'
@@ -332,7 +333,7 @@ values ('Finden Sie heraus, was ist der durchschnittliche Preis aller Produkte j
 insert into frage(text, punkte, antw, tips)
 values ('Got sei Dank ! Der Preis der Lebensmitteln ist am niedrigsten !', 0, null,'' );
 insert into frage (text, punkte, antw, tips)
-values ('Wenn Sie alle Lebensmitteln kaufen würde, wie viel kostet es ?
+values ('Wenn du alle Lebensmitteln kaufen würdest, wie viel kostet es ?
         Hinweis : die Antwort hat eine Spalte : summe [10p]', 10,
         'with bewohner as (select id, name, alter, hobby, beruf, beruf_erfahrung, status from bewohner where insel_id = 1) ' ||
         'select sum(preis * menge) as summe from produkt'
@@ -340,30 +341,31 @@ values ('Wenn Sie alle Lebensmitteln kaufen würde, wie viel kostet es ?
 insert into frage(text, punkte, antw, tips)
 values ('Oh ! Das ist dann zu viel', 0, null,null );
 insert into frage (text, punkte, antw, tips)
-values ('Suchen Sie die Bewohner, die Fleisch zu verkaufen haben.
-        Hinweis : Antwort hat 4 Spalten : name, fleischsorte, preis, menge [10p]', 10,
+values ('Suche die Bewohner, die Fleisch zu verkaufen haben.
+        Hinweis : Antwort hat 4 Spalten : name (Name des Bewohners), fleischsorte, preis, menge [10p]', 10,
         'with bewohner as (select id, name, alter, hobby, beruf, beruf_erfahrung, status from bewohner where insel_id = 1) ' ||
         'select bewohner.name, produkt.name as fleischsorte, produkt.preis, produkt.menge from bewohner, produkt ' ||
         'where bewohner.id = produkt.besitzer_id and produkt.name like \"%fleisch\" and produkt.status = \"zu verkaufen\"'
-        ,'mit like kann man mehrere Fleischsorten abfragen' );
+        ,'mit *like* kann man mehrere Fleischsorten abfragen' );
 insert into frage (text, punkte, antw, tips)
-values ('Jetzt brauchen Sie noch Reis, Mehl und Kartoffel.
-        Suchen Sie alle Bewohner, die diese Produkte zu verkaufen haben.
-        Hinweis: Antwort hat 4 Spalten : name , produkt, preis, menge [10p]', 10,
+values ('Jetzt brauchst du noch Reis, Mehl und Kartoffel.
+        Suche alle Bewohner, die diese Produkte zu verkaufen haben.
+        Hinweis: Antwort hat 4 Spalten : name (Name des Bewohner) , produkt, preis, menge [10p]', 10,
         'with bewohner as (select id, name, alter, hobby, beruf, beruf_erfahrung, status from bewohner where insel_id = 1) ' ||
         'select bewohner.name, produkt.name as produkt, preis, menge from bewohner, produkt' ||
         ' where bewohner.id = produkt.besitzer_id ' ||
         'and (produkt.name = \"Reis\" or produkt.name = \"Mehl\" or produkt.name = \"Kartoffel\")',
         'Join und logische Operatoren');
 insert into frage (text, punkte, antw, tips)
-values ('Ihr Schiff ist aufgeladen, Sie können die endlich in den See stechen !!!',0,null ,null);
+values ('Dein Schiff ist aufgeladen, Sie können die endlich in den See stechen !!!',0,null ,null);
 insert into frage (text, punkte, antw, tips)
-values ('Die Navigation sagt, die nächste Insel liegt im Norden. Finden Sie alle Inseln im Norden.
+values ('Die Navigation zeigt: die nächste Insel liegt im Norden. Finde alle Inseln im Norden.
         Hinweis : die Antwort hat nur 2 Spalten : id und name der Insel [10p]', 10,
         'select insel.id, insel.name from insel, koordinaten where breite_richtung = \"N\" and insel.koord_id = koordinaten.id '
         ,'Join zwischen insel und koordinaten Tabelle');
 insert into frage (text, punkte, antw, tips)
-values ('Nächte Information : die Insel liegt im NW , zeigen Sie diese Inseln an [10p]', 10,
+values ('Nächte Information : die Insel liegt im NW , zeig bitte diese Inseln an.
+        Hinweis : die Antwort hat nur 2 Spalten : id und name der Insel [10p]', 10,
         'select insel.id, insel.name from insel, koordinaten where breite_richtung = \"N\"' ||
         ' and laenge_richtung = \"W\" and insel.koord_id = koordinaten.id'
         ,'Join zwischen insel und koordinaten Tabelle');
@@ -382,7 +384,7 @@ values ('Auf dem Weg zum Ziel muss der Navigator immer auf das Wetter aufpassen.
         Wenn die Feuchtigkeit größer als 85% und Windgeschwindigkeit größer als 50km/h, ' ||
         'ist es höchst wahrscheinlich, dass es da bald ein Sturm kommt.' ||
         'Das Schiff ist in 2 Stunden ungefähr in Koordinaten 20°N 80°W. ' ||
-        'Checken Sie das Wetter dort (am 2021-11-21) [20p]', 20,
+        'Check bitte das Wetter dort (am 2021-11-21) [20p]', 20,
         'select breite_grad, breite_richtung , laenge_grad, laenge_richtung, feuchtigkeit, wind_geschw ' ||
         'from koordinaten, wetter ' ||
         'where koord_id = koordinaten.id and breite_grad = 20 and breite_richtung = \"N\" ' ||
@@ -392,8 +394,8 @@ values ('Auf dem Weg zum Ziel muss der Navigator immer auf das Wetter aufpassen.
 insert into frage (text, punkte, antw, tips)
 values ('Oh, da kommt bald ein Sturm , wir müssen umfahren', 0, null ,null);
 insert into frage (text, punkte, antw, tips)
-values ('Sie sind auf Insel Ohara gekommen haben aber kein Gold mehr um Lebensmitteln zu kaufen.
-        Alle müssen arbeiten, um Gold zu verdienen. Sie sollen für jeden ihrer Mannschaft einen Job suchen', 0, null,null );
+values ('Deine Mannschaft ist auf die Insel Ohara gekommen hat aber kein Gold mehr um Lebensmitteln zu kaufen.
+        Alle müssen arbeiten, um Gold zu verdienen. Du sollst für jeden ihrer Mannschaft einen Job suchen', 0, null,null );
 insert into frage (text, punkte, antw, tips)
 values ('Finden Sie das durchschnittliche Einkommen einzelner Berufsgruppe auf der Insel, geordnet nach dem Einkommen absteigend
         Hinweis : Antwort hat 2 Spalten : beruf und avg_einkommen [15p]', 15,
@@ -404,18 +406,18 @@ values ('Finden Sie das durchschnittliche Einkommen einzelner Berufsgruppe auf d
 insert  into frage (text, punkte, antw, tips)
 values ('Da verdient Musiker am meistens', 0, null,null);
 insert  into frage (text, punkte, antw, tips)
-values ('Suchen Sie den am bestens bezahlten Musiker, dann kann dein Musiker bei ihm arbeiten
-        Hinweis : sein id, name und einkommen sind erforderlich [20p]', 20,
-        'select bewohner.id, bewohner.name, einkommen from bewohner, insel where bewohner.insel_id = insel.id and beruf =\"Musiker\"
+values ('Suche den am bestens bezahlten Musiker, dann kann dein Musiker bei ihm arbeiten
+        Hinweis : nur sein id, name und einkommen sind erforderlich [20p]', 20,
+        'select bewohner.id, bewohner.name, einkommen from bewohner, insel where bewohner.insel_id = insel.id and insel.id = 2 and beruf =\"Musiker\"
         and einkommen = (select max (einkommen)  from bewohner where beruf = \"Musiker\")'
         ,'Unterfrage oder top zu benutzen');
 insert into frage (text, punkte, antw, tips)
-values ('Für den Koch suchen Sie jemanden, der Koch oder Baecker ist
+values ('Für den Koch suchst du jemanden, der Koch oder Baecker ist
         Hinweis : Die Antwort hat 3 Spalten: bewohner.id, bewohner.name, bewohner.beruf. [10p]', 10,
         'select bewohner.id, bewohner.name, bewohner.beruf from bewohner, insel ' ||
         'where insel.name = \"Ohara\" and bewohner.insel_id = insel.id ' ||
-        'and (beruf = \"Koch\" or beruf = \"Baecker\"'
-        ,'vergessen Sie join zwischen insel und bewohner nicht');
+        'and (beruf = \"Koch\" or beruf = \"Baecker\")'
+        ,'vergesst du join zwischen insel und bewohner nicht und du bist auf der Insel Ohara');
 insert into frage (text, punkte, antw, tips)
 values ('Der Koch kann bei dem Baecker Luca arbeiten',0,null ,null);
 insert into frage (text, punkte, antw, tips)
@@ -430,28 +432,31 @@ values ('Ein Navigator sucht nach einer Aushilfe. Sein Einkommen ist unter dem d
         'select bewohner.id, bewohner.name from insel, bewohner ' ||
         'where insel.name = \"Ohara\" and insel.id = bewohner.insel_id and bewohner.beruf = \"Navigator\" ' ||
         'and einkommen < (select avg(einkommen) from bewohner, insel where insel.name = \"Ohara\" and bewohner.insel_id = insel.id)'
-        ,'Unterabfrage in der where-Klause');
+        ,'du brauchst hier eine Unterfrage, um avg(einkommen) der Bewohner zu ermitteln.
+         vergisst bitte nicht, dass du gerade auf der Insel Ohara bist');
 insert into frage (text, punkte, antw, tips)
 values ('Sehr Gut ! Alle haben jetzt einen Job', 0, null,null );
 insert into frage (text, punkte, antw, tips)
-values ('Auf dem See ist man leicht, krank zu werden. Sie brauchen einen Arzt für seine Mannschaft', 0, null,null );
+values ('Auf dem See ist man leicht, krank zu werden. Du brauchst einen Arzt für seine Mannschaft', 0, null,null );
 insert into frage (text, punkte, antw, tips)
-values ('Ordnen Sie erstmal die Bewohner nach dem beruf IQ - Ranking der Bewohner jeder Gruppe
-        Hinweis : Benutzen Sie  window, rank() function
+values ('Ordne erstmal die Bewohner nach der Beruf-Gruppe das IQ - Ranking der Bewohner
+        Hinweis : Du kannst  window, rank() function benutzen
         Die Spalten der Antwort sind : bewohner.id, bewohner.name, beruf , IQ, IQ_Ranking [30p]', 30,
         'select bewohner.id, bewohner.name, beruf, IQ, rank() over w as IQ_Ranking from bewohner, insel where bewohner.insel_id = insel.id' ||
-        'and insel.name = \"Ohara\"
+        ' and insel.name = \"Ohara\"
          window w as (partition by beruf order by IQ desc)'
          ,'window-funktion ist hier der Schlüssel');
 insert into frage (text, punkte, antw, tips)
-values ('Hier erkennen Sie , dass es keinen Arzt mit dem Platz 2 gibt.
-        Da zwei Ärzte am 1.Platz sind. Lösen Sie das Problem [30p]',
-        30, 'select bewohner.id, bewohner.name, beruf, IQ, dense_rank() over w as IQ_Ranking from bewohner, insel where bewohner.insel_id = insel.id'' ||
-        ''and insel.name = \"Ohara\"
-         window w as (partition by beruf order by IQ desc)',
-        'in diesem Fall bietet SQL *dense_rank()* an' );
+values ('Hier erkennt man, dass es keinen Arzt mit dem Platz 2 gibt.
+        Da zwei Ärzte am 1.Platz sind. Löst du bitte das Problem [30p]',
+        30, 'select bewohner.id, bewohner.name, beruf, IQ, dense_rank() over w as IQ_Ranking from bewohner, insel
+            where bewohner.insel_id = insel.id
+            and insel.name = \"Ohara\"
+            window w as (partition by beruf order by IQ desc)',
+            'In der letzte Frage hast du die Bewohner nach dem beruf IQ - Ranking der Bewohner jeder Gruppe geordnet
+            .In diesem Fall bietet SQL *dense_rank()* an' );
 insert into frage (text, punkte, antw, tips)
-values ('Der Arzt, wer bereit ist, mitzukommen, hat IQ Ranking 3 in seiner Gruppe. Finden Sie ihn.
+values ('Der Arzt, wer bereit ist, mitzukommen, hat IQ Ranking 3 in seiner Gruppe.
          Empfehlung : benutzen Sie window und dense_rank() function' ||
         'Hinweis : Antwort hat die Spalten : id, name, iq und beruf [30p]', 30,
         'select	 id, name, iq, beruf
@@ -464,7 +469,7 @@ insert into frage (text, punkte, antw, tips)
 values ('Sehr gut ! Ihre Mannschaft hat jetzt genug Gold, um das Schiff wieder bereit zu machen
         Jetzt müssen Sie die nächste Insel finden', 0, null,null );
 insert into frage (text, punkte, antw, tips)
-values ('Die nächste Insel liegt auch im NW und hat Breitengrad und Längengrad gleich 80. Finden Sie sie.
+values ('Die nächste Insel liegt auch im NW und hat Breitengrad und Längengrad gleich. Finde sie bitte heraus.
         Hinweis : Spalten der Antwort : insel.name, breite_grad, breite_richtung, laenge_grad, laenge_richtung [10p]'
         ,10, 'select insel.name, breite_grad, breite_richtung, laenge_grad, laenge_richtung ' ||
              'from insel, koordinaten ' ||
@@ -474,20 +479,25 @@ values ('Die nächste Insel liegt auch im NW und hat Breitengrad und Längengrad
 insert into frage (text, punkte, antw, tips)
 values ('Ok, die nächste Insel ist Konomi !', 0, null,null );
 insert into frage (text, punkte, antw, tips)
-values ('Auf der Insel Konomi herrscht ein Diktatur. Die  Revolteure haben ihre Mannschaft gebeten, sie anzuschließen, um diesen Diktator zu stürzen. ' ||
-        'Obwohl das Volk in Armut lebt , hat der Diktator ein Luxusleben. Sie sollten sein Luxusleben enthüllen', 0, null ,null);
+values ('Auf der Insel Konomi herrscht ein Diktator. Die  Revolteure haben deine Mannschaft gebeten, sie anzuschließen, um diesen Diktator zu stürzen. ' ||
+        'Obwohl das Volk in Armut lebt , hat der Diktator ein Luxusleben. Du sollst sein Luxusleben enthüllen.
+        Hinweis: Die folgenden Fragen beziehen sich auf die Tabellen: ware, kaeufe und hersteller', 0, null ,null);
 insert into frage (text, punkte, antw, tips)
 values ('Wie viele Hersteller des Bekanntheitsgrades 5 gibt es ? [10p]', 10, 'select count(*) from hersteller where bekanntheitsgrad = 5'
 ,'count und where-bedingung beachten');
 insert into frage (text , punkte, antw, tips)
-values ('Wie oft hat er im 01.2021 Produkte von einem Hersteller des Bekanntheitsgrades größer als 4 gekauft?
+values ('Wie oft hat der Diktator im 01.2021 Produkte von einem Hersteller des Bekanntheitsgrades größer als oder gleich 4 gekauft?
         Hinweis : Antwort hat eine Spalte bestellung_anzahl. [30p]', 30,
         'select count (*) as bestellung_anzahl from kaeufe, ware, hersteller where kaeufe.ware_id = ware.id and ware.hersteller_id = hersteller.id
                 and tag <= \"2021-01-31\" and tag >= \"2021-01-01\" and hersteller.bekanntheitsgrad >= 4'
-                ,'<, >, >=,<= sind auch mit dem Date-Datentyp einsetzbar');
-insert into frage (text, punkte, antw, tips)
+                ,'<, >, >=,<= sind auch mit dem Date-Datentyp einsetzbar
+                 Join zwischen ware, kaeufe und hersteller');
+/*insert into frage (text, punkte, antw, tips)
 values ('Wie oft hat er im 01.2021 Produkte von einem Hersteller des Bekanntheitsgrades größer als 3 gekauft? [10p]', 10,
-        'select count (*) from kaeufe where tag >= \"2021-01-01\"  and tag <= \"2021-01-31\"',null);
+        'select count (*) ' ||
+        'from kaeufe k, ware w, hersteller h
+        where k.ware_id = w.id and w.hersteller_id = h.id
+        and tag >= \"2021-01-01\"  and tag <= \"2021-01-31\" and bekanntheitsgrad > 3',null);*/
 insert into frage (text, punkte, antw, tips)
 values ('Wie ist der Kaufbetrag im 01.2021 ? [10p]' , 10,
         'select sum(anzahl * preis) as Kaufbetrag from kaeufe, ware ' ||
@@ -498,7 +508,7 @@ values ('Was ist der höchste Betrag, den er am einem Tag gekauft hat ?
         Hinweis : Die Antwort hat die einzige Spalte max_betrag [20p]', 20,
         'select max (tag_kaufbetrag) as max_betrag from
         (select sum(anzahl * preis) as tag_kaufbetrag from kaeufe, ware where kaeufe.ware_id = ware.id group by tag) as tmp',
-        'eine unterfrage mit group by tag, um Kaufbeträge aller Tage zu ermittelt und dann das Maximal');
+        'eine unterfrage mit *group by tag*, um Kaufbeträge aller Tage zu ermittelt und dann das Maximal');
 insert into frage (text, punkte, antw, tips)
 values ('Was ist der durchschnittliche Kaufbetrag jeden Tag vom 01.01.2021 bis 31.01.2021 ?
         Hinweis : die Antwort hat eine Spalte kaufbetrag_durchschnitt [20p]', 20,
@@ -512,22 +522,8 @@ values ('Am welchen Tag hat der mehr als Durchschnitt gekauft ?
         Hinweis: die Antwort hat 2 Spalten : tag, kaufbetrag_pro_tag [25p]', 25,
         'with kaufbetrag as (select tag, sum(preis*anzahl) as kaufbetrag_pro_tag from kaeufe, ware where kaeufe.ware_id = ware.id group by tag)
             select *  from kaufbetrag where kaufbetrag_pro_tag > (select avg(kaufbetrag_pro_tag) from kaufbetrag)',
-        'mit *with* kann man lokal eine Tabelle aufbauen. Der Code ist dann mehr übersichtlich');
+        'mit *with* kann man lokal eine Tabelle aufbauen. Der Code ist dann übersichtlicher');
 insert into frage (text, punkte, antw, tips)
-values ('Mit ihrer Hilfe wurde der Diktator gestürzt.
-        Jetzt können Sie mit der Reise weiter.
-        Auf der  Insel gibt es den Schatz ,der für jede Reisende ein Traum ist.', 0, null ,null);
-insert into frage (text, punkte, antw, tips)
-values ('Es gibt einen Bewohner, der weiß, wo der Schatz zu finden ist.
-        Antworten Sie folgende Fragen, um ihn zu finden', 0 , null ,null);
-insert into frage (text, punkte, antw, tips)
-values ('Was ist das dominante Hobby der Bewohner auf der Insel ?
-        Hinweis : die Antwort hat 2 Spalten : hobby, interessierte (für die Anzahl der Interessierte) [30p]', 30,
-        'with hobby_statistik as
-        (select hobby, count (*) as interessierte from insel, bewohner where insel.id = bewohner.insel_id and insel.id = 2 group by hobby)
-        select hobby, interessierte from hobby_statistik where interessierte = (select max(interessierte) from hobby_statistik)',null);
-/*insert into frage (text, punkte, antw, tips)
-values ('Wer von Ihnen kann sein Hobby Archaeologie zum Beruf machen ? ' ||
-        'Zeigen Sie die Liste dieser Bewohner mit ihrer id und ihrem name an.',10,
-        '',null);*/
+values ('Mit deiner Hilfe wurde der Diktator gestürzt.', 0, null ,null);
+
 

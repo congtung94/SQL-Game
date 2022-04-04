@@ -186,7 +186,7 @@ function ausfuhren(){
                 return;
             }
 
-            // daten aus der Server-Antwort zu holen
+            // daten aus der Server-Antwort holen
             let spaltenAnz = response.spaltenAnz;
             let zeilenAnz = response.zeilenAnz;
             let dataInString = response.data;
@@ -194,12 +194,16 @@ function ausfuhren(){
             // daten für Ausgabe-Tabelle
             let spaltenNamen = new Array();
             let daten = new Array();
+
             for (let i = 4; i< spaltenAnz +4; i++){
                 const key = Object.keys(response)[i];
                 const spaltenName = response[key];
                 spaltenNamen.push(spaltenName);
             }
-            daten = dataInString.split ("#");
+
+            if (dataInString.length != 0)
+                daten = dataInString.split ("#");
+
             // tabelle für die Ausgabe erstellen
             let ausgabeTabelle = tabelleGenerator(spaltenAnz, zeilenAnz, spaltenNamen, daten);
 
@@ -226,8 +230,10 @@ function ausfuhren(){
                 document.getElementById("punkte").innerText = punkte;
 
                 // update womöglich level
-                if (aktuelleFrageId == 22){ // 22
+                console.log(aktuelleFrageId);
+                if (aktuelleFrageId == 21){ // 21
                     const tabelleListe = document.getElementById("tabelle-liste");
+                    console.log("level 2 looooooooadddd");
                     level = 2;
                     $('#mitteilungModal').modal('show').find('.modal-header').text("Glückwunsch");
                     $('#mitteilungModal').modal('show').find('.modal-body').text("Sie haben Level 2 erreicht !");

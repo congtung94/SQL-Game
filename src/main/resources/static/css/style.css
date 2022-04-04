@@ -348,4 +348,8 @@ table th{
     margin-bottom: 0;
 }
 
+#tips{
+    max-width: 100%;
+}
+
 

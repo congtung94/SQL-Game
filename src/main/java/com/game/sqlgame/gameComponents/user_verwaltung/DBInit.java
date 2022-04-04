@@ -1,11 +1,11 @@
 package com.game.sqlgame.gameComponents.user_verwaltung;
 
-import com.game.sqlgame.model.Spielstand;
 import com.game.sqlgame.model.Spieler;
+import com.game.sqlgame.model.Spielstand;
 import com.game.sqlgame.model.UbersprungenFragen;
-import com.game.sqlgame.repository.UbersprungenFragenRepository;
 import com.game.sqlgame.repository.SpielerRepository;
 import com.game.sqlgame.repository.SpielstandRepository;
+import com.game.sqlgame.repository.UbersprungenFragenRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -143,11 +143,11 @@ public class DBInit {
         spielstandRepository.save(spielstandDuong);
 
         Spielstand spielstandCu = new Spielstand();
-        spielstandCu.setLevel(2);
+        spielstandCu.setLevel(1);
         spielstandCu.setSpielerId(9);
         spielstandCu.setPunkte(200);
         spielstandCu.setZeit(3001);
-        spielstandCu.setAktuelleFrageId(56);
+        spielstandCu.setAktuelleFrageId(20);
         spielstandRepository.save(spielstandCu);
 
         UbersprungenFragen fragen = new UbersprungenFragen(9, 7);

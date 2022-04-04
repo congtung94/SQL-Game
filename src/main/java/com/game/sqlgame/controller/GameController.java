@@ -459,6 +459,7 @@ public class GameController {
         objectNode.put("bewertung", true);
         objectNode.put("feedback", "deine Antwort ist richtig");
         resultSetToObjectNode(objectNode, spieler_rst, spieler_rsmt);
+        log.info(objectNode.toString());
 
         closeConnection(s1,c1);
         closeConnection(s2,c2);
@@ -536,6 +537,7 @@ public class GameController {
             objectNode.put("spaltenName" +i, resultSetMetaData.getColumnName(i));
         }
         // data an objectNode übertragen
+        log.info(data.toString());
         objectNode.put("data", data.toString());
     }
 
