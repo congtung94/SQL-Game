@@ -298,7 +298,7 @@ values ('Suche alle Bewohner (nur ihre Id und Name erforderlich),' ||
               'select id, name from bewohner where beruf = \"Schiffbauer\"','');
 --12
 insert into frage (text, punkte, antw, tips)
-values ('Suche die Schiffbauer, die altes Schiff mit dem Status *zu verkaufen* haben.
+values ('Suche die Bewohner, die altes Schiff mit dem Status *zu verkaufen* haben.
         Hinweis : die Spalten für die Anfrage sind : bewohner.id, bewohner.name, produkt.name as produkt, produkt.preis, produkt.menge, produkt.status [10p]',
         10,'with bewohner as (select id, name, alter, hobby, beruf, beruf_erfahrung, status from bewohner where insel_id = 1) ' ||
            'select bewohner.id, bewohner.name, produkt.name as produkt, produkt.preis, produkt.menge, produkt.status ' ||

@@ -143,11 +143,11 @@ public class DBInit {
         spielstandRepository.save(spielstandDuong);
 
         Spielstand spielstandCu = new Spielstand();
-        spielstandCu.setLevel(1);
+        spielstandCu.setLevel(3);
         spielstandCu.setSpielerId(9);
         spielstandCu.setPunkte(200);
         spielstandCu.setZeit(3001);
-        spielstandCu.setAktuelleFrageId(20);
+        spielstandCu.setAktuelleFrageId(39);
         spielstandRepository.save(spielstandCu);
 
         UbersprungenFragen fragen = new UbersprungenFragen(9, 7);

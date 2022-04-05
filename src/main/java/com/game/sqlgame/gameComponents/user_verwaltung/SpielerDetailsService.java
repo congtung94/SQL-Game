@@ -22,7 +22,7 @@ public class SpielerDetailsService implements UserDetailsService {
     @Override
     public AktuellerSpieler loadUserByUsername(String spielerName) throws UsernameNotFoundException {
 
-        Spieler spieler = spielerRepository.getPlayerByName(spielerName).orElseThrow(() ->
+        Spieler spieler = spielerRepository.getPlayerByName(spielerName.toLowerCase()).orElseThrow(() ->
             new UsernameNotFoundException("Spieler mit dem Name "+ spielerName + "nicht gefunden")
         );
 

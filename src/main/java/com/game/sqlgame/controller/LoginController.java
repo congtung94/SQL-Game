@@ -61,7 +61,7 @@ public class LoginController {
             return "registrationPage";
         }
         Spieler spieler = new Spieler();
-        spieler.setName(form.getName());
+        spieler.setName(form.getName().toLowerCase());
         spieler.setPasswort(form.getPasswort());
         spielerRepository.save(spieler);
 
