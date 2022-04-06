@@ -370,8 +370,8 @@ values ('Nächte Information : die Insel liegt im NW , zeig bitte diese Inseln a
         ' and laenge_richtung = \"W\" and insel.koord_id = koordinaten.id'
         ,'Join zwischen insel und koordinaten Tabelle');
 insert into frage (text, punkte, antw, tips)
-values ('Die nächste Insel ist eine dieser 2 Insel, welche die kleiner Abstand hat.
-        Zeigen Sie die name und koordinaten dieser Insel an.
+values ('Die nächste Insel ist eine dieser 2 Insel, welche den kleineren Abstand hat.
+        Zeig bitte name und koordinaten dieser Insel an.
         Hinweis : die Spalten der Antwort sind : name, abstand, breite_grad, breite_richtung, laenge_grad, laenge_richtung [25p]', 25,
         'select name, abstand,breite_grad,breite_richtung, laenge_grad,laenge_richtung from insel, koordinaten ' ||
         'where insel.koord_id = koordinaten.id and (insel.id = 2 or insel.id = 5) ' ||
@@ -397,7 +397,7 @@ insert into frage (text, punkte, antw, tips)
 values ('Deine Mannschaft ist auf die Insel Ohara gekommen hat aber kein Gold mehr um Lebensmitteln zu kaufen.
         Alle müssen arbeiten, um Gold zu verdienen. Du sollst für jeden ihrer Mannschaft einen Job suchen', 0, null,null );
 insert into frage (text, punkte, antw, tips)
-values ('Finden Sie das durchschnittliche Einkommen einzelner Berufsgruppe auf der Insel, geordnet nach dem Einkommen absteigend
+values ('Ermittelt bitte das durchschnittliche Einkommen einzelner Berufsgruppe auf der Insel, geordnet nach dem Einkommen absteigend
         Hinweis : Antwort hat 2 Spalten : beruf und avg_einkommen [15p]', 15,
         'select beruf, avg(einkommen) as avg_einkommen from insel, bewohner ' ||
         'where insel.name = \"Ohara\" and bewohner.insel_id = insel.id ' ||
@@ -406,7 +406,7 @@ values ('Finden Sie das durchschnittliche Einkommen einzelner Berufsgruppe auf d
 insert  into frage (text, punkte, antw, tips)
 values ('Da verdient Musiker am meistens', 0, null,null);
 insert  into frage (text, punkte, antw, tips)
-values ('Suche den am bestens bezahlten Musiker, dann kann dein Musiker bei ihm arbeiten
+values ('Suche den am besten bezahlten Musiker, dann kann dein Musiker bei ihm arbeiten
         Hinweis : nur sein id, name und einkommen sind erforderlich [20p]', 20,
         'select bewohner.id, bewohner.name, einkommen from bewohner, insel where bewohner.insel_id = insel.id and insel.id = 2 and beruf =\"Musiker\"
         and einkommen = (select max (einkommen)  from bewohner where beruf = \"Musiker\")'
@@ -423,7 +423,7 @@ values ('Der Koch kann bei dem Baecker Luca arbeiten',0,null ,null);
 insert into frage (text, punkte, antw, tips)
 values ('Jetzt bleibt noch der Navigator ',0,null ,null);
 insert into frage (text, punkte, antw, tips)
-values ('Finden Sie, wie viel Navigator auf der Insel Ohara es gibt ? [10p]',10,
+values ('Wie viel Navigator auf der Insel Ohara es gibt ? [10p]',10,
         'select count (*) from insel, bewohner where insel.name = \"Ohara\" and insel.id = bewohner.insel_id and beruf = \"Navigator\"'
         ,'mit *count* kann man die Zeilen zählen');
 insert into frage (text, punkte, antw, tips)
