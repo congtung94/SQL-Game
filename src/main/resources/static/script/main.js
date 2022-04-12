@@ -25,7 +25,7 @@ if (ubersprungenFragen.includes(aktuelleFrageId)){
     istUbersprungenFrage = true;
 }
 // frageText anzeigen
-frageText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[1];
+frageText.innerText = aktuelleFrageId + ". " + Object.values(listFragebObject[aktuelleFrageId-1])[1];
 // Tips anzeigen
 tipsText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[4];
 
@@ -263,7 +263,7 @@ function ausfuhren(){
 }
 
 function setViewForNextQuestion() {
-    frageText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[1]; // nächste Frage text
+    frageText.innerText = aktuelleFrageId + ". " +  Object.values(listFragebObject[aktuelleFrageId-1])[1]; // nächste Frage text
     // tips zuklappen
     $('#tips').collapse('hide');
     tipsText.innerText = Object.values(listFragebObject[aktuelleFrageId-1])[4];

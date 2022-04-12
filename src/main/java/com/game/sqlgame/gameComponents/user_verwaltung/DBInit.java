@@ -147,7 +147,7 @@ public class DBInit {
         spielstandCu.setSpielerId(9);
         spielstandCu.setPunkte(200);
         spielstandCu.setZeit(3001);
-        spielstandCu.setAktuelleFrageId(39);
+        spielstandCu.setAktuelleFrageId(48);
         spielstandRepository.save(spielstandCu);
 
         UbersprungenFragen fragen = new UbersprungenFragen(9, 7);
